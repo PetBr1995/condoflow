@@ -1,20 +1,25 @@
+/* ====================================================
+   CondoFlow Login - Design System Oficial (Midnight Navy)
+   ==================================================== */
+
 .login-wrapper {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
-  background: radial-gradient(circle at 50% 10%, #eff6ff 0%, #f8fafc 60%, #e2e8f0 100%);
+  padding: 32px 16px;
+  background-color: #f4f7fb;
+  background-image: radial-gradient(circle at 50% 0%, rgba(14, 29, 53, 0.04) 0%, transparent 60%);
 }
 
 .login-card {
   width: 100%;
   max-width: 440px;
   background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
   padding: 36px 32px;
-  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 20px -2px rgba(15, 29, 53, 0.06), 0 2px 6px -1px rgba(15, 29, 53, 0.04);
 }
 
 .login-brand {
@@ -23,16 +28,16 @@
 }
 
 .brand-icon {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
+  background-color: #0e1d35;
+  color: #ffffff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(14, 29, 53, 0.25);
+  margin-bottom: 14px;
 }
 
 .brand-icon mat-icon {
@@ -42,25 +47,26 @@
 }
 
 .login-brand h2 {
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: #0f172a;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
   margin: 0;
 }
 
 .login-brand p {
   color: #64748b;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   margin-top: 4px;
+  margin-bottom: 0;
 }
 
-/* Profile Toggle */
+/* Profile Toggle Segmentado */
 .profile-toggle {
   display: flex;
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 4px;
   margin-bottom: 24px;
   gap: 4px;
@@ -76,11 +82,11 @@
   border: none;
   background: transparent;
   color: #64748b;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .toggle-btn mat-icon {
@@ -89,14 +95,15 @@
   height: 18px;
 }
 
+/* Ativo no tom Dark Navy do Design System */
 .toggle-btn.active {
-  background: #ffffff;
-  color: #2563eb;
+  background: #0f213d;
+  color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2);
 }
 
-/* Form inputs */
+/* Formulário e Inputs */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -105,9 +112,9 @@
 
 .input-group label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
   margin-bottom: 6px;
 }
 
@@ -119,55 +126,68 @@
 
 .input-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   color: #94a3b8;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  pointer-events: none;
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 12px 14px 12px 42px;
-  font-family: inherit;
-  font-size: 0.95rem;
+  padding: 11px 14px 11px 42px;
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  background: #ffffff;
+  border-radius: 8px;
+  font-size: 0.9rem;
   color: #0f172a;
-  transition: all 0.2s;
+  background: #ffffff;
+  transition: all 0.2s ease;
 }
 
 .input-wrapper input:focus {
   outline: none;
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
+.input-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+/* Botão de Submit Dark Navy */
 .btn-submit {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   margin-top: 8px;
-  padding: 13px 20px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
+  padding: 12px 20px;
+  background-color: #0f213d;
+  color: #ffffff;
   border: none;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
-  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: #1a325a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(15, 33, 61, 0.25);
 }
 
 .btn-submit mat-icon {
   font-size: 18px;
   width: 18px;
   height: 18px;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
+}
+
+.btn-submit:hover mat-icon {
+  transform: translateX(3px);
 }
 
 .btn-submit:disabled {
@@ -186,76 +206,71 @@
   to { transform: rotate(360deg); }
 }
 
-.btn-submit:hover {
-  background: linear-gradient(135deg, #1d4ed8, #1e40af);
-  box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.35);
-  transform: translateY(-1px);
-}
-
-.btn-submit:hover mat-icon {
-  transform: translateX(3px);
-}
-
+/* Alerta de Erro */
 .alerta-erro-box {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  padding: 10px 14px;
-  background: #fef2f2;
+  gap: 10px;
+  padding: 12px 14px;
+  background-color: #fef2f2;
   border: 1px solid #fecaca;
-  color: #b91c1c;
+  color: #991b1b;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 600;
+  margin-top: 16px;
 }
 
 .alerta-erro-box mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
 }
 
+/* Rodapé do Login */
 .login-footer {
   text-align: center;
   margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #f1f5f9;
+  padding-top: 18px;
+  border-top: 1px solid #e2e8f0;
 }
 
 .login-footer p {
-  font-size: 0.875rem;
   color: #64748b;
-  margin-bottom: 6px;
+  font-size: 0.85rem;
+  margin: 0 0 6px 0;
 }
 
 .link-cadastro {
-  display: inline-block;
   color: #2563eb;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
   text-decoration: none;
-  cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .link-cadastro:hover {
+  color: #1d4ed8;
   text-decoration: underline;
 }
 
+/* Caixa de Credenciais Demo */
 .demo-box {
   margin-top: 20px;
-  padding: 10px 12px;
-  background: #f8fafc;
+  padding: 10px 14px;
+  background-color: #f8fafc;
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
   text-align: center;
+  font-size: 0.8rem;
   color: #475569;
-  font-size: 0.775rem;
 }
 
 .demo-box code {
   background: #e2e8f0;
-  padding: 2px 4px;
+  padding: 2px 6px;
   border-radius: 4px;
-  font-family: monospace;
+  font-weight: 700;
+  color: #0f172a;
 }

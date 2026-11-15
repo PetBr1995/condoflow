@@ -1,11 +1,15 @@
+/* ====================================================
+   CondoFlow Cadastro de Morador - Design System Oficial
+   ==================================================== */
+
 .cadastro-page-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 120px);
-  padding: 24px 16px;
-  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent 400px),
-              radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.05), transparent 400px);
+  min-height: 100vh;
+  padding: 32px 16px;
+  background-color: #f4f7fb;
+  background-image: radial-gradient(circle at 50% 0%, rgba(14, 29, 53, 0.04) 0%, transparent 60%);
 }
 
 .cadastro-card {
@@ -13,9 +17,9 @@
   max-width: 540px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 36px 32px;
-  box-shadow: 0 12px 36px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(15, 29, 53, 0.06), 0 2px 6px -1px rgba(15, 29, 53, 0.04);
 }
 
 .cadastro-header {
@@ -27,27 +31,27 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #eff6ff;
-  color: #2563eb;
-  padding: 6px 14px;
+  background: #0e1d35;
+  color: #ffffff;
+  padding: 6px 16px;
   border-radius: 9999px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   margin-bottom: 14px;
 }
 
 .brand-badge mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .cadastro-header h2 {
   font-size: 1.65rem;
   font-weight: 800;
   color: #0f172a;
-  letter-spacing: -0.02em;
-  margin: 0 0 8px;
+  letter-spacing: -0.025em;
+  margin: 0 0 6px;
 }
 
 .cadastro-header p {
@@ -57,11 +61,11 @@
   line-height: 1.45;
 }
 
-/* Form Styles */
-.form-container {
+/* Formulário e Grids */
+.cadastro-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .grid-2-col {
@@ -70,82 +74,72 @@
   gap: 14px;
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.form-field-group label {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
 }
 
-.input-group label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #334155;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.label-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  color: #2563eb;
-}
-
-.input-wrapper {
+.field-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.input-icon {
+.field-icon {
   position: absolute;
   left: 14px;
   color: #94a3b8;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  pointer-events: none;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.input-wrapper input {
+.field-input-wrapper input {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 14px 10px 40px;
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 0.92rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
   color: #0f172a;
-  font-family: inherit;
+  background: #ffffff;
   transition: all 0.2s ease;
-  background-color: #ffffff;
 }
 
-.input-wrapper:has(.input-icon) input {
-  padding-left: 42px;
-}
-
-.input-wrapper input:focus {
+.field-input-wrapper input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-/* Código em Destaque */
-.highlight-group {
-  background: #f8fafc;
-  padding: 14px;
-  border-radius: 12px;
+.field-input-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+/* Destaque para o Código do Apartamento */
+.code-box-highlight {
+  background-color: #f8fafc;
   border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 4px;
+}
+
+.code-box-highlight label {
+  color: #0f213d;
+  font-weight: 800;
 }
 
 .code-input-wrapper input.code-input {
   font-family: 'Courier New', Courier, monospace;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1e3a8a;
+  color: #0f213d;
   background: #ffffff;
-  border-color: #93c5fd;
+  border-color: #94a3b8;
 }
 
 .field-hint {
@@ -154,53 +148,57 @@
   margin-top: 4px;
 }
 
-/* Botão Submit */
+/* Botão Submit Dark Navy */
 .submit-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 13px;
+  padding: 12px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-radius: 8px;
+  background-color: #0f213d;
   color: #ffffff;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2);
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
   margin-top: 8px;
 }
 
 .submit-btn:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  background-color: #1a325a;
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 8px rgba(15, 33, 61, 0.25);
 }
 
-.submit-btn:active {
-  transform: translateY(0);
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .submit-btn mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-/* Footer Link */
+/* Link Rodapé */
 .footer-action {
   text-align: center;
-  margin-top: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
 }
 
 .link-btn {
   background: none;
   border: none;
   color: #64748b;
-  font-size: 0.86rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
@@ -217,20 +215,20 @@
 }
 
 .link-btn mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
-/* Feedback Alerts */
+/* Alertas de Feedback */
 .feedback-alert {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  border-radius: 10px;
-  font-size: 0.86rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
   margin-bottom: 18px;
 }
 
@@ -241,16 +239,9 @@
 }
 
 .feedback-alert.success {
-  background-color: #f0fdf4;
-  color: #166534;
-  border: 1px solid #bbf7d0;
-}
-
-.feedback-alert mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
 }
 
 @media (max-width: 580px) {

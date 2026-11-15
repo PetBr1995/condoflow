@@ -258,3 +258,71 @@ button {
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 8px rgba(15, 33, 61, 0.25) !important;
 }
+
+/* ====================================================
+   Unificação Global de Chips e Filtros (Design System Navy)
+   ==================================================== */
+.filtros button,
+.filtros-chamados button,
+.filtros-reservas button {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 9999px !important;
+  padding: 8px 16px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.filtros button:hover,
+.filtros-chamados button:hover,
+.filtros-reservas button:hover {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+.filtros button.ativo,
+.filtros-chamados button.ativo,
+.filtros-reservas button.ativo {
+  background: #0f213d !important;
+  color: #ffffff !important;
+  border-color: #0f213d !important;
+  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2) !important;
+}
+
+/* Cards elevados de Lista (Reservas, Encomendas, Acessos, Avisos, Documentos) */
+.card-reserva,
+.card-encomenda,
+.card-acesso,
+.card-aviso,
+.card-documento,
+.card-enquete {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.card-reserva:hover,
+.card-encomenda:hover,
+.card-acesso:hover,
+.card-aviso:hover,
+.card-documento:hover,
+.card-enquete:hover {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Quadrado Suave de Ícones nas listas */
+.icone-transportadora,
+.icone-area,
+.icone-acesso,
+.icone-doc {
+  background-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border-radius: 10px !important;
+}
