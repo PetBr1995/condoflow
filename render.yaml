@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://render.com/schema/render.yaml.json
 # ==========================================
 # CondoFlow - Render Blueprint Deployment
 # ==========================================
@@ -6,12 +7,13 @@ databases:
     databaseName: condoflow_prod
     user: condoflow_user
     plan: free
+    region: oregon
 
 services:
   # Backend API (Django + Gunicorn)
   - type: web
     name: condoflow-backend
-    env: python
+    runtime: python
     region: oregon
     plan: free
     rootDir: backend
@@ -32,9 +34,7 @@ services:
   # Frontend SPA (Angular)
   - type: web
     name: condoflow-frontend
-    env: static
-    region: oregon
-    plan: free
+    runtime: static
     rootDir: frontend
     buildCommand: "npm ci && npm run build -- --configuration production"
     staticPublishPath: dist/condoflow-frontend/browser
