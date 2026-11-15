@@ -1,0 +1,84 @@
+<header class="navbar-wrapper">
+  <div class="navbar-container">
+    <!-- Lado Esquerdo: Marca & Condomínio Ativo -->
+    <div class="brand-area" routerLink="/dashboard">
+      <div class="logo-mark">
+        <mat-icon>apartment</mat-icon>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">CondoFlow</span>
+        <span class="condo-badge" [title]="authService.condominioNome">
+          {{ authService.condominioNome }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Centro: Links de Navegação em Pílula -->
+    <nav class="nav-links">
+      <button class="nav-item" routerLink="/dashboard" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>grid_view</mat-icon>
+        <span>Início</span>
+      </button>
+
+      <button class="nav-item" routerLink="/chamados" routerLinkActive="ativo">
+        <mat-icon>build</mat-icon>
+        <span>Chamados</span>
+      </button>
+
+      <button class="nav-item" routerLink="/reservas" routerLinkActive="ativo">
+        <mat-icon>event_available</mat-icon>
+        <span>Reservas</span>
+      </button>
+
+      <button class="nav-item" routerLink="/acessos" routerLinkActive="ativo">
+        <mat-icon>security</mat-icon>
+        <span>Portaria</span>
+      </button>
+
+      <button class="nav-item" routerLink="/encomendas" routerLinkActive="ativo">
+        <mat-icon>inventory_2</mat-icon>
+        <span>Encomendas</span>
+      </button>
+
+      <button class="nav-item" routerLink="/avisos" routerLinkActive="ativo">
+        <mat-icon>campaign</mat-icon>
+        <span>Avisos</span>
+      </button>
+
+      <button class="nav-item" routerLink="/documentos" routerLinkActive="ativo">
+        <mat-icon>folder_open</mat-icon>
+        <span>Documentos</span>
+      </button>
+
+      <button class="nav-item" routerLink="/enquetes" routerLinkActive="ativo">
+        <mat-icon>how_to_vote</mat-icon>
+        <span>Votações</span>
+      </button>
+
+      @if (authService.isSindico) {
+        <button class="nav-item nav-destaque" routerLink="/moradores" routerLinkActive="ativo">
+          <mat-icon>groups</mat-icon>
+          <span>Moradores</span>
+        </button>
+      }
+    </nav>
+
+    <!-- Lado Direito: Perfil do Usuário & Sair -->
+    <div class="user-area">
+      <div class="user-pill">
+        <div class="user-avatar">
+          {{ authService.nomeUsuario.charAt(0).toUpperCase() }}
+        </div>
+        <div class="user-meta">
+          <strong class="user-name">{{ authService.nomeUsuario }}</strong>
+          <span class="user-role">{{ authService.isSindico ? 'Síndico / Gestor' : (authService.unidadeMorador || 'Morador') }}</span>
+        </div>
+      </div>
+
+      <button class="btn-logout" (click)="fazerLogout()" title="Sair da Plataforma">
+        <mat-icon>logout</mat-icon>
+        <span class="logout-label">Sair</span>
+      </button>
+    </div>
+  </div>
+</header>

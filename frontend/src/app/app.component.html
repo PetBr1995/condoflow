@@ -1,0 +1,10 @@
+<!-- Se estiver autenticado no sistema, exibe a barra privada de navegação e o container da aplicação -->
+@if (estaLogado()) {
+  <app-navbar></app-navbar>
+  <main class="app-main-content">
+    <router-outlet></router-outlet>
+  </main>
+} @else {
+  <!-- Páginas públicas (Landing Page, Login, Cadastro de Morador) com layout livre -->
+  <router-outlet></router-outlet>
+}

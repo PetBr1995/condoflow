@@ -1,0 +1,141 @@
+<div class="acessos-page">
+  <header class="header-acessos">
+    <div>
+      <h2>Controle de Visitantes & Portaria</h2>
+      <p>Liberações prévias de convidados, entregadores e prestadores de serviço</p>
+    </div>
+
+    <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+      <mat-icon>{{ mostrarFormulario ? 'close' : 'person_add' }}</mat-icon>
+      {{ mostrarFormulario ? 'Fechar' : 'Autorizar Acesso' }}
+    </button>
+  </header>
+
+  @if (mensagemSucesso) {
+    <div class="alerta alerta-sucesso">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ mensagemSucesso }}</span>
+    </div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alerta alerta-erro">
+      <mat-icon>error</mat-icon>
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  @if (mostrarFormulario) {
+    <section class="card-formulario">
+      <h3>Pré-autorizar Entrada na Portaria</h3>
+
+      <div class="form-grid">
+        <div class="campo">
+          <label>Nome do Visitante / Prestador</label>
+          <input type="text" [(ngModel)]="nomeVisitante" placeholder="Ex.: Lucas Rodrigues / Marido de Aluguel" />
+        </div>
+
+        <div class="campo">
+          <label>Tipo de Acesso</label>
+          <select [(ngModel)]="tipoAcesso">
+            <option value="visitante">Visitante / Amigo / Familiar</option>
+            <option value="prestador">Prestador de Serviço / Técnico</option>
+            <option value="delivery">Entregador / Delivery</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Data Prevista da Visita</label>
+          <input type="date" [(ngModel)]="dataPrevista" />
+        </div>
+
+        <div class="campo">
+          <label>RG ou CPF (Opcional)</label>
+          <input type="text" [(ngModel)]="documento" placeholder="000.000.000-00" />
+        </div>
+
+        <div class="campo">
+          <label>Placa do Veículo (Opcional)</label>
+          <input type="text" [(ngModel)]="placaVeiculo" placeholder="Ex.: ABC-1234" />
+        </div>
+
+        <div class="campo campo-full">
+          <label>Observações / Empresa (Opcional)</label>
+          <input type="text" [(ngModel)]="observacoes" placeholder="Ex.: Manutenção do ar condicionado / Claro Fibra" />
+        </div>
+      </div>
+
+      <div class="form-acoes">
+        <button class="btn-confirmar" (click)="liberarAcesso()">
+          Confirmar Liberação
+        </button>
+      </div>
+    </section>
+  }
+
+  <section class="secao-acessos">
+    <div class="topo-filtros">
+      <h3>{{ authService.isSindico ? 'Acessos Registrados no Condomínio' : 'Minhas Liberações de Entrada' }}</h3>
+      <div class="filtros">
+        <button [class.ativo]="filtroStatus === 'todos'" (click)="filtroStatus = 'todos'">Todos</button>
+        <button [class.ativo]="filtroStatus === 'autorizado'" (click)="filtroStatus = 'autorizado'">Aguardando Entrada</button>
+        <button [class.ativo]="filtroStatus === 'no_condominio'" (click)="filtroStatus = 'no_condominio'">No Condomínio</button>
+        <button [class.ativo]="filtroStatus === 'finalizado'" (click)="filtroStatus = 'finalizado'">Finalizados</button>
+      </div>
+    </div>
+
+    @if (acessosFiltrados().length === 0) {
+      <div class="estado-vazio">
+        <mat-icon>security</mat-icon>
+        <p>Nenhuma autorização de acesso encontrada.</p>
+      </div>
+    } @else {
+      <div class="lista-acessos">
+        @for (acesso of acessosFiltrados(); track acesso.id) {
+          <article class="card-acesso" [class.presente]="acesso.status === 'no_condominio'">
+            <div class="acesso-cabecalho">
+              <div>
+                <strong>{{ acesso.nome_visitante }}</strong>
+                <span class="tipo-tag">{{ acesso.tipo_display }}</span>
+                <p class="destino">Unidade de Destino: <strong>Bloco {{ acesso.bloco }} - Apto {{ acesso.numero }}</strong> ({{ acesso.morador_nome }})</p>
+                <div class="info-adicionais">
+                  <span><mat-icon>calendar_today</mat-icon> Previsto para: {{ acesso.data_prevista | date:'dd/MM/yyyy' }}</span>
+                  @if (acesso.placa_veiculo) {
+                    <span><mat-icon>directions_car</mat-icon> Placa: {{ acesso.placa_veiculo }}</span>
+                  }
+                  @if (acesso.documento) {
+                    <span><mat-icon>badge</mat-icon> Doc: {{ acesso.documento }}</span>
+                  }
+                </div>
+              </div>
+
+              <span class="badge-status" [class]="'badge-' + acesso.status">
+                {{ acesso.status_display }}
+              </span>
+            </div>
+
+            <div class="acesso-acoes">
+              @if (authService.isSindico && acesso.status === 'autorizado') {
+                <button class="btn-entrada" (click)="registrarEntrada(acesso.id)">
+                  <mat-icon>login</mat-icon> Registrar Entrada
+                </button>
+              }
+
+              @if (authService.isSindico && acesso.status === 'no_condominio') {
+                <button class="btn-saida" (click)="registrarSaida(acesso.id)">
+                  <mat-icon>logout</mat-icon> Registrar Saída
+                </button>
+              }
+
+              @if (acesso.status === 'autorizado') {
+                <button class="btn-cancelar" (click)="cancelar(acesso.id)">
+                  Cancelar Autorização
+                </button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

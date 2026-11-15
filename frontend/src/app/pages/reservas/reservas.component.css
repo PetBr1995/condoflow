@@ -1,0 +1,360 @@
+.reservas-page {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header-reservas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-reservas h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.header-reservas p {
+  color: #64748b;
+  margin: 0;
+}
+
+.btn-novo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #0284c7;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-novo:hover {
+  background-color: #0369a1;
+}
+
+.alerta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.alerta-sucesso {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.alerta-erro {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Card Formulario */
+.card-formulario {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-formulario h3 {
+  margin: 0 0 16px 0;
+  color: #0f172a;
+  font-size: 1.25rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.campo-full {
+  grid-column: 1 / -1;
+}
+
+.campo label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.campo input, .campo select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.campo input:focus, .campo select:focus {
+  outline: none;
+  border-color: #0284c7;
+}
+
+.form-acoes {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-confirmar {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-confirmar:hover {
+  background: #059669;
+}
+
+/* Espacos Grid */
+.secao-espacos h3, .secao-reservas h3 {
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.grid-espacos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.card-espaco {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.card-espaco h4 {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.espaco-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 12px 0;
+  min-height: 38px;
+}
+
+.espaco-tags {
+  display: flex;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.espaco-tags span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.espaco-tags mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #0284c7;
+}
+
+/* Lista Reservas */
+.reservas-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filtros {
+  display: flex;
+  gap: 8px;
+}
+
+.filtros button {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #475569;
+}
+
+.filtros button.ativo {
+  background: #0284c7;
+  color: white;
+  border-color: #0284c7;
+}
+
+.estado-vazio {
+  text-align: center;
+  padding: 40px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  color: #64748b;
+}
+
+.estado-vazio mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  color: #94a3b8;
+}
+
+.lista-reservas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-reserva {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.reserva-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.reserva-cabecalho strong {
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.reserva-data {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.reserva-data mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.badge-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-pendente {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.badge-confirmada {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.badge-cancelada {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.badge-rejeitada {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.reserva-detalhes p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.parecer-sindico {
+  background: #f1f5f9;
+  padding: 8px;
+  border-left: 3px solid #0284c7;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.reserva-acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  justify-content: flex-end;
+}
+
+.btn-aprovar, .btn-rejeitar, .btn-cancelar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-aprovar {
+  background: #10b981;
+  color: white;
+}
+
+.btn-rejeitar {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-cancelar {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-cancelar:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}

@@ -1,0 +1,180 @@
+<div class="enquetes-page">
+  <header class="header-enquetes">
+    <div>
+      <h2>Votações & Assembleia Ágil</h2>
+      <p>Decisões coletivas, enquetes de melhorias e consultas aos condôminos</p>
+    </div>
+
+    @if (authService.isSindico) {
+      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+        <mat-icon>{{ mostrarFormulario ? 'close' : 'how_to_vote' }}</mat-icon>
+        {{ mostrarFormulario ? 'Fechar' : 'Nova Votação' }}
+      </button>
+    }
+  </header>
+
+  @if (mensagemSucesso) {
+    <div class="alerta alerta-sucesso">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ mensagemSucesso }}</span>
+    </div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alerta alerta-erro">
+      <mat-icon>error</mat-icon>
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  @if (mostrarFormulario && authService.isSindico) {
+    <section class="card-formulario">
+      <h3>Abrir Nova Votação Virtual</h3>
+
+      <div class="campo">
+        <label>Pergunta / Título da Enquete</label>
+        <input type="text" [(ngModel)]="titulo" placeholder="Ex.: Aprovação da pintura da fachada: Cinza ou Bege?" />
+      </div>
+
+      <div class="campo" style="margin-top: 14px;">
+        <label>Descrição / Contexto</label>
+        <textarea rows="3" [(ngModel)]="descricao" placeholder="Detalhes dos custos, prazos e motivos da votação..."></textarea>
+      </div>
+
+      <div class="campo" style="margin-top: 14px;">
+        <label>Prazo Final para Votar</label>
+        <input type="date" [(ngModel)]="dataLimite" />
+      </div>
+
+      <div class="form-grid" style="margin-top: 14px;">
+        <div class="campo">
+          <label>Opção 1 *</label>
+          <input type="text" [(ngModel)]="opcao1" placeholder="Ex.: Opção 1: Cor Cinza Urbano" />
+        </div>
+
+        <div class="campo">
+          <label>Opção 2 *</label>
+          <input type="text" [(ngModel)]="opcao2" placeholder="Ex.: Opção 2: Cor Bege Clássico" />
+        </div>
+
+        <div class="campo">
+          <label>Opção 3 (Opcional)</label>
+          <input type="text" [(ngModel)]="opcao3" placeholder="Ex.: Manter a cor atual" />
+        </div>
+
+        <div class="campo">
+          <label>Opção 4 (Opcional)</label>
+          <input type="text" [(ngModel)]="opcao4" placeholder="Ex.: Não aprovar a pintura agora" />
+        </div>
+      </div>
+
+      <div class="form-acoes">
+        <button class="btn-confirmar" (click)="criarVotacao()">
+          Publicar Votação para os Moradores
+        </button>
+      </div>
+    </section>
+  }
+
+  <section class="lista-enquetes">
+    @if (enquetes.length === 0) {
+      <div class="estado-vazio">
+        <mat-icon>how_to_vote</mat-icon>
+        <p>Nenhuma votação em andamento no momento.</p>
+      </div>
+    } @else {
+      @for (enquete of enquetes; track enquete.id) {
+        <article class="card-enquete" [class.encerrada]="!enquete.ativa">
+          <div class="enquete-topo">
+            <div>
+              <span class="badge-status" [class.badge-ativa]="enquete.ativa" [class.badge-inativa]="!enquete.ativa">
+                {{ enquete.ativa ? 'VOTAÇÃO ABERTA' : 'ENCERRADA' }}
+              </span>
+              <h4>{{ enquete.titulo }}</h4>
+              @if (enquete.descricao) {
+                <p class="desc">{{ enquete.descricao }}</p>
+              }
+              <small class="prazo"><mat-icon>timer</mat-icon> Prazo até: {{ enquete.data_limite | date:'dd/MM/yyyy' }} · Total de votos: <strong>{{ enquete.total_votos }}</strong></small>
+            </div>
+
+            @if (authService.isSindico && enquete.ativa) {
+              <button class="btn-encerrar" (click)="encerrar(enquete.id)">
+                Encerrar Votação
+              </button>
+            }
+          </div>
+
+          <!-- Opções e Barra de Votação -->
+          <div class="opcoes-voto">
+            <!-- Opção 1 -->
+            <div class="item-opcao" [class.votada]="enquete.minha_opcao_votada === 1">
+              <div class="opcao-dados">
+                <strong>{{ enquete.opcao_1 }}</strong>
+                <span>{{ enquete.votos_opcao_1 }} votos ({{ calcularPorcentagem(enquete.votos_opcao_1, enquete.total_votos) }}%)</span>
+              </div>
+              <div class="barra-fundo">
+                <div class="barra-progresso" [style.width.%]="calcularPorcentagem(enquete.votos_opcao_1, enquete.total_votos)"></div>
+              </div>
+              @if (enquete.ativa && !enquete.minha_opcao_votada) {
+                <button class="btn-votar" (click)="computarVoto(enquete.id, 1)">Votar nesta opção</button>
+              }
+            </div>
+
+            <!-- Opção 2 -->
+            <div class="item-opcao" [class.votada]="enquete.minha_opcao_votada === 2">
+              <div class="opcao-dados">
+                <strong>{{ enquete.opcao_2 }}</strong>
+                <span>{{ enquete.votos_opcao_2 }} votos ({{ calcularPorcentagem(enquete.votos_opcao_2, enquete.total_votos) }}%)</span>
+              </div>
+              <div class="barra-fundo">
+                <div class="barra-progresso" [style.width.%]="calcularPorcentagem(enquete.votos_opcao_2, enquete.total_votos)"></div>
+              </div>
+              @if (enquete.ativa && !enquete.minha_opcao_votada) {
+                <button class="btn-votar" (click)="computarVoto(enquete.id, 2)">Votar nesta opção</button>
+              }
+            </div>
+
+            <!-- Opção 3 -->
+            @if (enquete.opcao_3) {
+              <div class="item-opcao" [class.votada]="enquete.minha_opcao_votada === 3">
+                <div class="opcao-dados">
+                  <strong>{{ enquete.opcao_3 }}</strong>
+                  <span>{{ enquete.votos_opcao_3 }} votos ({{ calcularPorcentagem(enquete.votos_opcao_3, enquete.total_votos) }}%)</span>
+                </div>
+                <div class="barra-fundo">
+                  <div class="barra-progresso" [style.width.%]="calcularPorcentagem(enquete.votos_opcao_3, enquete.total_votos)"></div>
+                </div>
+                @if (enquete.ativa && !enquete.minha_opcao_votada) {
+                  <button class="btn-votar" (click)="computarVoto(enquete.id, 3)">Votar nesta opção</button>
+                }
+              </div>
+            }
+
+            <!-- Opção 4 -->
+            @if (enquete.opcao_4) {
+              <div class="item-opcao" [class.votada]="enquete.minha_opcao_votada === 4">
+                <div class="opcao-dados">
+                  <strong>{{ enquete.opcao_4 }}</strong>
+                  <span>{{ enquete.votos_opcao_4 }} votos ({{ calcularPorcentagem(enquete.votos_opcao_4, enquete.total_votos) }}%)</span>
+                </div>
+                <div class="barra-fundo">
+                  <div class="barra-progresso" [style.width.%]="calcularPorcentagem(enquete.votos_opcao_4, enquete.total_votos)"></div>
+                </div>
+                @if (enquete.ativa && !enquete.minha_opcao_votada) {
+                  <button class="btn-votar" (click)="computarVoto(enquete.id, 4)">Votar nesta opção</button>
+                }
+              </div>
+            }
+          </div>
+
+          @if (enquete.minha_opcao_votada) {
+            <div class="voto-confirmado">
+              <mat-icon>check_circle</mat-icon>
+              <span>Voto da sua unidade já computado com sucesso!</span>
+            </div>
+          }
+        </article>
+      }
+    }
+  </section>
+</div>

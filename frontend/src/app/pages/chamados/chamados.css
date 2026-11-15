@@ -1,0 +1,557 @@
+/* =========================================
+   CHAMADOS (CONDOFLOW MODERN UI)
+   ========================================= */
+
+:host {
+  display: block;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 8px 0 40px;
+}
+
+/* Header */
+.header-chamados {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-content h2 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+}
+
+.header-content p {
+  color: #64748b;
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+/* Filter Chips (Síndico) */
+.filtros-chamados {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.filtros-chamados button {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filtros-chamados button:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.filtros-chamados button.ativo {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Estado Vazio */
+.estado-vazio {
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 20px 0;
+}
+
+/* Lista de Chamados */
+.lista-chamados-nova {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-chamado {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.card-chamado:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.card-header h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #64748b;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nome-morador {
+  color: #334155;
+  font-weight: 600;
+  margin: 0;
+}
+
+.data-chamado {
+  margin: 0;
+  color: #94a3b8;
+}
+
+/* Badges */
+.badge-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-aberto {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-em_andamento {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.badge-concluido {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+/* Botão Flutuante (Morador) */
+.botao-flutuante {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 99;
+}
+
+.botao-flutuante:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.5);
+}
+
+/* =========================================
+   TELA DE NOVO CHAMADO
+   ========================================= */
+.formulario-chamado {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.identificacao-morador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.identificacao-morador mat-icon {
+  color: #2563eb;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.identificacao-morador span {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: block;
+}
+
+.identificacao-morador strong {
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.navegacao-novo {
+  margin-bottom: 20px;
+}
+
+.formulario-chamado label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.formulario-chamado input,
+.formulario-chamado textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #0f172a;
+  background: #ffffff;
+  margin-bottom: 6px;
+  box-sizing: border-box;
+}
+
+.formulario-chamado input:focus,
+.formulario-chamado textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.ajuda-campo {
+  display: block;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 18px;
+}
+
+.grupo-escolha {
+  border: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.grupo-escolha legend {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.opcoes-categoria {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.opcao-categoria {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.opcao-categoria:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.opcao-categoria.opcao-selecionada {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.botao-criar {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.botao-criar:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   TELA DE DETALHE DO CHAMADO
+   ========================================= */
+.detalhe-chamado-novo {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.header-detalhe {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.header-detalhe h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-voltar:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-voltar mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.card-detalhe {
+  display: flex;
+  flex-direction: column;
+}
+
+.titulo-detalhe {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 12px 0 16px;
+}
+
+.info-detalhe {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-row span {
+  display: block;
+  font-size: 0.78rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.info-row strong {
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.card-detalhe h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 8px;
+}
+
+.texto-descricao {
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.6;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 0 0 24px;
+}
+
+.atualizar-status {
+  padding: 16px 0;
+  border-top: 1px solid #f1f5f9;
+}
+
+.botoes-status {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.botoes-status button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.botoes-status button.ativo {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.botao-salvar {
+  padding: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.botao-salvar:hover {
+  background: #1d4ed8;
+}
+
+/* Modals */
+.fundo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-confirmacao {
+  background: #ffffff;
+  border-radius: 18px;
+  max-width: 420px;
+  width: 100%;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+}
+
+.modal-confirmacao h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+.modal-confirmacao p {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 20px;
+}
+
+.botoes-modal {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.botoes-modal button {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.botao-secundario {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.botao-perigo {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .info-detalhe {
+    grid-template-columns: 1fr;
+  }
+}

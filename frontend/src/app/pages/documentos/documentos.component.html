@@ -1,0 +1,121 @@
+<div class="documentos-page">
+  <header class="header-documentos">
+    <div>
+      <h2>Atas & Documentos Oficiais</h2>
+      <p>Convenção, regimento interno, atas de assembleias e prestação de contas</p>
+    </div>
+
+    @if (authService.isSindico) {
+      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+        <mat-icon>{{ mostrarFormulario ? 'close' : 'upload_file' }}</mat-icon>
+        {{ mostrarFormulario ? 'Fechar' : 'Novo Documento' }}
+      </button>
+    }
+  </header>
+
+  @if (mensagemSucesso) {
+    <div class="alerta alerta-sucesso">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ mensagemSucesso }}</span>
+    </div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alerta alerta-erro">
+      <mat-icon>error</mat-icon>
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  @if (mostrarFormulario && authService.isSindico) {
+    <section class="card-formulario">
+      <h3>Publicar Documento Oficial</h3>
+
+      <div class="form-grid">
+        <div class="campo">
+          <label>Título do Arquivo</label>
+          <input type="text" [(ngModel)]="titulo" placeholder="Ex.: Ata da Assembleia Geral Ordinária 2026" />
+        </div>
+
+        <div class="campo">
+          <label>Categoria</label>
+          <select [(ngModel)]="categoria">
+            <option value="regimento">Regimento Interno & Convenção</option>
+            <option value="ata">Ata de Assembleia</option>
+            <option value="financeiro">Prestação de Contas / Balancete</option>
+            <option value="comunicado">Circular / Edital Oficial</option>
+            <option value="outros">Outros Documentos</option>
+          </select>
+        </div>
+
+        <div class="campo campo-full">
+          <label>Descrição / Resumo do Conteúdo</label>
+          <input type="text" [(ngModel)]="descricao" placeholder="Ex.: Aprovação de contas e eleição do novo conselho" />
+        </div>
+
+        <div class="campo campo-full">
+          <label>Arquivo (PDF, Imagem)</label>
+          <input #fileInput type="file" (change)="selecionarArquivo(fileInput)" accept=".pdf,image/*,.doc,.docx" />
+          @if (nomeArquivo) {
+            <small class="arquivo-nome">Arquivo selecionado: <strong>{{ nomeArquivo }}</strong></small>
+          }
+        </div>
+      </div>
+
+      <div class="form-acoes">
+        <button class="btn-confirmar" (click)="fazerUpload()">
+          Fazer Upload e Publicar
+        </button>
+      </div>
+    </section>
+  }
+
+  <section class="secao-documentos">
+    <div class="topo-filtros">
+      <div class="filtros">
+        <button [class.ativo]="filtroCategoria === 'todas'" (click)="filtroCategoria = 'todas'">Todos</button>
+        <button [class.ativo]="filtroCategoria === 'regimento'" (click)="filtroCategoria = 'regimento'">Regimento & Convenção</button>
+        <button [class.ativo]="filtroCategoria === 'ata'" (click)="filtroCategoria = 'ata'">Atas de Assembleia</button>
+        <button [class.ativo]="filtroCategoria === 'financeiro'" (click)="filtroCategoria = 'financeiro'">Prestação de Contas</button>
+      </div>
+    </div>
+
+    @if (documentosFiltrados().length === 0) {
+      <div class="estado-vazio">
+        <mat-icon>folder_open</mat-icon>
+        <p>Nenhum documento encontrado para este filtro.</p>
+      </div>
+    } @else {
+      <div class="grid-documentos">
+        @for (doc of documentosFiltrados(); track doc.id) {
+          <article class="card-documento">
+            <div class="icone-doc">
+              <mat-icon>description</mat-icon>
+            </div>
+
+            <div class="doc-conteudo">
+              <span class="categoria-badge">{{ doc.categoria_display }}</span>
+              <h4>{{ doc.titulo }}</h4>
+              @if (doc.descricao) {
+                <p class="desc">{{ doc.descricao }}</p>
+              }
+              <small class="info">Publicado em {{ doc.created_at | date:'dd/MM/yyyy' }} · {{ doc.tamanho_kb }} KB</small>
+            </div>
+
+            <div class="doc-acoes">
+              <a [href]="doc.arquivo" target="_blank" class="btn-baixar">
+                <mat-icon>download</mat-icon> Baixar / Visualizar
+              </a>
+
+              @if (authService.isSindico) {
+                <button class="btn-excluir" (click)="excluir(doc.id)" title="Excluir Documento">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

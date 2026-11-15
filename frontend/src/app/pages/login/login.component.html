@@ -1,0 +1,91 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    
+    <!-- Header do Login -->
+    <div class="login-brand">
+      <div class="brand-icon">
+        <mat-icon>apartment</mat-icon>
+      </div>
+      <h2>CondoFlow</h2>
+      <p>Gestão Inteligente de Condomínios</p>
+    </div>
+
+    <!-- Segmented Toggle Morador / Síndico -->
+    <div class="profile-toggle">
+      <button 
+        type="button"
+        class="toggle-btn" 
+        [class.active]="perfilSelecionado === 'morador'" 
+        (click)="selecionarPerfil('morador')">
+        <mat-icon>person</mat-icon>
+        <span>Sou Morador</span>
+      </button>
+      <button 
+        type="button"
+        class="toggle-btn" 
+        [class.active]="perfilSelecionado === 'sindico'" 
+        (click)="selecionarPerfil('sindico')">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>Sou Síndico</span>
+      </button>
+    </div>
+
+    <!-- Formulário -->
+    <form class="login-form" (submit)="$event.preventDefault(); fazerLogin(identificadorInput.value, senhaInput.value)">
+      <div class="input-group">
+        <label for="identificador">CPF de Acesso</label>
+        <div class="input-wrapper">
+          <mat-icon class="input-icon">badge</mat-icon>
+          <input
+            id="identificador"
+            #identificadorInput
+            type="text"
+            autocomplete="username"
+            placeholder="000.000.000-00"
+            required>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <div class="input-wrapper">
+          <mat-icon class="input-icon">lock</mat-icon>
+          <input
+            id="senha"
+            #senhaInput
+            type="password"
+            autocomplete="current-password"
+            placeholder="••••••••"
+            required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <span>Acessar Plataforma</span>
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </form>
+
+    @if (erroLogin) {
+      <div class="alerta-erro-box">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ erroLogin }}</span>
+      </div>
+    }
+
+    <!-- Link de Cadastro para Morador -->
+    @if (perfilSelecionado === 'morador') {
+      <div class="login-footer">
+        <p>Ainda não tem cadastro?</p>
+        <a routerLink="/cadastro" class="link-cadastro">
+          Cadastrar com código do apartamento →
+        </a>
+      </div>
+    }
+
+    <!-- Dica de teste rápido -->
+    <div class="demo-box">
+      <small><strong>Acesso Síndico Teste:</strong> CPF <code>00000000000</code> / Senha <code>admin123</code></small>
+    </div>
+  </div>
+</div>

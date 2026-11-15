@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # Banco de Dados PostgreSQL 16
+  # ==========================================
+  db:
+    image: postgres:16-alpine
+    container_name: condoflow_db
+    restart: always
+    environment:
+      POSTGRES_DB: condoflow_prod
+      POSTGRES_USER: condoflow_user
+      POSTGRES_PASSWORD: condoflow_secure_pass_2026
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # ==========================================
+  # Backend API Django REST + Gunicorn
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: condoflow_backend
+    restart: always
+    environment:
+      DEBUG: "False"
+      SECRET_KEY: "prod-secret-key-change-me-in-production-!@#$99"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,backend"
+      DATABASE_URL: "postgres://condoflow_user:condoflow_secure_pass_2026@db:5432/condoflow_prod"
+      CORS_ALLOW_ALL_ORIGINS: "True"
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - media_data:/app/media
+
+  # ==========================================
+  # Frontend Angular + Nginx
+  # ==========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: condoflow_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  media_data:

@@ -1,0 +1,153 @@
+<div class="reservas-page">
+  <header class="header-reservas">
+    <div>
+      <h2>Reservas de Áreas Comuns</h2>
+      <p>Agende salão de festas, churrasqueiras e espaços compartilhados</p>
+    </div>
+    <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+      <mat-icon>{{ mostrarFormulario ? 'close' : 'add' }}</mat-icon>
+      {{ mostrarFormulario ? 'Fechar Formulário' : 'Solicitar Nova Reserva' }}
+    </button>
+  </header>
+
+  @if (mensagemSucesso) {
+    <div class="alerta alerta-sucesso">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ mensagemSucesso }}</span>
+    </div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alerta alerta-erro">
+      <mat-icon>error</mat-icon>
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  <!-- Formulário de Nova Reserva -->
+  @if (mostrarFormulario) {
+    <section class="card-formulario">
+      <h3>Agendar Espaço</h3>
+      
+      <div class="form-grid">
+        <div class="campo">
+          <label>Espaço Comum</label>
+          <select [(ngModel)]="areaSelecionadaId">
+            @for (area of areas; track area.id) {
+              <option [value]="area.id">
+                {{ area.nome }} (Capacidade: {{ area.capacidade_maxima }} pessoas - Taxa: R$ {{ area.taxa_reserva }})
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Data Desejada</label>
+          <input type="date" [(ngModel)]="dataReserva" />
+        </div>
+
+        <div class="campo">
+          <label>Período</label>
+          <select [(ngModel)]="periodoSelecionado">
+            <option value="dia_inteiro">Dia Inteiro (08h às 22h)</option>
+            <option value="manha">Manhã (08h às 13h)</option>
+            <option value="tarde">Tarde (13h às 18h)</option>
+            <option value="noite">Noite (18h às 23h)</option>
+          </select>
+        </div>
+
+        <div class="campo campo-full">
+          <label>Finalidade / Observações</label>
+          <input type="text" [(ngModel)]="observacoes" placeholder="Ex.: Comemoração de aniversário familiar" />
+        </div>
+      </div>
+
+      <div class="form-acoes">
+        <button class="btn-confirmar" (click)="solicitarReserva()">
+          Confirmar Solicitação
+        </button>
+      </div>
+    </section>
+  }
+
+  <!-- Catálogo de Espaços Disponíveis -->
+  <section class="secao-espacos">
+    <h3>Espaços Disponíveis no Condomínio</h3>
+    <div class="grid-espacos">
+      @for (area of areas; track area.id) {
+        <article class="card-espaco">
+          <div class="espaco-info">
+            <h4>{{ area.nome }}</h4>
+            <p class="espaco-desc">{{ area.descricao || 'Área compartilhada do condomínio.' }}</p>
+            <div class="espaco-tags">
+              <span><mat-icon>people</mat-icon> Até {{ area.capacidade_maxima }} pessoas</span>
+              <span><mat-icon>payments</mat-icon> R$ {{ area.taxa_reserva }}</span>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- Histórico / Gestão de Reservas -->
+  <section class="secao-reservas">
+    <div class="reservas-topo">
+      <h3>{{ authService.isSindico ? 'Solicitações de Reservas (Todos os Moradores)' : 'Minhas Solicitações de Reserva' }}</h3>
+      <div class="filtros">
+        <button [class.ativo]="filtroStatus === 'todas'" (click)="filtroStatus = 'todas'">Todas</button>
+        <button [class.ativo]="filtroStatus === 'pendente'" (click)="filtroStatus = 'pendente'">Pendentes</button>
+        <button [class.ativo]="filtroStatus === 'confirmada'" (click)="filtroStatus = 'confirmada'">Confirmadas</button>
+      </div>
+    </div>
+
+    @if (reservasFiltradas().length === 0) {
+      <div class="estado-vazio">
+        <mat-icon>event_busy</mat-icon>
+        <p>Nenhuma reserva encontrada para o filtro selecionado.</p>
+      </div>
+    } @else {
+      <div class="lista-reservas">
+        @for (reserva of reservasFiltradas(); track reserva.id) {
+          <article class="card-reserva">
+            <div class="reserva-cabecalho">
+              <div>
+                <strong>{{ reserva.area_nome }}</strong>
+                <span class="reserva-data"><mat-icon>calendar_today</mat-icon> {{ reserva.data_reserva | date:'dd/MM/yyyy' }} ({{ reserva.periodo_display }})</span>
+              </div>
+              <span class="badge-status" [class]="'badge-' + reserva.status">
+                {{ reserva.status_display }}
+              </span>
+            </div>
+
+            <div class="reserva-detalhes">
+              <p><strong>Solicitante:</strong> {{ reserva.morador_nome }} ({{ reserva.morador_unidade || 'Unidade' }})</p>
+              @if (reserva.observacoes) {
+                <p><strong>Finalidade:</strong> {{ reserva.observacoes }}</p>
+              }
+              @if (reserva.resposta_sindico) {
+                <p class="parecer-sindico"><strong>Parecer da Administração:</strong> {{ reserva.resposta_sindico }}</p>
+              }
+            </div>
+
+            <div class="reserva-acoes">
+              @if (authService.isSindico && reserva.status === 'pendente') {
+                <button class="btn-aprovar" (click)="aprovar(reserva.id)">
+                  <mat-icon>done</mat-icon> Aprovar
+                </button>
+                <button class="btn-rejeitar" (click)="rejeitar(reserva.id)">
+                  <mat-icon>close</mat-icon> Rejeitar
+                </button>
+              }
+
+              @if (reserva.status === 'pendente' || reserva.status === 'confirmada') {
+                <button class="btn-cancelar" (click)="cancelar(reserva.id)">
+                  Cancelar Reserva
+                </button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

@@ -1,0 +1,93 @@
+<div class="avisos-page">
+  <header class="header-avisos">
+    <div>
+      <h2>Mural de Comunicados</h2>
+      <p>Informativos oficiais, avisos de manutenção e recados do condomínio</p>
+    </div>
+
+    @if (authService.isSindico) {
+      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+        <mat-icon>{{ mostrarFormulario ? 'close' : 'campaign' }}</mat-icon>
+        {{ mostrarFormulario ? 'Fechar' : 'Novo Comunicado' }}
+      </button>
+    }
+  </header>
+
+  @if (mensagemSucesso) {
+    <div class="alerta alerta-sucesso">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ mensagemSucesso }}</span>
+    </div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alerta alerta-erro">
+      <mat-icon>error</mat-icon>
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  @if (mostrarFormulario && authService.isSindico) {
+    <section class="card-formulario">
+      <h3>Emitir Comunicado para o Condomínio</h3>
+
+      <div class="campo">
+        <label>Título do Aviso</label>
+        <input type="text" [(ngModel)]="tituloAviso" placeholder="Ex.: Manutenção preventiva dos elevadores" maxlength="100" />
+      </div>
+
+      <div class="campo" style="margin-top: 14px;">
+        <label>Mensagem / Conteúdo</label>
+        <textarea rows="4" [(ngModel)]="conteudoAviso" placeholder="Descreva os detalhes, horários e recomendações para os moradores..."></textarea>
+      </div>
+
+      <div class="campo-check" style="margin-top: 14px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" [(ngModel)]="isImportante" />
+          <strong style="color: #b91c1c;">Destacar como URGENTE / Importante</strong>
+        </label>
+      </div>
+
+      <div class="form-acoes">
+        <button class="btn-confirmar" (click)="publicarAviso()">
+          Publicar no Mural
+        </button>
+      </div>
+    </section>
+  }
+
+  <section class="lista-avisos">
+    @if (avisos.length === 0) {
+      <div class="estado-vazio">
+        <mat-icon>info</mat-icon>
+        <p>Nenhum comunicado publicado no momento.</p>
+      </div>
+    } @else {
+      @for (aviso of avisos; track aviso.id) {
+        <article class="card-aviso" [class.aviso-urgente]="aviso.is_importante">
+          <div class="aviso-cabecalho">
+            <div class="aviso-titulo-area">
+              @if (aviso.is_importante) {
+                <span class="badge-urgente"><mat-icon>priority_high</mat-icon> URGENTE</span>
+              }
+              <h4>{{ aviso.titulo }}</h4>
+            </div>
+
+            @if (authService.isSindico) {
+              <button class="btn-excluir" (click)="excluir(aviso.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+
+          <p class="aviso-conteudo">{{ aviso.conteudo }}</p>
+
+          <footer class="aviso-rodape">
+            <span><mat-icon>person</mat-icon> Publicado por {{ aviso.autor_nome || 'Administração' }}</span>
+            <span><mat-icon>schedule</mat-icon> {{ aviso.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+          </footer>
+        </article>
+      }
+    }
+  </section>
+</div>

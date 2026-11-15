@@ -1,0 +1,222 @@
+<div class="moradores-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1>Gestão de Unidades & Moradores</h1>
+      <p>Cadastre apartamentos, gere códigos de convite e acompanhe os condôminos registrados.</p>
+    </div>
+  </div>
+
+  <!-- Card de Cadastro de Nova Unidade -->
+  <section class="card-box">
+    <div class="card-header-styled">
+      <div class="header-icon-box blue">
+        <mat-icon>add_business</mat-icon>
+      </div>
+      <div>
+        <h3>Cadastrar Nova Unidade & Gerar Código de Convite</h3>
+        <p>Gere um código exclusivo para que o morador crie sua conta vinculado à unidade.</p>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="input-col">
+        <label for="bloco">Bloco / Torre</label>
+        <div class="input-with-icon">
+          <mat-icon>domain</mat-icon>
+          <input id="bloco" #blocoInput type="text" placeholder="Ex.: Bloco A ou Torre 1" />
+        </div>
+      </div>
+
+      <div class="input-col">
+        <label for="apartamento">Número / Apartamento</label>
+        <div class="input-with-icon">
+          <mat-icon>tag</mat-icon>
+          <input id="apartamento" #apartamentoInput type="text" placeholder="Ex.: 101 ou 204B" />
+        </div>
+      </div>
+
+      <div class="btn-col">
+        <button 
+          class="btn-primary" 
+          type="button"
+          (click)="cadastrarEndereco(blocoInput.value, apartamentoInput.value)">
+          <mat-icon>key</mat-icon>
+          <span>Gerar Código</span>
+        </button>
+      </div>
+    </div>
+
+    @if (erroCadastro !== '') {
+      <div class="feedback-alert error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ erroCadastro }}</span>
+      </div>
+    }
+
+    @if (codigoGerado !== '') {
+      <div class="code-created-banner">
+        <div class="banner-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="banner-details">
+          <strong>Unidade cadastrada com sucesso!</strong>
+          <p>Envie o código de ativação abaixo para o novo morador:</p>
+          <div class="code-display-row">
+            <span class="code-pill-lg">{{ codigoGerado }}</span>
+            <button class="btn-copy-lg" type="button" (click)="copiarCodigo(codigoGerado)">
+              <mat-icon>{{ codigoCopiado === codigoGerado ? 'done' : 'content_copy' }}</mat-icon>
+              <span>{{ codigoCopiado === codigoGerado ? 'Copiado!' : 'Copiar Código' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (mensagemSucesso !== '') {
+      <div class="feedback-alert success">
+        <mat-icon>check</mat-icon>
+        <span>{{ mensagemSucesso }}</span>
+      </div>
+    }
+  </section>
+
+  <!-- Grid de Unidades Cadastradas -->
+  <section class="card-box">
+    <div class="card-header-styled">
+      <div class="header-icon-box amber">
+        <mat-icon>vpn_key</mat-icon>
+      </div>
+      <div>
+        <h3>Códigos de Convite das Unidades ({{ unidades.length }})</h3>
+        <p>Consulte ou copie novamente o código de qualquer apartamento para envio aos moradores.</p>
+      </div>
+    </div>
+
+    @if (unidades.length === 0) {
+      <div class="empty-state">
+        <mat-icon>apartment</mat-icon>
+        <p>Nenhuma unidade cadastrada neste condomínio ainda.</p>
+      </div>
+    } @else {
+      <div class="units-grid">
+        @for (unidade of unidades; track unidade.id) {
+          <div class="unit-card">
+            <div class="unit-info">
+              <span class="unit-title">Bloco {{ unidade.bloco }} • Apto {{ unidade.numero }}</span>
+              <span class="code-badge">{{ unidade.codigo_registro }}</span>
+            </div>
+            <button 
+              type="button" 
+              class="btn-copy-sm"
+              [class.copied]="codigoCopiado === unidade.codigo_registro"
+              (click)="copiarCodigo(unidade.codigo_registro)"
+              [title]="'Copiar código ' + unidade.codigo_registro">
+              <mat-icon>{{ codigoCopiado === unidade.codigo_registro ? 'done' : 'content_copy' }}</mat-icon>
+              <span>{{ codigoCopiado === unidade.codigo_registro ? 'Copiado' : 'Copiar' }}</span>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <!-- Lista de Moradores Cadastrados -->
+  <section class="card-box">
+    <div class="card-header-styled">
+      <div class="header-icon-box emerald">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <div>
+        <h3>Moradores Registrados no Condomínio ({{ moradores.length }})</h3>
+        <p>Condôminos com cadastro ativo vinculados às suas respectivas unidades.</p>
+      </div>
+    </div>
+
+    @if (moradores.length === 0) {
+      <div class="empty-state">
+        <mat-icon>person_off</mat-icon>
+        <p>Nenhum morador registrado ainda.</p>
+      </div>
+    } @else {
+      <div class="residents-table-wrapper">
+        <table class="residents-table">
+          <thead>
+            <tr>
+              <th>Morador</th>
+              <th>Unidade</th>
+              <th>CPF</th>
+              <th>WhatsApp / Telefone</th>
+              <th>Perfil</th>
+              <th style="text-align: right;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (morador of moradores; track morador.id) {
+              <tr>
+                <td>
+                  <div class="resident-profile-cell">
+                    <div class="resident-avatar">
+                      {{ morador.first_name.charAt(0).toUpperCase() }}
+                    </div>
+                    <div>
+                      <strong>{{ morador.first_name }} {{ morador.last_name }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="unit-pill">
+                    Bloco {{ morador.endereco.bloco || '-' }} / Apto {{ morador.endereco.numero || '-' }}
+                  </span>
+                </td>
+                <td>{{ morador.cpf }}</td>
+                <td>{{ morador.telefone || '-' }}</td>
+                <td>
+                  <span class="role-badge" [class.sindico]="morador.is_sindico">
+                    {{ morador.is_sindico ? 'Síndico' : 'Morador' }}
+                  </span>
+                </td>
+                <td style="text-align: right;">
+                  <button 
+                    class="btn-delete" 
+                    type="button" 
+                    (click)="pedirExclusao(morador)"
+                    title="Excluir cadastro do morador">
+                    <mat-icon>delete_outline</mat-icon>
+                    <span>Excluir</span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  @if (mostrarModalExclusao && moradorParaExcluir !== null) {
+    <div class="modal-backdrop">
+      <div class="modal-card">
+        <div class="modal-icon-header">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <h3>Excluir Morador?</h3>
+        <p>
+          Tem certeza que deseja desvincular e excluir o cadastro de 
+          <strong>{{ moradorParaExcluir.first_name }} {{ moradorParaExcluir.last_name }}</strong>?
+          Esta ação é irreversível.
+        </p>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" type="button" (click)="cancelarExclusao()">
+            Cancelar
+          </button>
+          <button class="btn-confirm-delete" type="button" (click)="confirmarExclusao()">
+            Sim, Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

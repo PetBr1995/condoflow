@@ -1,0 +1,127 @@
+<div class="encomendas-page">
+  <header class="header-encomendas">
+    <div>
+      <h2>Portaria & Encomendas</h2>
+      <p>Controle de encomendas recebidas na portaria e aviso aos moradores</p>
+    </div>
+
+    @if (authService.isSindico) {
+      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+        <mat-icon>{{ mostrarFormulario ? 'close' : 'inventory_2' }}</mat-icon>
+        {{ mostrarFormulario ? 'Fechar' : 'Receber Encomenda' }}
+      </button>
+    }
+  </header>
+
+  @if (mensagemSucesso) {
+    <div class="alerta alerta-sucesso">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ mensagemSucesso }}</span>
+    </div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alerta alerta-erro">
+      <mat-icon>error</mat-icon>
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  @if (mostrarFormulario && authService.isSindico) {
+    <section class="card-formulario">
+      <h3>Registrar Chegada de Pacote na Portaria</h3>
+
+      <div class="form-grid">
+        <div class="campo">
+          <label>Unidade / Apartamento Destino</label>
+          <select [(ngModel)]="enderecoSelecionadoId">
+            @for (unid of unidades; track unid.id) {
+              <option [value]="unid.id">Bloco {{ unid.bloco }} - Apto {{ unid.numero }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Transportadora / Origem</label>
+          <select [(ngModel)]="empresaEntrega">
+            @for (emp of empresasDisponiveis; track emp) {
+              <option [value]="emp">{{ emp }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Descrição do Pacote</label>
+          <input type="text" [(ngModel)]="descricao" placeholder="Ex.: Caixa média papelão / Envelope" />
+        </div>
+
+        <div class="campo">
+          <label>Código de Rastreio (Opcional)</label>
+          <input type="text" [(ngModel)]="codigoRastreio" placeholder="Ex.: BR123456789" />
+        </div>
+      </div>
+
+      <div class="form-acoes">
+        <button class="btn-confirmar" (click)="registrarChegada()">
+          Salvar e Notificar Morador
+        </button>
+      </div>
+    </section>
+  }
+
+  <section class="secao-encomendas">
+    <div class="topo-filtros">
+      <h3>{{ authService.isSindico ? 'Todas as Encomendas na Portaria' : 'Minhas Encomendas' }}</h3>
+      <div class="filtros">
+        <button [class.ativo]="filtroStatus === 'todas'" (click)="filtroStatus = 'todas'">Todas</button>
+        <button [class.ativo]="filtroStatus === 'aguardando_retirada'" (click)="filtroStatus = 'aguardando_retirada'">Aguardando Retirada</button>
+        <button [class.ativo]="filtroStatus === 'entregue'" (click)="filtroStatus = 'entregue'">Entregues</button>
+      </div>
+    </div>
+
+    @if (encomendasFiltradas().length === 0) {
+      <div class="estado-vazio">
+        <mat-icon>markunread_mailbox</mat-icon>
+        <p>Nenhuma encomenda encontrada.</p>
+      </div>
+    } @else {
+      <div class="lista-encomendas">
+        @for (enc of encomendasFiltradas(); track enc.id) {
+          <article class="card-encomenda" [class.encomenda-retirada]="enc.status === 'entregue'">
+            <div class="encomenda-principal">
+              <div class="icone-transportadora">
+                <mat-icon>local_shipping</mat-icon>
+              </div>
+              <div class="detalhes">
+                <strong>{{ enc.empresa_entrega }}</strong> — <span>{{ enc.descricao }}</span>
+                <p class="destino">Destino: <strong>Bloco {{ enc.bloco }} - Apto {{ enc.numero }}</strong></p>
+                <small class="data">Recebido em: {{ enc.data_recebimento | date:'dd/MM/yyyy HH:mm' }}</small>
+              </div>
+            </div>
+
+            <div class="encomenda-lateral">
+              <span class="badge-status" [class]="'badge-' + enc.status">
+                {{ enc.status_display }}
+              </span>
+
+              @if (enc.status === 'aguardando_retirada') {
+                <div class="codigo-retirada-box">
+                  <small>Cód. Retirada</small>
+                  <strong>{{ enc.codigo_retirada }}</strong>
+                </div>
+
+                @if (authService.isSindico) {
+                  <button class="btn-dar-baixa" (click)="darBaixa(enc.id)">
+                    <mat-icon>check</mat-icon> Confirmar Entrega
+                  </button>
+                }
+              } @else {
+                <small class="data-retirada">Retirado em {{ enc.data_retirada | date:'dd/MM/yyyy HH:mm' }}</small>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

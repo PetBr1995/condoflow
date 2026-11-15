@@ -1,0 +1,128 @@
+<div class="cadastro-page-wrapper">
+  <div class="cadastro-card">
+    <div class="cadastro-header">
+      <div class="brand-badge">
+        <mat-icon>apartment</mat-icon>
+        <span>CondoFlow</span>
+      </div>
+      <h2>Cadastro de Morador</h2>
+      <p>Insira o código de convite da sua unidade fornecido pela administração</p>
+    </div>
+
+    <!-- Alert de Erro -->
+    @if (erroCadastro !== '') {
+      <div class="feedback-alert error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ erroCadastro }}</span>
+      </div>
+    }
+
+    <!-- Alert de Sucesso -->
+    @if (cadastroConcluido !== '') {
+      <div class="feedback-alert success">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ cadastroConcluido }}</span>
+      </div>
+    }
+
+    <div class="form-container">
+      <!-- Código de Convite em Destaque -->
+      <div class="input-group highlight-group">
+        <label for="codigo">
+          <mat-icon class="label-icon">vpn_key</mat-icon> Código de Convite da Unidade
+        </label>
+        <div class="input-wrapper code-input-wrapper">
+          <input 
+            class="code-input" 
+            id="codigo" 
+            #codigoInput 
+            type="text" 
+            placeholder="Ex.: FLORES-A101-QVMY" 
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <span class="field-hint">Solicite este código ao síndico do seu condomínio</span>
+      </div>
+
+      <!-- Nome e Sobrenome lado a lado -->
+      <div class="grid-2-col">
+        <div class="input-group">
+          <label for="nome">Nome</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">person</mat-icon>
+            <input id="nome" #nomeInput type="text" autocomplete="given-name" placeholder="Ex.: Ana" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="sobrenome">Sobrenome</label>
+          <div class="input-wrapper">
+            <input id="sobrenome" #sobrenomeInput type="text" autocomplete="family-name" placeholder="Ex.: Silva" />
+          </div>
+        </div>
+      </div>
+
+      <!-- CPF e WhatsApp lado a lado -->
+      <div class="grid-2-col">
+        <div class="input-group">
+          <label for="cpf">CPF</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">badge</mat-icon>
+            <input id="cpf" #cpfInput type="text" inputmode="numeric" placeholder="000.000.000-00" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="telefone">WhatsApp / Celular</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">phone</mat-icon>
+            <input id="telefone" #telefoneInput type="tel" placeholder="(92) 99999-9999" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Senha e Confirmação lado a lado -->
+      <div class="grid-2-col">
+        <div class="input-group">
+          <label for="senha">Senha</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">lock</mat-icon>
+            <input id="senha" #senhaInput type="password" placeholder="Mínimo 8 dígitos" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="confirmar-senha">Confirmar Senha</label>
+          <div class="input-wrapper">
+            <mat-icon class="input-icon">lock_clock</mat-icon>
+            <input id="confirmar-senha" #confirmarSenhaInput type="password" placeholder="Repita a senha" />
+          </div>
+        </div>
+      </div>
+
+      <button 
+        type="button" 
+        class="submit-btn"
+        (click)="finalizarCadastro(
+          nomeInput.value,
+          sobrenomeInput.value,
+          telefoneInput.value,
+          cpfInput.value,
+          codigoInput.value,
+          senhaInput.value,
+          confirmarSenhaInput.value
+        )">
+        <span>Criar Minha Conta</span>
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+
+      <div class="footer-action">
+        <button type="button" class="link-btn" (click)="voltarParaLogin()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Já tem cadastro? Fazer login</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
