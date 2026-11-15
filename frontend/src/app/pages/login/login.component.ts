@@ -14,13 +14,13 @@ import { MatIconModule } from '@angular/material/icon';
 export class LoginComponent {
   erroLogin = ''; 
   perfilSelecionado = 'morador';
+  carregando: boolean = false;
 
-  // 1. Injetamos o Motoboy na portaria e também o GPS (Router)
   constructor(private authService: AuthService, private router: Router) {}
 
   selecionarPerfil(perfil: string) {
     this.perfilSelecionado = perfil;
-    this.erroLogin = ''; // Limpa os erros se o usuário mudar de aba
+    this.erroLogin = '';
   }
 
   fazerLogin(cpf: string, senha: string) {
@@ -30,17 +30,13 @@ export class LoginComponent {
     } 
 
     this.erroLogin = '';
+    this.carregando = true;
     const cpfLimpo = cpf.replace(/\D/g, '');
     
-    // 2. Chamando o Motoboy para ir no Django
     this.authService.fazerLoginNoDjango(cpfLimpo, senha).subscribe({
       next: (resposta) => {
-        // Caminho Feliz! O Django gostou da senha e devolveu o Crachá (Token).
-        // Guardamos o crachá na gaveta mágica do navegador:
+        this.carregando = false;
         localStorage.setItem('token', resposta.access);
-        
-        // E usamos o GPS para levar o usuário pra página principal
-        console.log('Login feito com sucesso! Bem-vindo.');
         
         if (resposta.is_sindico) {
           this.router.navigate(['/dashboard']);
@@ -49,8 +45,12 @@ export class LoginComponent {
         }
       },
       error: (erro) => {
-        // Caminho Triste! Senha errada ou Django desligado.
-        this.erroLogin = 'CPF ou senha incorretos. Tente novamente.';
+        this.carregando = false;
+        if (erro.status === 401) {
+          this.erroLogin = 'CPF ou senha incorretos. Tente novamente.';
+        } else {
+          this.erroLogin = 'Servidor iniciando (cold start). Aguarde alguns segundos e tente novamente.';
+        }
       }
     });
   }

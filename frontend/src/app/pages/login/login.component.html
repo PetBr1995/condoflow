@@ -60,9 +60,9 @@
         </div>
       </div>
 
-      <button type="submit" class="btn-submit">
-        <span>Acessar Plataforma</span>
-        <mat-icon>arrow_forward</mat-icon>
+      <button type="submit" class="btn-submit" [disabled]="carregando">
+        <span>{{ carregando ? 'Acessando...' : 'Acessar Plataforma' }}</span>
+        <mat-icon [class.girando]="carregando">{{ carregando ? 'sync' : 'arrow_forward' }}</mat-icon>
       </button>
     </form>
 

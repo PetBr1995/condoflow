@@ -170,6 +170,22 @@
   transition: transform 0.2s;
 }
 
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.girando {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .btn-submit:hover {
   background: linear-gradient(135deg, #1d4ed8, #1e40af);
   box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.35);
