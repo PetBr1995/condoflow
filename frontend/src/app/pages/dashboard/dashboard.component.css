@@ -8,7 +8,7 @@
    WELCOME BANNER
    =============================== */
 .dash-welcome-card {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%);
+  background: linear-gradient(135deg, #0e1d35 0%, #162c50 60%, #24477d 100%);
   border-radius: 18px;
   padding: 32px 36px;
   color: #ffffff;
@@ -17,9 +17,10 @@
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 28px;
-  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.25);
+  box-shadow: 0 10px 30px -5px rgba(14, 29, 53, 0.25);
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .dash-welcome-card::after {
@@ -34,42 +35,48 @@
 }
 
 .resident-banner {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 70%, #3b82f6 100%);
+  background: linear-gradient(135deg, #0e1d35 0%, #1e3a6a 60%, #2563eb 100%);
 }
 
 .condo-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
   backdrop-filter: blur(8px);
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #93c5fd;
+  font-size: 0.82rem;
+  font-weight: 700 !important;
+  color: #ffffff !important;
   margin-bottom: 12px;
+  letter-spacing: 0.02em;
 }
 
 .condo-badge mat-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
+  color: #ffffff !important;
 }
 
 .dash-welcome-content h1 {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 800;
+  color: #ffffff !important;
   margin: 0 0 8px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .dash-welcome-content p {
   font-size: 0.95rem;
-  color: #cbd5e1;
+  color: #f1f5f9 !important;
   margin: 0;
   max-width: 580px;
   line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .dash-welcome-actions {
@@ -83,22 +90,23 @@
   align-items: center;
   gap: 8px;
   padding: 11px 18px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .banner-btn.primary {
-  background: #3b82f6;
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+  background: #ffffff !important;
+  color: #0e1d35 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .banner-btn.primary:hover {
-  background: #2563eb;
+  background: #f8fafc !important;
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
 .banner-btn.secondary {
