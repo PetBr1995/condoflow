@@ -186,3 +186,75 @@ button {
   color: #991b1b;
   border: 1px solid #fecaca;
 }
+
+/* ====================================================
+   CondoFlow Design System - Canvas & Page Containers
+   ==================================================== */
+.reservas-page,
+.encomendas-page,
+.acessos-page,
+.avisos-container,
+.documentos-container,
+.enquetes-page,
+.moradores-container,
+.dashboard-container {
+  padding: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Títulos de Página Padronizados */
+.header-reservas h2,
+.header-encomendas h2,
+.header-acessos h2,
+.header-avisos h2,
+.header-documentos h2,
+.header-enquetes h2,
+.moradores-header h2,
+.dashboard-header h2 {
+  color: #0f172a !important;
+  font-size: 1.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* Subtítulos de Página Padronizados */
+.header-reservas p,
+.header-encomendas p,
+.header-acessos p,
+.header-avisos p,
+.header-documentos p,
+.header-enquetes p,
+.moradores-header p,
+.dashboard-header p {
+  color: #64748b !important;
+  font-size: 0.92rem !important;
+  font-weight: 400 !important;
+  margin-top: 4px !important;
+}
+
+/* Botões de Ação Padronizados no Tom Navy do Design System */
+.btn-novo,
+.btn-novo-chamado,
+.btn-criar-aviso,
+.btn-upload-doc,
+.btn-nova-enquete,
+.btn-nova-unidade {
+  background-color: #0f213d !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.18) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-novo:hover,
+.btn-novo-chamado:hover,
+.btn-criar-aviso:hover,
+.btn-upload-doc:hover,
+.btn-nova-enquete:hover,
+.btn-nova-unidade:hover {
+  background-color: #1a325a !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(15, 33, 61, 0.25) !important;
+}

@@ -1,27 +1,32 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'CondoFlow';
+  sidebarRecolhida: boolean = false;
 
   constructor(private router: Router) {}
 
-  // Determina se deve exibir o menu privado superior do sistema
+  toggleSidebar(): void {
+    this.sidebarRecolhida = !this.sidebarRecolhida;
+  }
+
+  // Determina se deve exibir o layout privado interno do sistema
   estaLogado(): boolean {
-    // 1. Se não tiver token armazenado, não está logado
     if (!localStorage.getItem('token')) {
       return false;
     }
 
-    // 2. Rotas públicas NUNCA devem exibir o menu privado interno do sistema
     const rotaAtual = this.router.url.split('?')[0].split('#')[0];
     const rotasPublicas = ['', '/', '/landing', '/login', '/cadastro'];
 

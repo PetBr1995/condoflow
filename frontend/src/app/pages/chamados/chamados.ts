@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { API_CONFIG } from '../../config';
@@ -23,7 +24,7 @@ export interface Chamado {
 @Component({
   selector: 'app-chamados',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   styleUrls: ['./chamados.css'],
   templateUrl: './chamados.html',
 })
@@ -35,7 +36,10 @@ export class Chamados implements OnInit {
   chamadoSelecionado: Chamado | null = null;
   novoStatusSelecionado: string = '';
   novaPrioridadeSelecionada: string = '';
-  filtroStatus = 'todos';
+  
+  // Filtros e Busca (Design System)
+  filtroStatus: string = 'todos'; // 'todos' | 'aberto' | 'em_andamento' | 'concluido'
+  termoBusca: string = '';
   
   // Categorias disponíveis para abertura de chamados
   categorias = ['Manutenção', 'Elétrica', 'Hidráulica', 'Limpeza', 'Segurança', 'Reclamação / Barulho', 'Outros'];
@@ -87,10 +91,52 @@ export class Chamados implements OnInit {
 
   chamadosFiltrados(): Chamado[] {
     let lista = this.chamados;
+    
+    // Filtro por status
     if (this.filtroStatus !== 'todos') {
       lista = lista.filter(c => c.status === this.filtroStatus);
     }
+
+    // Filtro por termo de busca (título, id ou descrição)
+    if (this.termoBusca && this.termoBusca.trim() !== '') {
+      const termo = this.termoBusca.toLowerCase().trim();
+      lista = lista.filter(c => 
+        (c.titulo && c.titulo.toLowerCase().includes(termo)) || 
+        c.id.toString().includes(termo) ||
+        (c.descricao && c.descricao.toLowerCase().includes(termo))
+      );
+    }
+
     return lista;
+  }
+
+  // Helpers de Apresentação do Design System
+  getIconeCategoria(categoria?: string): string {
+    const cat = (categoria || '').toLowerCase();
+    if (cat.includes('elétr') || cat.includes('luz') || cat.includes('lâmpada')) return 'lightbulb';
+    if (cat.includes('hidrául') || cat.includes('cano') || cat.includes('vazamento')) return 'water_drop';
+    if (cat.includes('limp')) return 'cleaning_services';
+    if (cat.includes('seguran')) return 'shield';
+    if (cat.includes('barulho') || cat.includes('reclam')) return 'campaign';
+    return 'build'; // padrão: chave inglesa elegante
+  }
+
+  getLocalChamado(chamado: Chamado): string {
+    if (chamado.autor?.endereco?.bloco) {
+      return `Bloco ${chamado.autor.endereco.bloco}`;
+    }
+    if (chamado.autor?.is_sindico) {
+      return 'Administração';
+    }
+    return 'Área Comum';
+  }
+
+  getPrioridadeLabel(prioridade?: string): string {
+    const prio = (prioridade || '').toLowerCase();
+    if (prio === 'alta') return 'Alta';
+    if (prio === 'urgente') return 'Urgente';
+    if (prio === 'baixa') return 'Baixa';
+    return 'Média';
   }
 
   adicionarChamado(tituloInput: HTMLInputElement, descricaoInput: HTMLTextAreaElement): void {

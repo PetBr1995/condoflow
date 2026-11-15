@@ -1,274 +1,310 @@
-.navbar-wrapper {
-  position: sticky;
+/* ====================================================
+   CondoFlow Sidebar Navigation - Design System Navy
+   ==================================================== */
+
+.sidebar-container {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e2e8f0;
+  bottom: 0;
+  width: 240px;
+  background-color: #0e1d35;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
   z-index: 1000;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12);
+  user-select: none;
 }
 
-.navbar-container {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 8px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.sidebar-container.collapsed {
+  width: 72px;
 }
 
-/* ============================
-   LADO ESQUERDO: MARCA
-   ============================ */
-.brand-area {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  flex-shrink: 0;
-}
-
-.logo-mark {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
-}
-
-.logo-mark mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand-name {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-.condo-badge {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #2563eb;
-  background-color: #eff6ff;
-  padding: 1px 6px;
-  border-radius: 4px;
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-top: 2px;
-}
-
-/* ============================
-   CENTRO: LINKS DE NAVEGAÇÃO
-   ============================ */
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-wrap: nowrap;
-  margin: 0 8px;
-}
-
-.nav-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 10px;
-  border: none;
-  background: transparent;
-  color: #475569;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  white-space: nowrap;
-  text-decoration: none;
-}
-
-.nav-item mat-icon {
-  font-size: 17px;
-  width: 17px;
-  height: 17px;
-  color: #64748b;
-  transition: color 0.15s ease;
-}
-
-.nav-item:hover {
-  color: #0f172a;
-  background-color: #f1f5f9;
-}
-
-.nav-item:hover mat-icon {
-  color: #0f172a;
-}
-
-.nav-item.ativo {
-  background-color: #eff6ff;
-  color: #2563eb;
-  font-weight: 700;
-}
-
-.nav-item.ativo mat-icon {
-  color: #2563eb;
-}
-
-/* Destaque para Moradores (Gestão Síndico) */
-.nav-item.nav-destaque {
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-}
-
-.nav-item.nav-destaque:hover {
-  background-color: #f1f5f9;
-}
-
-.nav-item.nav-destaque.ativo {
-  background-color: #eff6ff;
-  border-color: #bfdbfe;
-  color: #2563eb;
-}
-
-/* ============================
-   LADO DIREITO: PERFIL & SAIR
-   ============================ */
-.user-area {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.user-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 10px 4px 4px;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 9999px;
-}
-
-.user-avatar {
-  width: 28px;
-  height: 28px;
+/* Botão Circular Flutuante de Toggle na Borda */
+.btn-toggle-sidebar {
+  position: absolute;
+  top: 24px;
+  right: -13px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: #3b82f6;
-  color: white;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0e1d35;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.user-meta {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
-}
-
-.user-name {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0f172a;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.user-role {
-  font-size: 0.68rem;
-  color: #64748b;
-}
-
-.btn-logout {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: #fef2f2;
-  color: #ef4444;
-  border: 1px solid #fee2e2;
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  z-index: 1010;
+  padding: 0;
 }
 
-.btn-logout mat-icon {
+.btn-toggle-sidebar:hover {
+  background-color: #f8fafc;
+  transform: scale(1.08);
+}
+
+.btn-toggle-sidebar mat-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
+  line-height: 16px;
 }
 
-.btn-logout:hover {
-  background: #fee2e2;
-  border-color: #fca5a5;
-  color: #dc2626;
+/* Cabeçalho da Sidebar (Brand) */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 20px;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-/* ============================
-   RESPONSIVIDADE (Telas menores)
-   ============================ */
-@media (max-width: 1180px) {
-  .navbar-container {
-    flex-wrap: wrap;
-    padding: 8px 14px;
-    gap: 8px;
+.brand-icon-box {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.brand-icon-box mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.brand-title {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.brand-condo {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+/* Menu de Navegação */
+.sidebar-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: #1e3a6a;
+  border-radius: 4px;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.menu-link .menu-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.menu-link:hover {
+  background-color: #162c50;
+  color: #f1f5f9;
+}
+
+.menu-link:hover .menu-icon {
+  color: #f1f5f9;
+}
+
+/* Item Ativo - Pílula Azul Marinho Elegante */
+.menu-link.ativo {
+  background-color: #24477d;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.menu-link.ativo .menu-icon {
+  color: #ffffff;
+}
+
+/* Rodapé da Sidebar */
+.sidebar-footer {
+  padding: 14px 14px 20px;
+  border-top: 1px solid #1a325a;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Card de Perfil do Usuário */
+.user-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  cursor: default;
+}
+
+.user-profile-card:hover {
+  background-color: #162c50;
+}
+
+.user-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-text-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.user-display-name {
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-unit-name {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-dropdown-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Botão de Logout */
+.btn-sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.84rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-sidebar-logout .logout-icon {
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+
+.btn-sidebar-logout:hover {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.btn-sidebar-logout:hover .logout-icon {
+  color: #ef4444;
+}
+
+/* Estado Recolhido */
+.sidebar-container.collapsed .sidebar-brand {
+  padding: 24px 0 20px;
+  justify-content: center;
+}
+
+.sidebar-container.collapsed .menu-link {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.sidebar-container.collapsed .user-profile-card {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.sidebar-container.collapsed .btn-sidebar-logout {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* Mobile Responsivo */
+@media (max-width: 900px) {
+  .sidebar-container {
+    transform: translateX(-100%);
+    width: 240px;
   }
 
-  .nav-links {
-    order: 3;
-    width: 100%;
-    margin: 4px 0 0;
-    overflow-x: auto;
-    padding: 4px 0 6px;
-    gap: 4px;
-    -webkit-overflow-scrolling: touch;
+  .sidebar-container.mobile-open {
+    transform: translateX(0);
   }
 
-  .nav-links::-webkit-scrollbar {
-    height: 3px;
-  }
-  .nav-links::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-  }
-
-  .user-role {
+  .btn-toggle-sidebar {
     display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .logout-label {
-    display: none;
-  }
-
-  .condo-badge {
-    max-width: 100px;
   }
 }

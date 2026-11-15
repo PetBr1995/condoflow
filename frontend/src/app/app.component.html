@@ -1,10 +1,28 @@
-<!-- Se estiver autenticado no sistema, exibe a barra privada de navegação e o container da aplicação -->
 @if (estaLogado()) {
-  <app-navbar></app-navbar>
-  <main class="app-main-content">
-    <router-outlet></router-outlet>
-  </main>
+  <div class="app-layout" [class.sidebar-recolhida]="sidebarRecolhida">
+    <!-- Sidebar Lateral Dark Navy -->
+    <app-navbar [recolhida]="sidebarRecolhida" (toggle)="toggleSidebar()"></app-navbar>
+
+    <!-- Área Principal de Conteúdo -->
+    <div class="app-body-container">
+      <!-- Barra Superior com Notificações -->
+      <header class="app-topbar">
+        <div class="topbar-spacer"></div>
+        <div class="topbar-actions">
+          <button type="button" class="btn-topbar-bell" title="Avisos e Notificações">
+            <mat-icon>notifications</mat-icon>
+            <span class="bell-badge"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Canvas das Páginas do Sistema -->
+      <main class="app-main-canvas">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
 } @else {
-  <!-- Páginas públicas (Landing Page, Login, Cadastro de Morador) com layout livre -->
+  <!-- Páginas Públicas (Landing Page, Login, Cadastro) sem sidebar -->
   <router-outlet></router-outlet>
 }
