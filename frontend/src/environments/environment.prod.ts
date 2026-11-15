@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api/'
+  apiUrl: 'https://condoflow-backend-26n4.onrender.com/api/'
 };
