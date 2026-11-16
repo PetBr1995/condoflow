@@ -91,64 +91,149 @@
         </a>
       </div>
 
-      <div class="hero-stats-bar">
-        <div class="stat-item">
-          <strong>+12.000</strong>
-          <span>Moradores Conectados</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <strong>99.8%</strong>
-          <span>Aprovação dos Síndicos</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <strong>100%</strong>
-          <span>Isolamento Seguro Multi-Tenant</span>
-        </div>
-      </div>
-
-      <!-- Mockup Visual do Dashboard CondoFlow -->
+      <!-- Mockup Visual Real do CondoFlow (Design System Oficial) -->
       <div class="mockup-preview-wrapper">
         <div class="mockup-frame">
           <div class="mockup-browser-dots">
             <span class="dot red"></span>
             <span class="dot yellow"></span>
             <span class="dot green"></span>
-            <span class="mockup-url">https://app.condoflow.com.br/dashboard</span>
+            <span class="mockup-url">https://app.condoflow.com.br/chamados</span>
           </div>
 
-          <div class="mockup-content">
-            <div class="mockup-header-row">
-              <div>
-                <span class="mockup-chip">🏢 Residencial Flores de Manaus</span>
-                <h3>Painel Geral do Síndico</h3>
+          <div class="mockup-app-layout">
+            <!-- Sidebar Midnight Navy da Referência -->
+            <aside class="mockup-sidebar">
+              <div class="mockup-brand">
+                <div class="mockup-brand-icon-box">
+                  <mat-icon>apartment</mat-icon>
+                </div>
+                <span>CondoFlow</span>
               </div>
-              <span class="mockup-live-badge">● Sistema Ativo</span>
-            </div>
+              <nav class="mockup-nav">
+                <div class="mockup-nav-item active">
+                  <mat-icon>home</mat-icon>
+                  <span>Meus Chamados</span>
+                </div>
+                <div class="mockup-nav-item">
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>Minhas Reservas</span>
+                </div>
+                <div class="mockup-nav-item">
+                  <mat-icon>sensor_door</mat-icon>
+                  <span>Portaria</span>
+                </div>
+                <div class="mockup-nav-item">
+                  <mat-icon>inventory_2</mat-icon>
+                  <span>Encomendas</span>
+                </div>
+                <div class="mockup-nav-item">
+                  <mat-icon>campaign</mat-icon>
+                  <span>Avisos</span>
+                </div>
+                <div class="mockup-nav-item">
+                  <mat-icon>description</mat-icon>
+                  <span>Documentos</span>
+                </div>
+                <div class="mockup-nav-item">
+                  <mat-icon>how_to_vote</mat-icon>
+                  <span>Votações</span>
+                </div>
+              </nav>
 
-            <div class="mockup-cards-grid">
-              <div class="mini-card card-blue">
-                <span class="mini-label">Moradores</span>
-                <strong>148</strong>
-                <span class="mini-trend">✓ 100% vinculados</span>
+              <div class="mockup-sidebar-footer">
+                <div class="mockup-user-pill">
+                  <div class="mockup-user-avatar">P</div>
+                  <div class="mockup-user-details">
+                    <strong>Peterson Brito</strong>
+                    <span>Bloco A • Apto 101</span>
+                  </div>
+                  <mat-icon class="mockup-user-chevron">expand_more</mat-icon>
+                </div>
+                <div class="mockup-logout">
+                  <mat-icon>logout</mat-icon>
+                  <span>Sair</span>
+                </div>
               </div>
-              <div class="mini-card card-rose">
-                <span class="mini-label">Chamados Abertos</span>
-                <strong>3</strong>
-                <span class="mini-trend">Atendimento ágil</span>
+            </aside>
+
+            <!-- Canvas Central da Referência -->
+            <main class="mockup-main-canvas">
+              <!-- Topbar com Sino de Notificação -->
+              <div class="mockup-topbar-row">
+                <div class="mockup-collapse-pill">
+                  <mat-icon>chevron_left</mat-icon>
+                </div>
+                <div class="mockup-bell-box">
+                  <mat-icon>notifications_none</mat-icon>
+                  <span class="mockup-bell-dot"></span>
+                </div>
               </div>
-              <div class="mini-card card-amber">
-                <span class="mini-label">Reservas Hoje</span>
-                <strong>2</strong>
-                <span class="mini-trend">Churrasqueira & Salão</span>
+
+              <!-- Header da Página -->
+              <div class="mockup-header-title">
+                <h2>Meus Chamados</h2>
+                <p>Acompanhe o status e histórico dos seus chamados</p>
               </div>
-              <div class="mini-card card-emerald">
-                <span class="mini-label">Encomendas na Portaria</span>
-                <strong>5</strong>
-                <span class="mini-trend">Aguardando retirada</span>
+
+              <!-- Toolbar: Busca, Filtros e Ação Primária -->
+              <div class="mockup-toolbar-row">
+                <div class="mockup-search-pill">
+                  <mat-icon>search</mat-icon>
+                  <span>Buscar por título ou número...</span>
+                </div>
+                <div class="mockup-filter-chips">
+                  <span class="mockup-chip-btn active">Todos</span>
+                  <span class="mockup-chip-btn"><span class="dot-red"></span> Abertos</span>
+                  <span class="mockup-chip-btn"><span class="dot-blue"></span> Em andamento</span>
+                  <span class="mockup-chip-btn"><span class="dot-green"></span> Finalizados</span>
+                </div>
+                <div class="mockup-btn-new">+ Novo Chamado</div>
               </div>
-            </div>
+
+              <!-- Lista de Cards Elevados -->
+              <div class="mockup-tickets-stack">
+                <!-- Card 1: Manutenção da Lâmpada (Exata referência da imagem) -->
+                <div class="mockup-ticket-card">
+                  <div class="mockup-ticket-icon">
+                    <mat-icon>build</mat-icon>
+                  </div>
+                  <div class="mockup-ticket-info">
+                    <h4>Manutenção da Lâmpada do Hall Bloco A</h4>
+                    <div class="mockup-ticket-meta">
+                      <span><mat-icon>calendar_today</mat-icon> 14 Nov 2026 • #1</span>
+                      <span class="meta-sep">|</span>
+                      <span><mat-icon>apartment</mat-icon> Bloco A</span>
+                    </div>
+                  </div>
+                  <div class="mockup-priority-badge priority-media">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Média</span>
+                  </div>
+                  <mat-icon class="mockup-chevron-arrow">chevron_right</mat-icon>
+                </div>
+
+                <!-- Card 2: Reserva Salão de Festas -->
+                <div class="mockup-ticket-card">
+                  <div class="mockup-ticket-icon icon-teal">
+                    <mat-icon>event_available</mat-icon>
+                  </div>
+                  <div class="mockup-ticket-info">
+                    <h4>Reserva do Salão de Festas com Churrasqueira</h4>
+                    <div class="mockup-ticket-meta">
+                      <span><mat-icon>calendar_today</mat-icon> 20 Nov 2026 • #14</span>
+                      <span class="meta-sep">|</span>
+                      <span><mat-icon>groups</mat-icon> Capacidade: 50 pessoas</span>
+                    </div>
+                  </div>
+                  <div class="mockup-priority-badge priority-alta">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Confirmada</span>
+                  </div>
+                  <mat-icon class="mockup-chevron-arrow">chevron_right</mat-icon>
+                </div>
+              </div>
+            </main>
           </div>
         </div>
       </div>
