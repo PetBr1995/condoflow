@@ -34,6 +34,37 @@
   --radius-md: 10px;
   --radius-lg: 16px;
   --radius-full: 9999px;
+
+  /* ── Transitions.dev Motion Tokens ────────────────────────────── */
+  --duration-stagger: 40ms;
+  --duration-micro: 80ms;
+  --duration-quick: 150ms;
+  --duration-fast: 250ms;
+  --duration-medium: 350ms;
+  --duration-slow: 400ms;
+  --duration-very-slow: 500ms;
+
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: ease-in-out;
+  --ease-out: ease-out;
+  --ease-linear: linear;
+  --ease-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --ease-bounce-strong: cubic-bezier(0.34, 3.85, 0.64, 1);
+
+  --distance-micro: 4px;
+  --distance-small: 6px;
+  --distance-base: 8px;
+  --distance-medium: 12px;
+  --distance-large: 30px;
+
+  --scale-large: 0.96;
+  --scale-medium: 0.97;
+  --scale-small: 0.98;
+  --scale-tiny: 0.99;
+
+  --blur-small: 2px;
+  --blur-medium: 3px;
+  --blur-large: 8px;
 }
 
 * {
@@ -325,4 +356,179 @@ button {
   background-color: #dbeafe !important;
   color: #1d4ed8 !important;
   border-radius: 10px !important;
+}
+
+/* ====================================================
+   Transitions.dev Motion Utilities & Micro-Interactions
+   ==================================================== */
+
+/* Smooth Card Hover with Elevation & Micro-Lift */
+.t-card-hover {
+  transition: transform var(--duration-fast) var(--ease-smooth-out),
+              box-shadow var(--duration-fast) var(--ease-smooth-out),
+              border-color var(--duration-quick) var(--ease-smooth-out) !important;
+  will-change: transform, box-shadow;
+}
+
+.t-card-hover:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04) !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Button Micro-Feedback (Hover Lift + Press Down) */
+.t-btn,
+button.btn-primary,
+.btn-primary-action,
+.btn-novo,
+.btn-novo-chamado,
+.btn-criar-aviso,
+.btn-upload-doc,
+.btn-nova-enquete,
+.btn-nova-unidade {
+  transition: transform var(--duration-micro) var(--ease-smooth-out),
+              box-shadow var(--duration-quick) var(--ease-smooth-out),
+              background-color var(--duration-quick) ease !important;
+}
+
+.t-btn:hover,
+button.btn-primary:hover,
+.btn-primary-action:hover,
+.btn-novo:hover,
+.btn-novo-chamado:hover,
+.btn-criar-aviso:hover,
+.btn-upload-doc:hover,
+.btn-nova-enquete:hover,
+.btn-nova-unidade:hover {
+  transform: translateY(-1px) scale(1.01) !important;
+}
+
+.t-btn:active,
+button.btn-primary:active,
+.btn-primary-action:active,
+.btn-novo:active,
+.btn-novo-chamado:active,
+.btn-criar-aviso:active,
+.btn-upload-doc:active,
+.btn-nova-enquete:active,
+.btn-nova-unidade:active {
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 0 1px 2px rgba(15, 33, 61, 0.2) !important;
+}
+
+/* Badge Bounce Pop-In */
+.t-badge-pop,
+.badge,
+.prioridade-tag,
+.chip-status {
+  transition: transform var(--duration-fast) var(--ease-bounce),
+              background-color var(--duration-quick) ease,
+              color var(--duration-quick) ease !important;
+}
+
+.chip-status:hover {
+  transform: translateY(-1px) !important;
+}
+
+.chip-status:active {
+  transform: scale(0.96) !important;
+}
+
+/* Modal Open/Close Scale & Blur Reveal */
+.modal-overlay,
+.modal-backdrop {
+  animation: t-fade-in var(--duration-quick) var(--ease-smooth-out) forwards;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-content,
+.modal-box,
+.dialog-box {
+  animation: t-modal-enter var(--duration-fast) var(--ease-smooth-out) forwards;
+}
+
+@keyframes t-modal-enter {
+  0% {
+    opacity: 0;
+    transform: scale(var(--scale-large)) translateY(var(--distance-base));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes t-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Toast & Alert Slide + Fade In */
+.alerta,
+.alerta-ds,
+.toast-box {
+  animation: t-toast-enter var(--duration-medium) var(--ease-smooth-out) forwards;
+}
+
+@keyframes t-toast-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Skeleton Shimmer Loading Placeholder */
+.t-skeleton {
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 0%,
+    #e2e8f0 50%,
+    #f1f5f9 100%
+  );
+  background-size: 200% 100%;
+  animation: t-shimmer 1.6s var(--ease-linear) infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes t-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Error State Shake */
+.t-error-shake {
+  animation: t-shake var(--duration-slow) var(--ease-smooth-out);
+}
+
+@keyframes t-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* Accessibility Guard for Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

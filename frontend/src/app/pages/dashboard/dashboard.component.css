@@ -145,12 +145,15 @@
   align-items: flex-start;
   gap: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
+  transition: transform var(--duration-fast) var(--ease-smooth-out),
+              box-shadow var(--duration-fast) var(--ease-smooth-out),
+              border-color var(--duration-quick) ease;
+  will-change: transform, box-shadow;
 }
 
 .kpi-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.09);
   border-color: #cbd5e1;
 }
 
@@ -296,7 +299,10 @@
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: transform var(--duration-fast) var(--ease-smooth-out),
+              background-color var(--duration-quick) ease,
+              border-color var(--duration-quick) ease;
+  will-change: transform;
 }
 
 .hub-item:hover {
@@ -383,14 +389,17 @@
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  transition: all 0.22s ease;
+  transition: transform var(--duration-fast) var(--ease-smooth-out),
+              box-shadow var(--duration-fast) var(--ease-smooth-out),
+              border-color var(--duration-quick) ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  will-change: transform, box-shadow;
 }
 
 .module-card:hover {
   transform: translateY(-4px);
   border-color: #3b82f6;
-  box-shadow: 0 10px 24px -4px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.14);
 }
 
 .module-icon-box {
