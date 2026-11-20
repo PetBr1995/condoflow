@@ -29,6 +29,16 @@ export interface Reserva {
   created_at: string;
 }
 
+export interface ReservaOcupada {
+  id: number | string;
+  bloqueio_id?: number;
+  area_comum_id: number;
+  data_reserva: string;
+  periodo: string;
+  status: 'pendente' | 'confirmada' | 'bloqueado';
+  motivo?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,6 +53,18 @@ export class ReservasService {
 
   getReservas(): Observable<Reserva[]> {
     return this.http.get<Reserva[]>(`${this.baseUrl}reservas/`);
+  }
+
+  getDisponibilidade(areaComumId: number): Observable<ReservaOcupada[]> {
+    return this.http.get<ReservaOcupada[]>(`${this.baseUrl}areas-comuns/${areaComumId}/disponibilidade/`);
+  }
+
+  bloquearData(areaComumId: number, dados: { data: string; periodo?: string; motivo?: string }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}areas-comuns/${areaComumId}/bloquear-data/`, dados);
+  }
+
+  desbloquearData(areaComumId: number, dados: { data?: string; periodo?: string; bloqueio_id?: number }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}areas-comuns/${areaComumId}/desbloquear-data/`, dados);
   }
 
   solicitarReserva(dados: { area_comum: number; data_reserva: string; periodo: string; observacoes?: string }): Observable<Reserva> {

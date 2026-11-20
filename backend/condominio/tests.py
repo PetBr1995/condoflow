@@ -171,6 +171,114 @@ class CondoFlowE2ETestCase(APITestCase):
         res3 = self.client.post('/api/reservas/', payload, **headers_morador)
         self.assertEqual(res3.status_code, status.HTTP_201_CREATED)
 
+        # 4. Consulta de disponibilidade e ocupação pelo morador
+        res_disp = self.client.get(f'/api/areas-comuns/{area.id}/disponibilidade/', **headers_morador)
+        self.assertEqual(res_disp.status_code, status.HTTP_200_OK)
+        datas_ocupadas = [r['data_reserva'] for r in res_disp.data]
+        self.assertIn("2026-12-25", datas_ocupadas)
+        self.assertIn("2026-12-26", datas_ocupadas)
+
+        res_ocup = self.client.get(f'/api/reservas/ocupadas/?area_comum={area.id}', **headers_morador)
+        self.assertEqual(res_ocup.status_code, status.HTTP_200_OK)
+        datas_ocupadas_2 = [r['data_reserva'] for r in res_ocup.data]
+        self.assertIn("2026-12-25", datas_ocupadas_2)
+
+        # 5. Síndico bloqueia uma data específica (ex: Manutenção)
+        headers_sindico = self.get_jwt_header("11111111111")
+        res_bloq = self.client.post(
+            f'/api/areas-comuns/{area.id}/bloquear-data/',
+            {'data': '2026-12-30', 'periodo': 'dia_inteiro', 'motivo': 'Pintura e Reforma'},
+            **headers_sindico
+        )
+        self.assertEqual(res_bloq.status_code, status.HTTP_201_CREATED)
+
+        # 6. Morador tenta reservar a data bloqueada (deve ser rejeitado)
+        payload_bloq = {
+            'area_comum': area.id,
+            'data_reserva': '2026-12-30',
+            'periodo': 'dia_inteiro',
+            'observacoes': 'Tentativa em dia bloqueado'
+        }
+        res_fail = self.client.post('/api/reservas/', payload_bloq, **headers_morador)
+        self.assertEqual(res_fail.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('data_reserva', res_fail.data)
+
+        # 7. Síndico desbloqueia a data
+        res_desbloq = self.client.post(
+            f'/api/areas-comuns/{area.id}/desbloquear-data/',
+            {'data': '2026-12-30', 'periodo': 'dia_inteiro'},
+            **headers_sindico
+        )
+        self.assertEqual(res_desbloq.status_code, status.HTTP_200_OK)
+
+        # 8. Morador agora consegue reservar a data liberada
+        res_ok = self.client.post('/api/reservas/', payload_bloq, **headers_morador)
+        self.assertEqual(res_ok.status_code, status.HTTP_201_CREATED)
+
+        # 9. Regra dos Turnos: reservar Manhã deixa Tarde e Noite disponíveis
+        data_turnos = "2026-11-24"
+        # 9.1 Reserva Manhã (deve ter sucesso)
+        res_manha = self.client.post('/api/reservas/', {
+            'area_comum': area.id,
+            'data_reserva': data_turnos,
+            'periodo': 'manha',
+            'observacoes': 'Treino matinal'
+        }, **headers_morador)
+        self.assertEqual(res_manha.status_code, status.HTTP_201_CREATED)
+
+        # 9.2 Outra tentativa para Manhã na mesma data (deve ser rejeitada)
+        res_manha_duplicada = self.client.post('/api/reservas/', {
+            'area_comum': area.id,
+            'data_reserva': data_turnos,
+            'periodo': 'manha'
+        }, **headers_morador)
+        self.assertEqual(res_manha_duplicada.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # 9.3 Tentativa de Dia Inteiro com Manhã já reservada (deve ser rejeitada)
+        res_dia_inteiro_bloqueado = self.client.post('/api/reservas/', {
+            'area_comum': area.id,
+            'data_reserva': data_turnos,
+            'periodo': 'dia_inteiro'
+        }, **headers_morador)
+        self.assertEqual(res_dia_inteiro_bloqueado.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # 9.4 Reserva Tarde na mesma data (deve ter SUCESSO - tarde permanece disponível!)
+        res_tarde = self.client.post('/api/reservas/', {
+            'area_comum': area.id,
+            'data_reserva': data_turnos,
+            'periodo': 'tarde',
+            'observacoes': 'Aniversário à tarde'
+        }, **headers_morador)
+        self.assertEqual(res_tarde.status_code, status.HTTP_201_CREATED)
+
+        # 9.5 Reserva Noite na mesma data (deve ter SUCESSO - noite permanece disponível!)
+        res_noite = self.client.post('/api/reservas/', {
+            'area_comum': area.id,
+            'data_reserva': data_turnos,
+            'periodo': 'noite',
+            'observacoes': 'Jantar'
+        }, **headers_morador)
+        self.assertEqual(res_noite.status_code, status.HTTP_201_CREATED)
+
+        # 10. Regra do Dia Inteiro: reserva de Dia Inteiro torna todos os turnos indisponíveis
+        data_dia_todo = "2026-11-28"
+        res_dia_todo = self.client.post('/api/reservas/', {
+            'area_comum': area.id,
+            'data_reserva': data_dia_todo,
+            'periodo': 'dia_inteiro',
+            'observacoes': 'Festa o dia todo'
+        }, **headers_morador)
+        self.assertEqual(res_dia_todo.status_code, status.HTTP_201_CREATED)
+
+        # 10.1 Qualquer tentativa para manhã, tarde ou noite nessa data deve ser rejeitada
+        for turno in ['dia_inteiro', 'manha', 'tarde', 'noite']:
+            res_tentativa = self.client.post('/api/reservas/', {
+                'area_comum': area.id,
+                'data_reserva': data_dia_todo,
+                'periodo': turno
+            }, **headers_morador)
+            self.assertEqual(res_tentativa.status_code, status.HTTP_400_BAD_REQUEST)
+
     # ==========================================
     # TESTE 3: ASSEMBLEIA VIRTUAL (1 VOTO POR UNIDADE)
     # ==========================================

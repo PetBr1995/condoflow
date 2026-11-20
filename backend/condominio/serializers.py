@@ -182,7 +182,21 @@ class AvisoSerializer(serializers.ModelSerializer):
 
 
 from datetime import date
-from .models import AreaComum, Reserva
+from .models import AreaComum, Reserva, BloqueioAreaComum
+
+class BloqueioAreaComumSerializer(serializers.ModelSerializer):
+    area_nome = serializers.CharField(source='area_comum.nome', read_only=True)
+    bloqueado_por_nome = serializers.CharField(source='bloqueado_por.get_full_name', read_only=True)
+    periodo_display = serializers.CharField(source='get_periodo_display', read_only=True)
+
+    class Meta:
+        model = BloqueioAreaComum
+        fields = [
+            'id', 'condominio', 'area_comum', 'area_nome', 'data',
+            'periodo', 'periodo_display', 'motivo', 'bloqueado_por',
+            'bloqueado_por_nome', 'created_at'
+        ]
+        read_only_fields = ['condominio', 'bloqueado_por', 'created_at']
 
 class AreaComumSerializer(serializers.ModelSerializer):
     condominio_nome = serializers.CharField(source='condominio.nome', read_only=True)
@@ -225,8 +239,24 @@ class ReservaSerializer(serializers.ModelSerializer):
         area = attrs.get('area_comum')
         periodo = attrs.get('periodo', 'dia_inteiro')
 
-        # Se estiver criando ou alterando data/período, checa conflito de agendamento
+        # Se estiver criando ou alterando data/período, checa bloqueios do síndico e conflito de agendamento
         if area and data_reserva:
+            # 1. Checa se o síndico bloqueou esta data/período para manutenção/interdição
+            bloqueios = BloqueioAreaComum.objects.filter(
+                area_comum=area,
+                data=data_reserva
+            )
+            conflito_bloqueio = (
+                bloqueios.filter(periodo=periodo).exists() or
+                bloqueios.filter(periodo='dia_inteiro').exists() or
+                (periodo == 'dia_inteiro' and bloqueios.exists())
+            )
+            if conflito_bloqueio:
+                motivo_b = bloqueios.first().motivo if bloqueios.exists() else "Indisponível pela Administração"
+                raise serializers.ValidationError({
+                    "data_reserva": f"O espaço '{area.nome}' está indisponível nesta data/horário por determinação da administração: {motivo_b}"
+                })
+
             qs = Reserva.objects.filter(
                 area_comum=area,
                 data_reserva=data_reserva,

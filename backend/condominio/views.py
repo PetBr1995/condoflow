@@ -204,8 +204,8 @@ class DashboardView(APIView):
         return Response(dados)
 
 
-from .models import AreaComum, Reserva
-from .serializers import AreaComumSerializer, ReservaSerializer
+from .models import AreaComum, Reserva, BloqueioAreaComum
+from .serializers import AreaComumSerializer, ReservaSerializer, BloqueioAreaComumSerializer
 
 class AreaComumViewSet(viewsets.ModelViewSet):
     """Gestão dos espaços comuns (Churrasqueira, Salão de Festas, etc.) por condomínio."""
@@ -221,12 +221,104 @@ class AreaComumViewSet(viewsets.ModelViewSet):
         return AreaComum.objects.filter(condominio=user.condominio, ativa=True)
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'disponibilidade']:
             return [EhAutenticado()]
         return [EhAutenticado(), IsSindico()]
 
     def perform_create(self, serializer):
         serializer.save(condominio=self.request.user.condominio)
+
+    @action(detail=True, methods=['get'], permission_classes=[EhAutenticado])
+    def disponibilidade(self, request, pk=None):
+        """Retorna as reservas ativas e bloqueios do síndico desta área comum para verificação de disponibilidade."""
+        from datetime import date
+        user = request.user
+        area = self.get_object()
+        reservas = Reserva.objects.filter(
+            condominio=user.condominio,
+            area_comum=area,
+            data_reserva__gte=date.today(),
+            status__in=['pendente', 'confirmada']
+        ).values('id', 'area_comum_id', 'data_reserva', 'periodo', 'status')
+
+        dados = [
+            {
+                'id': r['id'],
+                'area_comum_id': r['area_comum_id'],
+                'data_reserva': r['data_reserva'].strftime('%Y-%m-%d') if hasattr(r['data_reserva'], 'strftime') else str(r['data_reserva']),
+                'periodo': r['periodo'],
+                'status': r['status'],
+                'motivo': ''
+            }
+            for r in reservas
+        ]
+
+        # Inclui os bloqueios definidos pelo síndico
+        bloqueios = BloqueioAreaComum.objects.filter(
+            condominio=user.condominio,
+            area_comum=area,
+            data__gte=date.today()
+        )
+        for b in bloqueios:
+            dados.append({
+                'id': f"bloqueio_{b.id}",
+                'bloqueio_id': b.id,
+                'area_comum_id': b.area_comum_id,
+                'data_reserva': b.data.strftime('%Y-%m-%d') if hasattr(b.data, 'strftime') else str(b.data),
+                'periodo': b.periodo,
+                'status': 'bloqueado',
+                'motivo': b.motivo
+            })
+
+        return Response(dados)
+
+    @action(detail=True, methods=['post'], url_path='bloquear-data', permission_classes=[EhAutenticado, IsSindico])
+    def bloquear_data(self, request, pk=None):
+        """Ação exclusiva do síndico para bloquear uma data/horário para a área comum."""
+        area = self.get_object()
+        user = request.user
+        data_str = request.data.get('data')
+        periodo = request.data.get('periodo', 'dia_inteiro')
+        motivo = request.data.get('motivo', 'Indisponível pela Administração (Manutenção / Limpeza)')
+
+        if not data_str:
+            return Response({'erro': 'Informe a data a ser bloqueada.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        bloqueio, created = BloqueioAreaComum.objects.get_or_create(
+            condominio=user.condominio,
+            area_comum=area,
+            data=data_str,
+            periodo=periodo,
+            defaults={'motivo': motivo, 'bloqueado_por': user}
+        )
+        if not created:
+            bloqueio.motivo = motivo
+            bloqueio.bloqueado_por = user
+            bloqueio.save()
+
+        return Response(BloqueioAreaComumSerializer(bloqueio).data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['post'], url_path='desbloquear-data', permission_classes=[EhAutenticado, IsSindico])
+    def desbloquear_data(self, request, pk=None):
+        """Ação exclusiva do síndico para liberar/desbloquear uma data para a área comum."""
+        area = self.get_object()
+        user = request.user
+        data_str = request.data.get('data')
+        periodo = request.data.get('periodo')
+        bloqueio_id = request.data.get('bloqueio_id')
+
+        qs = BloqueioAreaComum.objects.filter(condominio=user.condominio, area_comum=area)
+        if bloqueio_id:
+            qs = qs.filter(id=bloqueio_id)
+        elif data_str:
+            qs = qs.filter(data=data_str)
+            if periodo:
+                qs = qs.filter(periodo=periodo)
+        else:
+            return Response({'erro': 'Informe a data ou o ID do bloqueio a ser removido.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        removidos, _ = qs.delete()
+        return Response({'sucesso': True, 'removidos': removidos, 'mensagem': 'Data desbloqueada com sucesso.'})
 
 
 class ReservaViewSet(viewsets.ModelViewSet):
@@ -252,6 +344,56 @@ class ReservaViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(morador=user, condominio=user.condominio)
+
+    @action(detail=False, methods=['get'], permission_classes=[EhAutenticado])
+    def ocupadas(self, request):
+        """Retorna as reservas ativas (pendentes ou confirmadas) para exibição de disponibilidade aos moradores."""
+        from datetime import date
+        user = request.user
+        if not user.condominio:
+            return Response([])
+
+        area_id = request.query_params.get('area_comum')
+        qs = Reserva.objects.filter(
+            condominio=user.condominio,
+            data_reserva__gte=date.today(),
+            status__in=['pendente', 'confirmada']
+        )
+        if area_id:
+            qs = qs.filter(area_comum_id=area_id)
+
+        reservas = qs.values('id', 'area_comum_id', 'data_reserva', 'periodo', 'status')
+        dados = [
+            {
+                'id': r['id'],
+                'area_comum_id': r['area_comum_id'],
+                'data_reserva': r['data_reserva'].strftime('%Y-%m-%d') if hasattr(r['data_reserva'], 'strftime') else str(r['data_reserva']),
+                'periodo': r['periodo'],
+                'status': r['status'],
+                'motivo': ''
+            }
+            for r in reservas
+        ]
+
+        # Inclui os bloqueios definidos pelo síndico
+        bloqueios = BloqueioAreaComum.objects.filter(
+            condominio=user.condominio,
+            data__gte=date.today()
+        )
+        if area_id:
+            bloqueios = bloqueios.filter(area_comum_id=area_id)
+        for b in bloqueios:
+            dados.append({
+                'id': f"bloqueio_{b.id}",
+                'bloqueio_id': b.id,
+                'area_comum_id': b.area_comum_id,
+                'data_reserva': b.data.strftime('%Y-%m-%d') if hasattr(b.data, 'strftime') else str(b.data),
+                'periodo': b.periodo,
+                'status': 'bloqueado',
+                'motivo': b.motivo
+            })
+
+        return Response(dados)
 
     @action(detail=True, methods=['post'], permission_classes=[EhAutenticado, IsSindico])
     def aprovar(self, request, pk=None):

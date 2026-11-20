@@ -193,6 +193,28 @@ class Reserva(models.Model):
         return f"{self.area_comum.nome} - {self.data_reserva} ({self.get_status_display()})"
 
 
+class BloqueioAreaComum(models.Model):
+    """Permite ao síndico definir dias e horários indisponíveis para reserva (ex: manutenção, limpeza, reformas)."""
+    PERIODO_CHOICES = Reserva.PERIODO_CHOICES
+
+    condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE, related_name='bloqueios_area', verbose_name="Condomínio")
+    area_comum = models.ForeignKey(AreaComum, on_delete=models.CASCADE, related_name='bloqueios', verbose_name="Espaço")
+    data = models.DateField(verbose_name="Data Bloqueada")
+    periodo = models.CharField(max_length=20, choices=PERIODO_CHOICES, default='dia_inteiro', verbose_name="Período")
+    motivo = models.CharField(max_length=150, default="Indisponível pela Administração (Manutenção / Limpeza)", verbose_name="Motivo do Bloqueio")
+    bloqueado_por = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='bloqueios_criados', verbose_name="Bloqueado por")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Bloqueado em")
+
+    class Meta:
+        verbose_name = "Bloqueio de Área Comum (Síndico)"
+        verbose_name_plural = "Bloqueios de Áreas Comuns (Síndico)"
+        ordering = ['-data']
+        unique_together = ('area_comum', 'data', 'periodo')
+
+    def __str__(self):
+        return f"[Bloqueio Síndico] {self.area_comum.nome} - {self.data} ({self.periodo})"
+
+
 class Encomenda(models.Model):
     """Módulo de Portaria: Registro de encomendas e pacotes entregues na portaria."""
     STATUS_CHOICES = [

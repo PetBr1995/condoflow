@@ -2,11 +2,11 @@
   <header class="header-reservas">
     <div>
       <h2>Reservas de Áreas Comuns</h2>
-      <p>Agende salão de festas, churrasqueiras e espaços compartilhados</p>
+      <p>Consulte a disponibilidade em tempo real e agende espaços com segurança</p>
     </div>
     <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
-      <mat-icon>{{ mostrarFormulario ? 'close' : 'add' }}</mat-icon>
-      {{ mostrarFormulario ? 'Fechar Formulário' : 'Solicitar Nova Reserva' }}
+      <mat-icon>{{ mostrarFormulario ? 'close' : 'event_available' }}</mat-icon>
+      {{ mostrarFormulario ? 'Fechar Agendamento' : 'Novo Agendamento / Gestão' }}
     </button>
   </header>
 
@@ -24,65 +24,320 @@
     </div>
   }
 
-  <!-- Formulário de Nova Reserva -->
+  <!-- Formulário e Calendário de Agendamento -->
   @if (mostrarFormulario) {
     <section class="card-formulario">
-      <h3>Agendar Espaço</h3>
-      
-      <div class="form-grid">
-        <div class="campo">
-          <label>Espaço Comum</label>
-          <select [(ngModel)]="areaSelecionadaId">
+      <div class="form-header">
+        <div class="form-titulo">
+          <span class="badge-passo">Passo a Passo</span>
+          <h3>Agendar Espaço Comum</h3>
+        </div>
+        <p class="form-instrucao">
+          {{ authService.isSindico 
+            ? 'Como Síndico, você pode solicitar reservas ou definir dias disponíveis e indisponíveis para o condomínio.' 
+            : 'Selecione o espaço, visualize os dias disponíveis no calendário e escolha o melhor horário.' }}
+        </p>
+      </div>
+
+      <div class="form-conteudo">
+        <!-- 1. Seleção do Espaço Comum -->
+        <div class="seletor-espaco-box">
+          <label class="label-secao">
+            <mat-icon>apartment</mat-icon>
+            1. Selecione o Espaço
+          </label>
+          <select class="select-moderno" [(ngModel)]="areaSelecionadaId" (change)="aoMudarArea()">
             @for (area of areas; track area.id) {
               <option [value]="area.id">
-                {{ area.nome }} (Capacidade: {{ area.capacidade_maxima }} pessoas - Taxa: R$ {{ area.taxa_reserva }})
+                {{ area.nome }} — Até {{ area.capacidade_maxima }} pessoas (Taxa: R$ {{ area.taxa_reserva }})
               </option>
             }
           </select>
         </div>
 
-        <div class="campo">
-          <label>Data Desejada</label>
-          <input type="date" [(ngModel)]="dataReserva" />
+        <!-- PAINEL EXCLUSIVO DO SÍNDICO: DEFINIR DISPONIBILIDADE DO DIA SELECIONADO -->
+        @if (authService.isSindico) {
+          <div class="painel-sindico-disponibilidade">
+            <div class="painel-sindico-header">
+              <div class="sindico-info-box">
+                <mat-icon class="icone-sindico">admin_panel_settings</mat-icon>
+                <div>
+                  <h4>Controle de Disponibilidade do Síndico</h4>
+                  <p>Defina se a data <strong>{{ formatarDataBr(dataReserva) }}</strong> está disponível ou indisponível para os moradores.</p>
+                </div>
+              </div>
+
+              <div class="sindico-status-box">
+                @if (diaSelecionadoTemBloqueio) {
+                  <span class="badge-sindico bloqueado">
+                    <mat-icon>lock</mat-icon> Dia Indisponível (Bloqueado)
+                  </span>
+                  <button type="button" class="btn-sindico-liberar" [disabled]="carregandoBloqueio" (click)="desbloquearDataSindico()">
+                    <mat-icon>lock_open</mat-icon>
+                    Liberar / Tornar Disponível
+                  </button>
+                } @else {
+                  <span class="badge-sindico livre">
+                    <mat-icon>check_circle</mat-icon> Dia Disponível
+                  </span>
+                  <button type="button" class="btn-sindico-bloquear" (click)="mostrarPainelBloqueio = !mostrarPainelBloqueio">
+                    <mat-icon>{{ mostrarPainelBloqueio ? 'close' : 'block' }}</mat-icon>
+                    {{ mostrarPainelBloqueio ? 'Cancelar Bloqueio' : 'Bloquear / Tornar Indisponível' }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Formulário expansível de Bloqueio -->
+            @if (mostrarPainelBloqueio && !diaSelecionadoTemBloqueio) {
+              <div class="form-bloqueio-sindico">
+                <h5>Configurar Indisponibilidade para {{ formatarDataBr(dataReserva) }}</h5>
+                <div class="grade-bloqueio-campos">
+                  <div class="campo-bloqueio">
+                    <label>Período a Bloquear:</label>
+                    <select [(ngModel)]="periodoBloqueio" class="select-moderno">
+                      <option value="dia_inteiro">Dia Inteiro (08h às 22h)</option>
+                      <option value="manha">Manhã (08h às 13h)</option>
+                      <option value="tarde">Tarde (13h às 18h)</option>
+                      <option value="noite">Noite (18h às 23h)</option>
+                    </select>
+                  </div>
+
+                  <div class="campo-bloqueio campo-bloqueio-motivo">
+                    <label>Motivo da Indisponibilidade:</label>
+                    <input 
+                      type="text" 
+                      [(ngModel)]="motivoBloqueioInput" 
+                      class="input-moderno"
+                      placeholder="Ex.: Manutenção preventiva, Limpeza profunda, Reforma..." 
+                    />
+                  </div>
+                </div>
+
+                <div class="acoes-bloqueio">
+                  <button type="button" class="btn-salvar-bloqueio" [disabled]="carregandoBloqueio" (click)="bloquearDataSindico()">
+                    <mat-icon>check</mat-icon>
+                    Confirmar Bloqueio da Data
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (diaSelecionadoTemBloqueio) {
+              <div class="detalhes-bloqueio-ativo">
+                <mat-icon>info</mat-icon>
+                <span><strong>Motivo cadastrado:</strong> {{ motivoBloqueioDiaSelecionado }}</span>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- 2. Calendário Mensal de Disponibilidade -->
+        <div class="calendario-container">
+          <div class="calendario-header">
+            <div class="calendario-nav">
+              <button type="button" class="btn-nav-mes" (click)="mesAnterior()" [disabled]="!podeVoltarMes" title="Mês anterior">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <h4 class="mes-titulo">{{ mesAtualLabel }}</h4>
+              <button type="button" class="btn-nav-mes" (click)="proximoMes()" title="Próximo mês">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+
+            <!-- Legenda de Cores -->
+            <div class="legenda-disponibilidade">
+              <span class="legenda-item"><span class="dot-status livre"></span> Dia Livre</span>
+              <span class="legenda-item"><span class="dot-status parcial"></span> Horários Livres</span>
+              <span class="legenda-item"><span class="dot-status ocupado"></span> Reservado</span>
+              <span class="legenda-item"><span class="dot-status bloqueado"></span> Bloqueio Síndico</span>
+            </div>
+          </div>
+
+          @if (carregandoDisponibilidade) {
+            <div class="loading-disponibilidade">
+              <mat-icon class="girando">sync</mat-icon>
+              <span>Consultando disponibilidade do espaço...</span>
+            </div>
+          }
+
+          <!-- Grade dos Dias da Semana -->
+          <div class="grade-dias-semana">
+            @for (diaSemana of diasSemana; track diaSemana) {
+              <span class="col-semana">{{ diaSemana }}</span>
+            }
+          </div>
+
+          <!-- Grade de Dias do Mês -->
+          <div class="grade-dias">
+            @for (dia of diasCalendario; track dia.dataStr) {
+              <button
+                type="button"
+                class="dia-btn"
+                [class.outro-mes]="dia.isOutroMes"
+                [class.passado]="dia.isPassado"
+                [class.hoje]="dia.isHoje"
+                [class.disponivel]="dia.isDisponivel && !dia.isParcialmenteOcupado && !dia.isParcialmenteBloqueado"
+                [class.parcial]="dia.isParcialmenteOcupado || dia.isParcialmenteBloqueado"
+                [class.ocupado]="dia.isTotalmenteOcupado && !dia.isTotalmenteBloqueado"
+                [class.bloqueado-sindico]="dia.isTotalmenteBloqueado"
+                [class.selecionado]="dia.dataStr === dataReserva"
+                [disabled]="dia.isPassado || (dia.isTotalmenteOcupado && !authService.isSindico)"
+                (click)="selecionarDia(dia)"
+                [title]="dia.isPassado 
+                  ? 'Data no passado' 
+                  : dia.isTotalmenteBloqueado 
+                    ? 'Totalmente bloqueado pelo síndico: ' + dia.motivoBloqueio 
+                    : dia.isTotalmenteOcupado 
+                      ? 'Totalmente reservado nesta data (todos os turnos ocupados)' 
+                      : (dia.isParcialmenteOcupado || dia.isParcialmenteBloqueado)
+                        ? 'Possui turnos livres para reserva!' 
+                        : 'Todos os turnos livres'"
+              >
+                <span class="dia-num">{{ dia.diaNumero }}</span>
+                @if (!dia.isPassado && !dia.isOutroMes) {
+                  @if (dia.isTotalmenteBloqueado) {
+                    <span class="tag-dia bloqueado">Bloqueado</span>
+                  } @else if (dia.isTotalmenteOcupado) {
+                    <span class="tag-dia esgotado">Ocupado</span>
+                  } @else if (dia.isParcialmenteOcupado || dia.isParcialmenteBloqueado) {
+                    <span class="tag-dia parcial">Turnos Livres</span>
+                  } @else {
+                    <span class="tag-dia livre">Livre</span>
+                  }
+                }
+              </button>
+            }
+          </div>
         </div>
 
-        <div class="campo">
-          <label>Período</label>
-          <select [(ngModel)]="periodoSelecionado">
-            <option value="dia_inteiro">Dia Inteiro (08h às 22h)</option>
-            <option value="manha">Manhã (08h às 13h)</option>
-            <option value="tarde">Tarde (13h às 18h)</option>
-            <option value="noite">Noite (18h às 23h)</option>
-          </select>
+        <!-- 3. Seletor de Horários / Período -->
+        <div class="secao-horarios">
+          <div class="horarios-topo">
+            <label class="label-secao">
+              <mat-icon>schedule</mat-icon>
+              2. Escolha o Horário para {{ formatarDataBr(dataReserva) }}
+            </label>
+            @if (diaSelecionadoTemBloqueio) {
+              <span class="alerta-bloqueado-inline">
+                <mat-icon>lock</mat-icon> Esta data possui bloqueio definido pela administração
+              </span>
+            } @else if (!temHorarioDisponivelNoDia) {
+              <span class="alerta-esgotado-inline">
+                <mat-icon>warning</mat-icon> Todos os horários deste dia já foram reservados
+              </span>
+            }
+          </div>
+
+          <div class="grid-periodos">
+            @for (opcao of opcoesPeriodo; track opcao.id) {
+              <div
+                class="card-periodo"
+                [class.selecionado]="periodoSelecionado === opcao.id && opcao.disponivel"
+                [class.indisponivel]="!opcao.disponivel"
+                [class.bloqueado-card]="opcao.isBloqueadoPeloSindico"
+                (click)="selecionarPeriodo(opcao)"
+              >
+                <div class="periodo-topo">
+                  <mat-icon class="icone-periodo">{{ opcao.icone }}</mat-icon>
+                  @if (opcao.disponivel) {
+                    <span class="badge-status-periodo livre">Disponível</span>
+                  } @else if (opcao.isBloqueadoPeloSindico) {
+                    <span class="badge-status-periodo bloqueado-badge">Bloqueado</span>
+                  } @else {
+                    <span class="badge-status-periodo ocupado">Reservado</span>
+                  }
+                </div>
+                <h5 class="periodo-nome">{{ opcao.nome }}</h5>
+                <span class="periodo-hora">{{ opcao.horario }}</span>
+                @if (!opcao.disponivel && opcao.motivoIndisponivel) {
+                  <p class="motivo-bloqueio">{{ opcao.motivoIndisponivel }}</p>
+                }
+              </div>
+            }
+          </div>
         </div>
 
-        <div class="campo campo-full">
-          <label>Finalidade / Observações</label>
-          <input type="text" [(ngModel)]="observacoes" placeholder="Ex.: Comemoração de aniversário familiar" />
+        <!-- 4. Observações / Finalidade -->
+        <div class="campo-observacoes">
+          <label class="label-secao">
+            <mat-icon>description</mat-icon>
+            3. Finalidade do Evento / Observações (Opcional)
+          </label>
+          <input
+            type="text"
+            class="input-moderno"
+            [(ngModel)]="observacoes"
+            placeholder="Ex.: Aniversário familiar, confraternização de condomínio..."
+          />
         </div>
       </div>
 
-      <div class="form-acoes">
-        <button class="btn-confirmar" (click)="solicitarReserva()">
-          Confirmar Solicitação
-        </button>
+      <!-- Resumo do Agendamento e Ações -->
+      <div class="form-rodape">
+        <div class="resumo-box">
+          <span class="resumo-label">Resumo da Seleção:</span>
+          <span class="resumo-valor">
+            <strong>{{ areaSelecionadaNome }}</strong> em 
+            <strong>{{ formatarDataBr(dataReserva) }}</strong> — 
+            Turno: <strong>{{ periodoSelecionadoNome }}</strong>
+          </span>
+        </div>
+
+        <div class="form-botoes">
+          <button type="button" class="btn-cancelar" (click)="mostrarFormulario = false">
+            Fechar
+          </button>
+          <button
+            type="button"
+            class="btn-confirmar"
+            [disabled]="!temHorarioDisponivelNoDia || !areaSelecionadaId || !dataReserva"
+            (click)="solicitarReserva()"
+          >
+            <mat-icon>check</mat-icon>
+            Confirmar Reserva
+          </button>
+        </div>
       </div>
     </section>
   }
 
   <!-- Catálogo de Espaços Disponíveis -->
   <section class="secao-espacos">
-    <h3>Espaços Disponíveis no Condomínio</h3>
+    <div class="secao-header">
+      <div>
+        <h3>Espaços Disponíveis no Condomínio</h3>
+        <p>Consulte regras, capacidade e agende com um clique</p>
+      </div>
+    </div>
+
     <div class="grid-espacos">
       @for (area of areas; track area.id) {
         <article class="card-espaco">
-          <div class="espaco-info">
-            <h4>{{ area.nome }}</h4>
-            <p class="espaco-desc">{{ area.descricao || 'Área compartilhada do condomínio.' }}</p>
-            <div class="espaco-tags">
-              <span><mat-icon>people</mat-icon> Até {{ area.capacidade_maxima }} pessoas</span>
-              <span><mat-icon>payments</mat-icon> R$ {{ area.taxa_reserva }}</span>
+          <div class="espaco-card-header">
+            <div class="espaco-icone-box">
+              <mat-icon>deck</mat-icon>
             </div>
+            <div>
+              <h4>{{ area.nome }}</h4>
+              <span class="espaco-capacidade">
+                <mat-icon>people</mat-icon> Capacidade: {{ area.capacidade_maxima }} pessoas
+              </span>
+            </div>
+          </div>
+
+          <p class="espaco-desc">{{ area.descricao || 'Área compartilhada para lazer e convivência dos moradores.' }}</p>
+
+          <div class="espaco-rodape">
+            <div class="espaco-taxa">
+              <span class="taxa-rotulo">Taxa de Reserva</span>
+              <span class="taxa-valor">R$ {{ area.taxa_reserva }}</span>
+            </div>
+
+            <button type="button" class="btn-agendar-espaco" (click)="abrirFormularioParaEspaco(area.id)">
+              <mat-icon>{{ authService.isSindico ? 'tune' : 'calendar_month' }}</mat-icon>
+              {{ authService.isSindico ? 'Gerenciar / Agendar' : 'Agendar' }}
+            </button>
           </div>
         </article>
       }
@@ -92,7 +347,10 @@
   <!-- Histórico / Gestão de Reservas -->
   <section class="secao-reservas">
     <div class="reservas-topo">
-      <h3>{{ authService.isSindico ? 'Solicitações de Reservas (Todos os Moradores)' : 'Minhas Solicitações de Reserva' }}</h3>
+      <div>
+        <h3>{{ authService.isSindico ? 'Solicitações de Reservas (Todos os Moradores)' : 'Minhas Solicitações de Reserva' }}</h3>
+        <p>Acompanhe o status e a aprovação das reservas</p>
+      </div>
       <div class="filtros">
         <button [class.ativo]="filtroStatus === 'todas'" (click)="filtroStatus = 'todas'">Todas</button>
         <button [class.ativo]="filtroStatus === 'pendente'" (click)="filtroStatus = 'pendente'">Pendentes</button>
@@ -100,7 +358,12 @@
       </div>
     </div>
 
-    @if (reservasFiltradas().length === 0) {
+    @if (carregando) {
+      <div class="estado-vazio">
+        <mat-icon class="girando">sync</mat-icon>
+        <p>Carregando solicitações...</p>
+      </div>
+    } @else if (reservasFiltradas().length === 0) {
       <div class="estado-vazio">
         <mat-icon>event_busy</mat-icon>
         <p>Nenhuma reserva encontrada para o filtro selecionado.</p>
@@ -109,30 +372,38 @@
       <div class="lista-reservas">
         @for (reserva of reservasFiltradas(); track reserva.id) {
           <article class="card-reserva">
-            <div class="reserva-cabecalho">
-              <div>
-                <strong>{{ reserva.area_nome }}</strong>
-                <span class="reserva-data"><mat-icon>calendar_today</mat-icon> {{ reserva.data_reserva | date:'dd/MM/yyyy' }} ({{ reserva.periodo_display }})</span>
+            <div class="reserva-principal">
+              <div class="reserva-icone">
+                <mat-icon>event</mat-icon>
               </div>
-              <span class="badge-status" [class]="'badge-' + reserva.status">
-                {{ reserva.status_display }}
-              </span>
+              <div class="reserva-dados">
+                <div class="reserva-linha-1">
+                  <h4>{{ reserva.area_nome }}</h4>
+                  <span class="badge-status" [ngClass]="'status-' + reserva.status">
+                    {{ reserva.status_display }}
+                  </span>
+                </div>
+                <div class="reserva-meta">
+                  <span><mat-icon>calendar_today</mat-icon> {{ formatarDataBr(reserva.data_reserva) }}</span>
+                  <span><mat-icon>schedule</mat-icon> {{ reserva.periodo_display }}</span>
+                  @if (authService.isSindico) {
+                    <span><mat-icon>person</mat-icon> {{ reserva.morador_nome }} ({{ reserva.morador_unidade }})</span>
+                  }
+                </div>
+                @if (reserva.observacoes) {
+                  <p class="reserva-obs"><strong>Finalidade:</strong> {{ reserva.observacoes }}</p>
+                }
+                @if (reserva.resposta_sindico) {
+                  <p class="reserva-resposta"><strong>Parecer da Administração:</strong> {{ reserva.resposta_sindico }}</p>
+                }
+              </div>
             </div>
 
-            <div class="reserva-detalhes">
-              <p><strong>Solicitante:</strong> {{ reserva.morador_nome }} ({{ reserva.morador_unidade || 'Unidade' }})</p>
-              @if (reserva.observacoes) {
-                <p><strong>Finalidade:</strong> {{ reserva.observacoes }}</p>
-              }
-              @if (reserva.resposta_sindico) {
-                <p class="parecer-sindico"><strong>Parecer da Administração:</strong> {{ reserva.resposta_sindico }}</p>
-              }
-            </div>
-
+            <!-- Ações do Síndico ou Morador -->
             <div class="reserva-acoes">
               @if (authService.isSindico && reserva.status === 'pendente') {
                 <button class="btn-aprovar" (click)="aprovar(reserva.id)">
-                  <mat-icon>done</mat-icon> Aprovar
+                  <mat-icon>check</mat-icon> Aprovar
                 </button>
                 <button class="btn-rejeitar" (click)="rejeitar(reserva.id)">
                   <mat-icon>close</mat-icon> Rejeitar
@@ -140,8 +411,8 @@
               }
 
               @if (reserva.status === 'pendente' || reserva.status === 'confirmada') {
-                <button class="btn-cancelar" (click)="cancelar(reserva.id)">
-                  Cancelar Reserva
+                <button class="btn-cancelar-reserva" (click)="cancelar(reserva.id)">
+                  <mat-icon>cancel</mat-icon> Cancelar
                 </button>
               }
             </div>
