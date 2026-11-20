@@ -1,0 +1,9 @@
+{
+  "appId": "com.condoflow.app",
+  "appName": "CondoFlow",
+  "webDir": "dist/condoflow-frontend/browser",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
+}

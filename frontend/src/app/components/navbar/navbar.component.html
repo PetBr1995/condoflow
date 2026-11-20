@@ -45,9 +45,9 @@
     </a>
 
     <!-- Portaria / Acessos -->
-    <a class="menu-link" routerLink="/acessos" routerLinkActive="ativo" [title]="recolhida ? 'Portaria' : ''">
-      <mat-icon class="menu-icon">sensor_door</mat-icon>
-      @if (!recolhida) { <span class="menu-text">Portaria</span> }
+    <a class="menu-link" routerLink="/acessos" routerLinkActive="ativo" [title]="recolhida ? (authService.isSindico ? 'Portaria & Totem' : 'Facial & Visitas') : ''">
+      <mat-icon class="menu-icon">face</mat-icon>
+      @if (!recolhida) { <span class="menu-text">{{ authService.isSindico ? 'Portaria & Totem' : 'Facial & Visitas' }}</span> }
     </a>
 
     <!-- Encomendas -->

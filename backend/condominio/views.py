@@ -597,3 +597,392 @@ class EnqueteViewSet(viewsets.ModelViewSet):
 
         enquete = Enquete.objects.prefetch_related('votos').get(id=enquete.id)
         return Response(EnqueteSerializer(enquete, context={'request': request}).data)
+
+
+# ==============================================================================
+# RECONHECIMENTO FACIAL E PORTARIA INTELIGENTE
+# ==============================================================================
+
+from .facial_engine import processar_foto_facial, comparar_face_com_base
+from .models import Visitante, BiometriaFacial, RegistroAcesso
+from .serializers import VisitanteSerializer, BiometriaFacialSerializer, RegistroAcessoSerializer
+from datetime import datetime
+
+class BiometriaFacialViewSet(viewsets.ModelViewSet):
+    """Gestão da biometria facial de moradores."""
+    serializer_class = BiometriaFacialSerializer
+    permission_classes = [EhAutenticado]
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.condominio:
+            return BiometriaFacial.objects.none()
+        if user.is_sindico or user.is_staff or user.is_superuser:
+            return BiometriaFacial.objects.filter(condominio=user.condominio)
+        return BiometriaFacial.objects.filter(condominio=user.condominio, usuario=user)
+
+    @action(detail=False, methods=['get'], url_path='minha-face')
+    def minha_face(self, request):
+        """Retorna o registro biométrico facial ativo do morador logado."""
+        user = request.user
+        bio = BiometriaFacial.objects.filter(usuario=user, ativa=True).first()
+        if not bio:
+            return Response({'tem_biometria': False, 'mensagem': 'Nenhuma biometria facial cadastrada.'})
+        return Response({
+            'tem_biometria': True,
+            'id': bio.id,
+            'foto_base64': bio.foto_base64,
+            'qualidade_score': bio.qualidade_score,
+            'capturada_em': bio.created_at
+        })
+
+    @action(detail=False, methods=['post'], url_path='cadastrar-minha-face')
+    def cadastrar_minha_face(self, request):
+        """Morador envia sua selfie capturada pelo celular para extração e cadastro biométrico."""
+        user = request.user
+        if not user.condominio:
+            return Response({'erro': 'Usuário não está vinculado a um condomínio.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        foto_base64 = request.data.get('foto_base64')
+        if not foto_base64:
+            return Response({'erro': 'Foto não fornecida. Capture a selfie antes de enviar.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Processa a foto com a IA de visão computacional
+        resultado = processar_foto_facial(foto_base64)
+        if not resultado['sucesso']:
+            return Response({'erro': resultado['erro']}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Desativa registros faciais anteriores deste morador para manter o mais atual
+        BiometriaFacial.objects.filter(usuario=user).update(ativa=False)
+
+        bio = BiometriaFacial.objects.create(
+            condominio=user.condominio,
+            usuario=user,
+            tipo_pessoa='morador',
+            foto_base64=resultado['face_base64'],
+            vetor_facial=resultado['vetor'],
+            qualidade_score=resultado.get('brilho', 100.0),
+            ativa=True
+        )
+
+        return Response({
+            'sucesso': True,
+            'mensagem': 'Biometria facial cadastrada com sucesso! Seu rosto está liberado para a portaria.',
+            'biometria_id': bio.id,
+            'face_recortada': bio.foto_base64
+        }, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['delete'], url_path='remover-minha-face')
+    def remover_minha_face(self, request):
+        """Permite ao morador revogar sua biometria facial."""
+        user = request.user
+        BiometriaFacial.objects.filter(usuario=user).update(ativa=False)
+        return Response({'sucesso': True, 'mensagem': 'Biometria facial removida com sucesso.'})
+
+
+class VisitanteViewSet(viewsets.ModelViewSet):
+    """Gestão de visitantes, convidados e prestadores com link de convite e biometria."""
+    serializer_class = VisitanteSerializer
+    permission_classes = [EhAutenticado]
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.condominio:
+            return Visitante.objects.none()
+        if user.is_sindico or user.is_staff or user.is_superuser:
+            return Visitante.objects.filter(condominio=user.condominio).select_related('morador', 'endereco')
+        return Visitante.objects.filter(condominio=user.condominio, morador=user).select_related('morador', 'endereco')
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(
+            morador=user,
+            condominio=user.condominio,
+            endereco=user.endereco
+        )
+
+    @action(detail=True, methods=['post'], url_path='vincular-face')
+    def vincular_face(self, request, pk=None):
+        """Porteiro ou morador vincula uma foto facial diretamente ao visitante cadastrado."""
+        visitante = self.get_object()
+        foto_base64 = request.data.get('foto_base64')
+        if not foto_base64:
+            return Response({'erro': 'Informe a foto do visitante.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        resultado = processar_foto_facial(foto_base64)
+        if not resultado['sucesso']:
+            return Response({'erro': resultado['erro']}, status=status.HTTP_400_BAD_REQUEST)
+
+        BiometriaFacial.objects.filter(visitante=visitante).update(ativa=False)
+        bio = BiometriaFacial.objects.create(
+            condominio=visitante.condominio,
+            visitante=visitante,
+            tipo_pessoa=visitante.tipo,
+            foto_base64=resultado['face_base64'],
+            vetor_facial=resultado['vetor'],
+            qualidade_score=resultado.get('brilho', 100.0),
+            ativa=True
+        )
+
+        return Response({
+            'sucesso': True,
+            'mensagem': f'Facial de {visitante.nome} cadastrada com sucesso!',
+            'face_base64': bio.foto_base64
+        })
+
+    @action(detail=False, methods=['get'], url_path='convite-publico/(?P<token>[^/.]+)', permission_classes=[AllowAny])
+    def convite_publico(self, request, token=None):
+        """Endpoint público acessado pelo visitante via WhatsApp para visualizar detalhes do convite."""
+        visitante = Visitante.objects.filter(codigo_acesso__iexact=token).first()
+        if not visitante:
+            return Response({'erro': 'Convite não encontrado ou código inválido.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            'codigo_acesso': visitante.codigo_acesso,
+            'nome': visitante.nome,
+            'tipo': visitante.get_tipo_display(),
+            'morador_nome': visitante.morador.get_full_name(),
+            'unidade': str(visitante.endereco) if visitante.endereco else 'Geral',
+            'condominio_nome': visitante.condominio.nome,
+            'data_inicio': visitante.data_inicio,
+            'data_fim': visitante.data_fim,
+            'periodo': visitante.get_periodo_display(),
+            'status': visitante.status,
+            'tem_biometria': visitante.biometrias.filter(ativa=True).exists()
+        })
+
+    @action(detail=False, methods=['post'], url_path='salvar-selfie-convite/(?P<token>[^/.]+)', permission_classes=[AllowAny])
+    def salvar_selfie_convite(self, request, token=None):
+        """Endpoint público onde o visitante tira a selfie no navegador do seu próprio celular."""
+        visitante = Visitante.objects.filter(codigo_acesso__iexact=token).first()
+        if not visitante:
+            return Response({'erro': 'Convite não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if visitante.status != 'ativo':
+            return Response({'erro': 'Este convite não está mais ativo.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        foto_base64 = request.data.get('foto_base64')
+        if not foto_base64:
+            return Response({'erro': 'Foto não fornecida.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        resultado = processar_foto_facial(foto_base64)
+        if not resultado['sucesso']:
+            return Response({'erro': resultado['erro']}, status=status.HTTP_400_BAD_REQUEST)
+
+        BiometriaFacial.objects.filter(visitante=visitante).update(ativa=False)
+        bio = BiometriaFacial.objects.create(
+            condominio=visitante.condominio,
+            visitante=visitante,
+            tipo_pessoa=visitante.tipo,
+            foto_base64=resultado['face_base64'],
+            vetor_facial=resultado['vetor'],
+            qualidade_score=resultado.get('brilho', 100.0),
+            ativa=True
+        )
+
+        return Response({
+            'sucesso': True,
+            'mensagem': 'Selfie cadastrada com sucesso! Seu acesso ao condomínio foi pré-autorizado na portaria.',
+            'face_base64': bio.foto_base64
+        })
+
+
+class PortariaTotemViewSet(viewsets.ViewSet):
+    """
+    Controlador de Portaria e Totem Facial:
+    Recebe frames da câmera ao vivo, compara com o banco de dados e registra acessos.
+    """
+    permission_classes = [EhAutenticado]
+
+    @action(detail=False, methods=['post'], url_path='identificar-face')
+    def identificar_face(self, request):
+        user = request.user
+        condo = user.condominio
+        if not condo:
+            return Response({'erro': 'Usuário sem condomínio associado.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        foto_base64 = request.data.get('foto_base64')
+        ponto_acesso = request.data.get('dispositivo_ponto', 'Portão Principal Pedestres')
+
+        if not foto_base64:
+            return Response({'erro': 'Imagem da câmera não enviada.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        resultado = processar_foto_facial(foto_base64)
+        if not resultado['sucesso']:
+            return Response({
+                'autorizado': False,
+                'motivo': resultado['erro'],
+                'tipo': 'desconhecido'
+            })
+
+        vetor_camera = resultado['vetor']
+        hoje = date.today()
+        hora_atual = datetime.now().hour
+
+        # 1. Busca biometrias ativas do condomínio (Moradores e Visitantes válidos)
+        biometrias_moradores = BiometriaFacial.objects.filter(
+            condominio=condo,
+            ativa=True,
+            usuario__isnull=False
+        ).select_related('usuario', 'usuario__endereco')
+
+        biometrias_visitantes = BiometriaFacial.objects.filter(
+            condominio=condo,
+            ativa=True,
+            visitante__isnull=False,
+            visitante__status='ativo',
+            visitante__data_inicio__lte=hoje,
+            visitante__data_fim__gte=hoje
+        ).select_related('visitante', 'visitante__endereco')
+
+        base_comparacao = []
+        for b in biometrias_moradores:
+            base_comparacao.append({
+                'id': b.id,
+                'tipo': 'morador',
+                'objeto': b.usuario,
+                'nome': b.usuario.get_full_name() or b.usuario.username,
+                'unidade': str(b.usuario.endereco) if b.usuario.endereco else 'Morador',
+                'vetor': b.vetor_facial
+            })
+
+        for b in biometrias_visitantes:
+            v = b.visitante
+            base_comparacao.append({
+                'id': b.id,
+                'tipo': v.tipo,
+                'objeto': v,
+                'nome': v.nome,
+                'unidade': str(v.endereco) if v.endereco else 'Visita',
+                'periodo': v.periodo,
+                'vetor': b.vetor_facial
+            })
+
+        match, similaridade = comparar_face_com_base(vetor_camera, base_comparacao, limiar_minimo=0.78)
+
+        if not match:
+            # Não reconheceu ninguém
+            RegistroAcesso.objects.create(
+                condominio=condo,
+                tipo_pessoa='desconhecido',
+                nome_identificado='Pessoa Não Reconhecida',
+                destino='Entrada',
+                status='negado',
+                motivo='Rosto não localizado na base de pessoas autorizadas.',
+                similaridade=round(similaridade * 100, 1),
+                foto_capturada=resultado['face_base64'],
+                dispositivo_ponto=ponto_acesso
+            )
+            return Response({
+                'autorizado': False,
+                'status': 'negado',
+                'nome': 'Não Reconhecido',
+                'motivo': 'Rosto não cadastrado no condomínio.',
+                'similaridade': round(similaridade * 100, 1),
+                'foto_recortada': resultado['face_base64']
+            })
+
+        # Reconheceu alguém! Valida as regras de negócio:
+        if match['tipo'] == 'morador':
+            usuario = match['objeto']
+            RegistroAcesso.objects.create(
+                condominio=condo,
+                tipo_pessoa='morador',
+                usuario=usuario,
+                nome_identificado=match['nome'],
+                destino=match['unidade'],
+                status='autorizado',
+                motivo='Morador reconhecido com sucesso.',
+                similaridade=round(similaridade * 100, 1),
+                foto_capturada=resultado['face_base64'],
+                dispositivo_ponto=ponto_acesso
+            )
+            return Response({
+                'autorizado': True,
+                'status': 'autorizado',
+                'tipo': 'morador',
+                'nome': match['nome'],
+                'unidade': match['unidade'],
+                'similaridade': round(similaridade * 100, 1),
+                'mensagem': f'Acesso Liberado! Bem-vindo(a), {match["nome"]}!',
+                'foto_recortada': resultado['face_base64']
+            })
+
+        # Se for Visitante ou Prestador de Serviço
+        visitante = match['objeto']
+        periodo_valido = True
+        motivo_negacao = ''
+
+        p = match.get('periodo', 'dia_inteiro')
+        if p == 'manha' and not (6 <= hora_atual < 12):
+            periodo_valido = False
+            motivo_negacao = 'Acesso permitido apenas pela manhã (08h às 12h).'
+        elif p == 'tarde' and not (12 <= hora_atual < 18):
+            periodo_valido = False
+            motivo_negacao = 'Acesso permitido apenas à tarde (13h às 18h).'
+        elif p == 'noite' and not (18 <= hora_atual < 23):
+            periodo_valido = False
+            motivo_negacao = 'Acesso permitido apenas à noite (18h às 23h).'
+        elif p == 'comercial' and not (8 <= hora_atual < 18):
+            periodo_valido = False
+            motivo_negacao = 'Acesso permitido apenas em horário comercial (08h às 18h).'
+
+        if not periodo_valido:
+            RegistroAcesso.objects.create(
+                condominio=condo,
+                tipo_pessoa=match['tipo'],
+                visitante=visitante,
+                nome_identificado=match['nome'],
+                destino=match['unidade'],
+                status='fora_horario',
+                motivo=motivo_negacao,
+                similaridade=round(similaridade * 100, 1),
+                foto_capturada=resultado['face_base64'],
+                dispositivo_ponto=ponto_acesso
+            )
+            return Response({
+                'autorizado': False,
+                'status': 'fora_horario',
+                'tipo': match['tipo'],
+                'nome': match['nome'],
+                'unidade': match['unidade'],
+                'motivo': motivo_negacao,
+                'similaridade': round(similaridade * 100, 1),
+                'foto_recortada': resultado['face_base64']
+            })
+
+        # Visitante / Prestador Liberado
+        RegistroAcesso.objects.create(
+            condominio=condo,
+            tipo_pessoa=match['tipo'],
+            visitante=visitante,
+            nome_identificado=match['nome'],
+            destino=match['unidade'],
+            status='autorizado',
+            motivo=f'Visitante autorizado para {match["unidade"]}',
+            similaridade=round(similaridade * 100, 1),
+            foto_capturada=resultado['face_base64'],
+            dispositivo_ponto=ponto_acesso
+        )
+
+        return Response({
+            'autorizado': True,
+            'status': 'autorizado',
+            'tipo': match['tipo'],
+            'nome': match['nome'],
+            'unidade': match['unidade'],
+            'similaridade': round(similaridade * 100, 1),
+            'mensagem': f'Acesso Liberado para {match["nome"]} (Destino: {match["unidade"]})',
+            'foto_recortada': resultado['face_base64']
+        })
+
+    @action(detail=False, methods=['get'], url_path='historico')
+    def historico(self, request):
+        """Retorna os últimos 30 registros de acessos do condomínio."""
+        user = request.user
+        if not user.condominio:
+            return Response([])
+
+        registros = RegistroAcesso.objects.filter(condominio=user.condominio)[:30]
+        return Response(RegistroAcessoSerializer(registros, many=True).data)
+

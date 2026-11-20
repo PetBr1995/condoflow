@@ -1,0 +1,119 @@
+<div class="convite-container">
+  <div class="convite-card">
+    <!-- Header com Marca -->
+    <div class="convite-header">
+      <div class="logo-box">
+        <mat-icon>face</mat-icon>
+      </div>
+      <h2>CondoFlow Acesso</h2>
+      <p class="subtitulo">Pré-cadastro de Biometria Facial para Entrada</p>
+    </div>
+
+    @if (carregando) {
+      <div class="loading-box">
+        <mat-icon class="girando">sync</mat-icon>
+        <p>Carregando informações do convite...</p>
+      </div>
+    }
+
+    @if (mensagemErro && !cameraAtiva) {
+      <div class="alerta-erro">
+        <mat-icon>error</mat-icon>
+        <span>{{ mensagemErro }}</span>
+      </div>
+    }
+
+    @if (mensagemSucesso) {
+      <div class="alerta-sucesso">
+        <mat-icon>check_circle</mat-icon>
+        <h4>Cadastro Concluído!</h4>
+        <p>{{ mensagemSucesso }}</p>
+      </div>
+    }
+
+    <!-- Dados do Convite -->
+    @if (convite && !mensagemSucesso) {
+      <div class="detalhes-convite">
+        <div class="info-row">
+          <span class="label">Convidado(a):</span>
+          <span class="valor destaque">{{ convite.nome }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Condomínio:</span>
+          <span class="valor">{{ convite.condominio_nome }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Autorizado por:</span>
+          <span class="valor">{{ convite.morador_nome }} ({{ convite.unidade }})</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Período Permitido:</span>
+          <span class="valor tag-periodo">{{ convite.periodo }}</span>
+        </div>
+      </div>
+
+      <!-- Câmera e Captura de Selfie -->
+      <div class="secao-selfie">
+        @if (!cameraAtiva && !fotoCapturada) {
+          <div class="instrucoes-box">
+            <h4>Tire uma selfie para agilizar sua entrada</h4>
+            <ul>
+              <li><mat-icon>wb_sunny</mat-icon> Fique em um local bem iluminado</li>
+              <li><mat-icon>visibility</mat-icon> Não use óculos escuros, boné ou máscara</li>
+              <li><mat-icon>face</mat-icon> Olhe diretamente para a câmera do celular</li>
+            </ul>
+            <button type="button" class="btn-abrir-camera" (click)="iniciarCamera()">
+              <mat-icon>photo_camera</mat-icon>
+              Abrir Câmera e Tirar Selfie
+            </button>
+          </div>
+        }
+
+        <!-- Visualizador ao Vivo da Câmera -->
+        @if (cameraAtiva) {
+          <div class="camera-viewport">
+            <video #videoRef autoplay playsinline muted class="video-stream"></video>
+            <!-- Guia Oval de Centralização -->
+            <div class="moldura-oval-guia">
+              <span class="texto-guia">Enquadre seu rosto aqui</span>
+            </div>
+          </div>
+          <div class="controles-camera">
+            <button type="button" class="btn-cancelar-camera" (click)="pararCamera()">
+              Cancelar
+            </button>
+            <button type="button" class="btn-disparar" (click)="capturarFoto()">
+              <mat-icon>camera</mat-icon>
+              Capturar Foto
+            </button>
+          </div>
+        }
+
+        <!-- Pré-visualização da Foto Capturada -->
+        @if (fotoCapturada && !cameraAtiva) {
+          <div class="preview-box">
+            <h5>Confira sua Selfie:</h5>
+            <div class="foto-moldura">
+              <img [src]="fotoCapturada" alt="Preview Selfie" class="img-preview" />
+            </div>
+            <div class="acoes-preview">
+              <button type="button" class="btn-recapturar" (click)="recapturar()" [disabled]="processandoFoto">
+                <mat-icon>refresh</mat-icon>
+                Tirar Outra Foto
+              </button>
+              <button type="button" class="btn-confirmar-foto" (click)="enviarSelfie()" [disabled]="processandoFoto">
+                @if (processandoFoto) {
+                  <mat-icon class="girando">sync</mat-icon>
+                  Validando Rosto com IA...
+                } @else {
+                  <mat-icon>check</mat-icon>
+                  Confirmar e Salvar
+                }
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

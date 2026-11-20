@@ -1,128 +1,363 @@
-<div class="cadastro-page-wrapper">
-  <div class="cadastro-card">
-    <div class="cadastro-header">
-      <div class="brand-badge">
-        <mat-icon>apartment</mat-icon>
-        <span>CondoFlow</span>
+<div class="mobile-app-container">
+  <!-- Topbar Mobile com Marca e Configuração de Conexão -->
+  <header class="mobile-header">
+    <div class="brand-group">
+      <div class="brand-icon-box">
+        <mat-icon>face_unlock</mat-icon>
       </div>
-      <h2>Cadastro de Morador</h2>
-      <p>Insira o código de convite da sua unidade fornecido pela administração</p>
+      <div class="brand-titles">
+        <h1>CondoFlow ID</h1>
+        <span>Cadastro & Scanner Facial</span>
+      </div>
     </div>
 
-    <!-- Alert de Erro -->
-    @if (erroCadastro !== '') {
-      <div class="feedback-alert error">
-        <mat-icon>error_outline</mat-icon>
-        <span>{{ erroCadastro }}</span>
-      </div>
-    }
+    <button type="button" class="btn-header-action" (click)="abrirConfigServidor()" title="Configurações de Rede">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </header>
 
-    <!-- Alert de Sucesso -->
-    @if (cadastroConcluido !== '') {
-      <div class="feedback-alert success">
-        <mat-icon>check_circle</mat-icon>
-        <span>{{ cadastroConcluido }}</span>
+  <!-- Indicador de Progresso (Stepper) -->
+  <div class="stepper-bar">
+    <div class="step-item" [class.active]="etapaAtual === 1" [class.done]="etapaAtual > 1">
+      <div class="step-circle">
+        @if (etapaAtual > 1) {
+          <mat-icon>check</mat-icon>
+        } @else {
+          <span>1</span>
+        }
       </div>
-    }
+      <span class="step-label">Dados</span>
+    </div>
 
-    <div class="form-container">
-      <!-- Código de Convite em Destaque -->
-      <div class="input-group highlight-group">
+    <div class="step-line" [class.filled]="etapaAtual > 1"></div>
+
+    <div class="step-item" [class.active]="etapaAtual === 2" [class.done]="etapaAtual > 2">
+      <div class="step-circle">
+        @if (etapaAtual > 2) {
+          <mat-icon>check</mat-icon>
+        } @else {
+          <mat-icon>photo_camera</mat-icon>
+        }
+      </div>
+      <span class="step-label">Scanner</span>
+    </div>
+
+    <div class="step-line" [class.filled]="etapaAtual === 3"></div>
+
+    <div class="step-item" [class.active]="etapaAtual === 3">
+      <div class="step-circle">
+        <mat-icon>verified</mat-icon>
+      </div>
+      <span class="step-label">Acesso</span>
+    </div>
+  </div>
+
+  <!-- Alerta de Erro Global -->
+  @if (erroCadastro) {
+    <div class="alert-box alert-error">
+      <mat-icon>error_outline</mat-icon>
+      <div class="alert-text">{{ erroCadastro }}</div>
+    </div>
+  }
+
+  <!-- ========================================================================= -->
+  <!-- ETAPA 1: DADOS DO MORADOR                                                -->
+  <!-- ========================================================================= -->
+  @if (etapaAtual === 1) {
+    <div class="card-content">
+      <div class="section-headline">
+        <h2>Identificação da Unidade</h2>
+        <p>Informe o código de convite fornecido pelo seu síndico ou condomínio.</p>
+      </div>
+
+      <!-- Chave do Apartamento em Destaque -->
+      <div class="field-group highlight-field">
         <label for="codigo">
-          <mat-icon class="label-icon">vpn_key</mat-icon> Código de Convite da Unidade
+          <mat-icon>vpn_key</mat-icon> Código do Apartamento
         </label>
-        <div class="input-wrapper code-input-wrapper">
-          <input 
-            class="code-input" 
-            id="codigo" 
-            #codigoInput 
-            type="text" 
-            placeholder="Ex.: FLORES-A101-QVMY" 
+        <div class="field-control">
+          <input
+            id="codigo"
+            type="text"
+            [(ngModel)]="codigo"
+            placeholder="Ex: FLORES-A101-QVMY"
+            (input)="codigo = codigo.toUpperCase()"
             autocomplete="off"
             spellcheck="false"
           />
         </div>
-        <span class="field-hint">Solicite este código ao síndico do seu condomínio</span>
+        <span class="field-hint">Chave de acesso exclusiva da sua unidade</span>
       </div>
 
-      <!-- Nome e Sobrenome lado a lado -->
-      <div class="grid-2-col">
-        <div class="input-group">
+      <div class="section-divider">
+        <span>Seus Dados Pessoais</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group flex-1">
           <label for="nome">Nome</label>
-          <div class="input-wrapper">
-            <mat-icon class="input-icon">person</mat-icon>
-            <input id="nome" #nomeInput type="text" autocomplete="given-name" placeholder="Ex.: Ana" />
+          <div class="field-control">
+            <mat-icon class="prefix-icon">person</mat-icon>
+            <input id="nome" type="text" [(ngModel)]="nome" placeholder="Ex: Lucas" />
           </div>
         </div>
 
-        <div class="input-group">
+        <div class="field-group flex-1">
           <label for="sobrenome">Sobrenome</label>
-          <div class="input-wrapper">
-            <input id="sobrenome" #sobrenomeInput type="text" autocomplete="family-name" placeholder="Ex.: Silva" />
+          <div class="field-control">
+            <input id="sobrenome" type="text" [(ngModel)]="sobrenome" placeholder="Ex: Silva" />
           </div>
         </div>
       </div>
 
-      <!-- CPF e WhatsApp lado a lado -->
-      <div class="grid-2-col">
-        <div class="input-group">
+      <div class="field-row">
+        <div class="field-group flex-1">
           <label for="cpf">CPF</label>
-          <div class="input-wrapper">
-            <mat-icon class="input-icon">badge</mat-icon>
-            <input id="cpf" #cpfInput type="text" inputmode="numeric" placeholder="000.000.000-00" />
+          <div class="field-control">
+            <mat-icon class="prefix-icon">badge</mat-icon>
+            <input id="cpf" type="text" inputmode="numeric" [(ngModel)]="cpf" placeholder="000.000.000-00" />
           </div>
         </div>
 
-        <div class="input-group">
+        <div class="field-group flex-1">
           <label for="telefone">WhatsApp / Celular</label>
-          <div class="input-wrapper">
-            <mat-icon class="input-icon">phone</mat-icon>
-            <input id="telefone" #telefoneInput type="tel" placeholder="(92) 99999-9999" />
+          <div class="field-control">
+            <mat-icon class="prefix-icon">phone</mat-icon>
+            <input id="telefone" type="tel" [(ngModel)]="telefone" placeholder="(92) 99999-9999" />
           </div>
         </div>
       </div>
 
-      <!-- Senha e Confirmação lado a lado -->
-      <div class="grid-2-col">
-        <div class="input-group">
-          <label for="senha">Senha</label>
-          <div class="input-wrapper">
-            <mat-icon class="input-icon">lock</mat-icon>
-            <input id="senha" #senhaInput type="password" placeholder="Mínimo 8 dígitos" />
+      <div class="field-row">
+        <div class="field-group flex-1">
+          <label for="senha">Senha de Acesso</label>
+          <div class="field-control">
+            <mat-icon class="prefix-icon">lock</mat-icon>
+            <input id="senha" type="password" [(ngModel)]="senha" placeholder="Mínimo 8 dígitos" />
           </div>
         </div>
 
-        <div class="input-group">
-          <label for="confirmar-senha">Confirmar Senha</label>
-          <div class="input-wrapper">
-            <mat-icon class="input-icon">lock_clock</mat-icon>
-            <input id="confirmar-senha" #confirmarSenhaInput type="password" placeholder="Repita a senha" />
+        <div class="field-group flex-1">
+          <label for="confirmarSenha">Confirmar Senha</label>
+          <div class="field-control">
+            <mat-icon class="prefix-icon">lock_reset</mat-icon>
+            <input id="confirmarSenha" type="password" [(ngModel)]="confirmarSenha" placeholder="Repita a senha" />
           </div>
         </div>
       </div>
 
-      <button 
-        type="button" 
-        class="submit-btn"
-        (click)="finalizarCadastro(
-          nomeInput.value,
-          sobrenomeInput.value,
-          telefoneInput.value,
-          cpfInput.value,
-          codigoInput.value,
-          senhaInput.value,
-          confirmarSenhaInput.value
-        )">
-        <span>Criar Minha Conta</span>
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
+      <!-- Ação Principal para Avançar -->
+      <div class="mobile-actions">
+        <button type="button" class="btn-primary-mobile" (click)="avancarParaScanner()">
+          <span>Avançar para Scanner Facial</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
 
-      <div class="footer-action">
-        <button type="button" class="link-btn" (click)="voltarParaLogin()">
+      @if (!isMobileNative) {
+        <div class="footer-links">
+          <button type="button" class="btn-text-link" (click)="voltarParaLogin()">
+            <mat-icon>arrow_back</mat-icon>
+            <span>Já tem conta? Ir para login</span>
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ========================================================================= -->
+  <!-- ETAPA 2: SCANNER FACIAL BIOMÉTRICO AO VIVO                                -->
+  <!-- ========================================================================= -->
+  @if (etapaAtual === 2) {
+    <div class="card-content scanner-step-content">
+      <div class="section-headline">
+        <h2>Scanner de Reconhecimento Facial</h2>
+        <p>Posicione seu rosto dentro da moldura para validar seu acesso.</p>
+      </div>
+
+      <!-- Viewport da Câmera / Scanner -->
+      <div class="camera-viewport-card">
+        @if (!fotoBase64) {
+          <div class="video-container">
+            <video #videoScannerRef autoplay playsinline muted class="camera-video-feed"></video>
+
+            <!-- Moldura Oval Biométrica -->
+            <div class="biometric-overlay">
+              <div class="oval-target">
+                <!-- Laser Animado -->
+                <div class="laser-scanner"></div>
+                <!-- Cantos de Enquadramento -->
+                <div class="corner corner-tl"></div>
+                <div class="corner corner-tr"></div>
+                <div class="corner corner-bl"></div>
+                <div class="corner corner-br"></div>
+              </div>
+            </div>
+
+            <!-- Dica Flutuante de Iluminação -->
+            <div class="camera-floating-tip">
+              <mat-icon>lightbulb</mat-icon>
+              <span>Mantenha o rosto iluminado e centralizado</span>
+            </div>
+          </div>
+        } @else {
+          <!-- Foto Capturada Preview -->
+          <div class="preview-container">
+            <img [src]="fotoBase64" alt="Face Capturada" class="preview-image" />
+            <div class="preview-badge">
+              <mat-icon>check_circle</mat-icon>
+              <span>Rosto Escaneado</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Controles de Captura do Scanner -->
+      <div class="scanner-controls">
+        @if (!fotoBase64) {
+          <div class="shutter-row">
+            <button type="button" class="btn-shutter" (click)="capturarFoto()" title="Capturar Foto">
+              <div class="shutter-inner">
+                <mat-icon>photo_camera</mat-icon>
+              </div>
+            </button>
+          </div>
+
+          <div class="fallback-gallery-row">
+            <label class="btn-gallery">
+              <mat-icon>photo_library</mat-icon>
+              <span>Ou selecionar foto da galeria</span>
+              <input type="file" accept="image/*" (change)="carregarFotoGaleria($event)" hidden />
+            </label>
+          </div>
+        } @else {
+          <div class="action-buttons-grid">
+            <button type="button" class="btn-secondary-mobile" (click)="refazerFoto()" [disabled]="processandoEnvio">
+              <mat-icon>refresh</mat-icon>
+              <span>Tirar Outra Foto</span>
+            </button>
+
+            <button type="button" class="btn-primary-mobile btn-concluir" (click)="finalizarCadastro()" [disabled]="processandoEnvio">
+              @if (processandoEnvio) {
+                <div class="spinner-inline"></div>
+                <span>Processando IA...</span>
+              } @else {
+                <mat-icon>fingerprint</mat-icon>
+                <span>Concluir & Liberar Acesso</span>
+              }
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Botão Voltar para Dados -->
+      <div class="back-link-row">
+        <button type="button" class="btn-back-step" (click)="voltarParaDados()" [disabled]="processandoEnvio">
           <mat-icon>arrow_back</mat-icon>
-          <span>Já tem cadastro? Fazer login</span>
+          <span>Corrigir dados do morador</span>
         </button>
       </div>
     </div>
-  </div>
+  }
+
+  <!-- ========================================================================= -->
+  <!-- ETAPA 3: SUCESSO & ACESSO LIBERADO                                        -->
+  <!-- ========================================================================= -->
+  @if (etapaAtual === 3) {
+    <div class="card-content success-step-content">
+      <div class="success-badge-icon">
+        <mat-icon>verified</mat-icon>
+      </div>
+
+      <div class="success-headline">
+        <h2>Cadastro Concluído com Sucesso!</h2>
+        <p>Sua biometria facial foi analisada e cadastrada no sistema.</p>
+      </div>
+
+      <!-- Cartão Digital de Identificação do Morador -->
+      <div class="credential-card">
+        <div class="credential-photo-box">
+          @if (fotoBase64) {
+            <img [src]="fotoBase64" alt="Face do Morador" />
+          } @else {
+            <mat-icon>person</mat-icon>
+          }
+        </div>
+
+        <div class="credential-info">
+          <h3>{{ nome }} {{ sobrenome }}</h3>
+          <div class="info-tag unit-tag">
+            <mat-icon>home</mat-icon>
+            <span>Unidade: {{ codigo }}</span>
+          </div>
+          <div class="info-tag status-active">
+            <mat-icon>check_circle</mat-icon>
+            <span>Reconhecimento Facial Ativo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="instruction-box">
+        <mat-icon>info</mat-icon>
+        <span>Você já pode acessar as catracas, portões e totens do condomínio. Basta olhar para a câmera na portaria!</span>
+      </div>
+
+      <div class="mobile-actions">
+        <button type="button" class="btn-primary-mobile" (click)="novoCadastro()">
+          <mat-icon>person_add</mat-icon>
+          <span>Cadastrar Novo Morador</span>
+        </button>
+
+        @if (!isMobileNative) {
+          <button type="button" class="btn-secondary-mobile" (click)="voltarParaLogin()">
+            <mat-icon>login</mat-icon>
+            <span>Acessar Painel Web</span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE CONFIGURAÇÃO DE SERVIDOR / ENDPOINT                              -->
+  <!-- ========================================================================= -->
+  @if (mostrarModalConfig) {
+    <div class="modal-backdrop" (click)="fecharConfigServidor()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-title-box">
+            <mat-icon>router</mat-icon>
+            <h3>Servidor da API</h3>
+          </div>
+          <button type="button" class="btn-close-modal" (click)="fecharConfigServidor()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-desc">
+            Defina o IP da máquina onde o backend Django está rodando na sua rede local ou servidor em nuvem.
+          </p>
+
+          <div class="field-group">
+            <label for="urlServidor">URL do Backend</label>
+            <div class="field-control">
+              <mat-icon class="prefix-icon">link</mat-icon>
+              <input id="urlServidor" type="text" [(ngModel)]="urlServidorCustom" placeholder="http://192.168.1.2:8000/api/" />
+            </div>
+            <span class="field-hint">Exemplo local: http://192.168.1.2:8000/api/</span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-modal-cancel" (click)="restaurarServidorPadrao()">
+            Restaurar Padrão
+          </button>
+          <button type="button" class="btn-modal-save" (click)="salvarConfigServidor()">
+            Salvar Conexão
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </div>

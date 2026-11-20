@@ -1,141 +1,524 @@
-<div class="acessos-page">
-  <header class="header-acessos">
-    <div>
-      <h2>Controle de Visitantes & Portaria</h2>
-      <p>Liberações prévias de convidados, entregadores e prestadores de serviço</p>
+<div class="pagina-acessos">
+  <!-- Topo da Página -->
+  <header class="topo-secao">
+    <div class="titulo-box">
+      <div class="icone-destaque">
+        <mat-icon>face</mat-icon>
+      </div>
+      <div>
+        <h2>Controle de Acessos & Reconhecimento Facial</h2>
+        <p class="subtitulo">Segurança inteligente com biometria facial para moradores e convites para visitantes</p>
+      </div>
     </div>
-
-    <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
-      <mat-icon>{{ mostrarFormulario ? 'close' : 'person_add' }}</mat-icon>
-      {{ mostrarFormulario ? 'Fechar' : 'Autorizar Acesso' }}
-    </button>
   </header>
 
+  <!-- Mensagens de Alerta -->
   @if (mensagemSucesso) {
-    <div class="alerta alerta-sucesso">
+    <div class="alerta-banner sucesso">
       <mat-icon>check_circle</mat-icon>
       <span>{{ mensagemSucesso }}</span>
+      <button type="button" class="btn-fechar-alerta" (click)="mensagemSucesso = ''">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
   }
 
   @if (mensagemErro) {
-    <div class="alerta alerta-erro">
+    <div class="alerta-banner erro">
       <mat-icon>error</mat-icon>
       <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn-fechar-alerta" (click)="mensagemErro = ''">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
   }
 
-  @if (mostrarFormulario) {
-    <section class="card-formulario">
-      <h3>Pré-autorizar Entrada na Portaria</h3>
+  <!-- Navegação por Abas -->
+  <nav class="abas-navegacao">
+    <button
+      type="button"
+      class="aba-btn"
+      [class.ativa]="abaAtiva === 'facial'"
+      (click)="mudarAba('facial')"
+    >
+      <mat-icon>photo_camera_front</mat-icon>
+      Minha Biometria Facial
+      @if (minhaFace.tem_biometria) {
+        <span class="badge-mini ativo">Ativa</span>
+      }
+    </button>
 
-      <div class="form-grid">
-        <div class="campo">
-          <label>Nome do Visitante / Prestador</label>
-          <input type="text" [(ngModel)]="nomeVisitante" placeholder="Ex.: Lucas Rodrigues / Marido de Aluguel" />
+    <button
+      type="button"
+      class="aba-btn"
+      [class.ativa]="abaAtiva === 'visitantes'"
+      (click)="mudarAba('visitantes')"
+    >
+      <mat-icon>badge</mat-icon>
+      Visitantes & Prestadores
+      <span class="badge-mini count">{{ visitantes.length }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="aba-btn"
+      [class.ativa]="abaAtiva === 'totem'"
+      (click)="mudarAba('totem')"
+    >
+      <mat-icon>videocam</mat-icon>
+      Totem da Portaria (Ao Vivo)
+      <span class="badge-mini live">Hardware / Câmera</span>
+    </button>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- ABA 1: MINHA BIOMETRIA FACIAL (MORADOR) -->
+  <!-- ========================================================================= -->
+  @if (abaAtiva === 'facial') {
+    <section class="conteudo-aba">
+      <div class="card-painel">
+        <div class="painel-cabecalho">
+          <div>
+            <h3>Sua Biometria Facial para Entrada</h3>
+            <p>Cadastre sua selfie uma única vez para ter acesso liberado e mãos-livres nos portões do condomínio.</p>
+          </div>
         </div>
 
-        <div class="campo">
-          <label>Tipo de Acesso</label>
-          <select [(ngModel)]="tipoAcesso">
-            <option value="visitante">Visitante / Amigo / Familiar</option>
-            <option value="prestador">Prestador de Serviço / Técnico</option>
-            <option value="delivery">Entregador / Delivery</option>
-          </select>
-        </div>
+        <!-- Caso já possua biometria cadastrada -->
+        @if (minhaFace.tem_biometria && !cameraFacialAtiva && !fotoFacialCapturada) {
+          <div class="status-facial-ativo">
+            <div class="face-card-preview">
+              <div class="foto-moldura-sucesso">
+                @if (minhaFace.foto_base64) {
+                  <img [src]="minhaFace.foto_base64" alt="Sua Face" class="foto-redonda" />
+                } @else {
+                  <mat-icon class="icone-avatar">person</mat-icon>
+                }
+                <div class="selo-verificado">
+                  <mat-icon>verified</mat-icon>
+                </div>
+              </div>
+              <div class="face-dados">
+                <h4>Biometria Facial Ativa e Autorizada</h4>
+                <p class="data-cadastrada">Cadastrada em: {{ formatarDataBr(minhaFace.capturada_em) }}</p>
+                <span class="status-pill liberado">
+                  <mat-icon>lock_open</mat-icon> Entrada Liberada no Totem
+                </span>
+              </div>
+            </div>
 
-        <div class="campo">
-          <label>Data Prevista da Visita</label>
-          <input type="date" [(ngModel)]="dataPrevista" />
-        </div>
+            <div class="acoes-biometria">
+              <button type="button" class="btn-secundario" (click)="iniciarCameraFacial()">
+                <mat-icon>sync</mat-icon>
+                Atualizar Selfie
+              </button>
+              <button type="button" class="btn-perigo" (click)="removerBiometriaMorador()">
+                <mat-icon>delete_outline</mat-icon>
+                Remover Biometria
+              </button>
+            </div>
+          </div>
+        }
 
-        <div class="campo">
-          <label>RG ou CPF (Opcional)</label>
-          <input type="text" [(ngModel)]="documento" placeholder="000.000.000-00" />
-        </div>
+        <!-- Caso ainda NÃO possua biometria -->
+        @if (!minhaFace.tem_biometria && !cameraFacialAtiva && !fotoFacialCapturada) {
+          <div class="onboarding-facial">
+            <div class="ilustracao-box">
+              <mat-icon>face_retouching_natural</mat-icon>
+            </div>
+            <h4>Você ainda não cadastrou sua biometria facial</h4>
+            <p>Tire uma selfie rápida pelo celular ou webcam para que a inteligência artificial reconheça seu rosto na portaria.</p>
 
-        <div class="campo">
-          <label>Placa do Veículo (Opcional)</label>
-          <input type="text" [(ngModel)]="placaVeiculo" placeholder="Ex.: ABC-1234" />
-        </div>
+            <div class="dicas-captura">
+              <div class="dica-item">
+                <mat-icon>wb_sunny</mat-icon>
+                <span>Fique em um ambiente iluminado</span>
+              </div>
+              <div class="dica-item">
+                <mat-icon>visibility</mat-icon>
+                <span>Retire óculos escuros e boné</span>
+              </div>
+              <div class="dica-item">
+                <mat-icon>center_focus_strong</mat-icon>
+                <span>Mantenha o rosto de frente para a câmera</span>
+              </div>
+            </div>
 
-        <div class="campo campo-full">
-          <label>Observações / Empresa (Opcional)</label>
-          <input type="text" [(ngModel)]="observacoes" placeholder="Ex.: Manutenção do ar condicionado / Claro Fibra" />
-        </div>
-      </div>
+            <button type="button" class="btn-principal grande" (click)="iniciarCameraFacial()">
+              <mat-icon>photo_camera</mat-icon>
+              Abrir Câmera e Cadastrar Rosto
+            </button>
+          </div>
+        }
 
-      <div class="form-acoes">
-        <button class="btn-confirmar" (click)="liberarAcesso()">
-          Confirmar Liberação
-        </button>
+        <!-- Viewport da Câmera Aberta -->
+        @if (cameraFacialAtiva) {
+          <div class="camera-wrapper">
+            <div class="camera-viewport">
+              <video #videoFacialRef autoplay playsinline muted class="video-stream"></video>
+              <div class="moldura-oval-guia">
+                <span class="texto-guia">Centralize seu rosto dentro da moldura</span>
+              </div>
+            </div>
+
+            <div class="controles-camera">
+              <button type="button" class="btn-cancelar" (click)="pararCameraFacial()">
+                Cancelar
+              </button>
+              <button type="button" class="btn-disparar" (click)="capturarSelfieMorador()">
+                <mat-icon>camera</mat-icon>
+                Capturar Selfie
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Preview da Selfie Capturada aguardando confirmação -->
+        @if (fotoFacialCapturada && !cameraFacialAtiva) {
+          <div class="preview-captura">
+            <h4>Confira sua foto antes de confirmar</h4>
+            <div class="foto-moldura-preview">
+              <img [src]="fotoFacialCapturada" alt="Preview Selfie" class="foto-redonda" />
+            </div>
+
+            <div class="acoes-preview">
+              <button type="button" class="btn-secundario" (click)="recapturarSelfieMorador()" [disabled]="processandoFacial">
+                <mat-icon>refresh</mat-icon>
+                Tirar Outra Foto
+              </button>
+              <button type="button" class="btn-confirmar" (click)="salvarBiometriaMorador()" [disabled]="processandoFacial">
+                @if (processandoFacial) {
+                  <mat-icon class="girando">sync</mat-icon>
+                  Processando Face com IA...
+                } @else {
+                  <mat-icon>check</mat-icon>
+                  Salvar Biometria Facial
+                }
+              </button>
+            </div>
+          </div>
+        }
       </div>
     </section>
   }
 
-  <section class="secao-acessos">
-    <div class="topo-filtros">
-      <h3>{{ authService.isSindico ? 'Acessos Registrados no Condomínio' : 'Minhas Liberações de Entrada' }}</h3>
-      <div class="filtros">
-        <button [class.ativo]="filtroStatus === 'todos'" (click)="filtroStatus = 'todos'">Todos</button>
-        <button [class.ativo]="filtroStatus === 'autorizado'" (click)="filtroStatus = 'autorizado'">Aguardando Entrada</button>
-        <button [class.ativo]="filtroStatus === 'no_condominio'" (click)="filtroStatus = 'no_condominio'">No Condomínio</button>
-        <button [class.ativo]="filtroStatus === 'finalizado'" (click)="filtroStatus = 'finalizado'">Finalizados</button>
-      </div>
-    </div>
+  <!-- ========================================================================= -->
+  <!-- ABA 2: VISITANTES & PRESTADORES DE SERVIÇO -->
+  <!-- ========================================================================= -->
+  @if (abaAtiva === 'visitantes') {
+    <section class="conteudo-aba">
+      <div class="card-painel">
+        <div class="painel-cabecalho com-botao">
+          <div>
+            <h3>Visitantes, Entregadores e Prestadores de Serviço</h3>
+            <p>Cadastre convites e envie o link para o visitante tirar uma selfie pelo próprio celular antes de chegar.</p>
+          </div>
+          <button type="button" class="btn-principal" (click)="mostrarFormVisitante = !mostrarFormVisitante">
+            <mat-icon>{{ mostrarFormVisitante ? 'close' : 'person_add' }}</mat-icon>
+            {{ mostrarFormVisitante ? 'Fechar Formulário' : 'Novo Convite / Prestador' }}
+          </button>
+        </div>
 
-    @if (acessosFiltrados().length === 0) {
-      <div class="estado-vazio">
-        <mat-icon>security</mat-icon>
-        <p>Nenhuma autorização de acesso encontrada.</p>
-      </div>
-    } @else {
-      <div class="lista-acessos">
-        @for (acesso of acessosFiltrados(); track acesso.id) {
-          <article class="card-acesso" [class.presente]="acesso.status === 'no_condominio'">
-            <div class="acesso-cabecalho">
-              <div>
-                <strong>{{ acesso.nome_visitante }}</strong>
-                <span class="tipo-tag">{{ acesso.tipo_display }}</span>
-                <p class="destino">Unidade de Destino: <strong>Bloco {{ acesso.bloco }} - Apto {{ acesso.numero }}</strong> ({{ acesso.morador_nome }})</p>
-                <div class="info-adicionais">
-                  <span><mat-icon>calendar_today</mat-icon> Previsto para: {{ acesso.data_prevista | date:'dd/MM/yyyy' }}</span>
-                  @if (acesso.placa_veiculo) {
-                    <span><mat-icon>directions_car</mat-icon> Placa: {{ acesso.placa_veiculo }}</span>
+        <!-- Formulário Expansível de Cadastro de Visitante -->
+        @if (mostrarFormVisitante) {
+          <div class="form-expansivel">
+            <h4 class="form-titulo">Informações do Visitante ou Prestador</h4>
+            <div class="grade-campos">
+              <div class="campo-grupo">
+                <label>Tipo de Entrada:</label>
+                <select [(ngModel)]="novoTipo" class="input-select">
+                  <option value="visitante">Visitante / Convidado</option>
+                  <option value="prestador">Prestador de Serviço / Técnico</option>
+                  <option value="delivery">Entregador Frequente</option>
+                </select>
+              </div>
+
+              <div class="campo-grupo">
+                <label>Nome Completo:</label>
+                <input type="text" [(ngModel)]="novoNome" placeholder="Ex.: João Carlos da Silva" class="input-texto" />
+              </div>
+
+              <div class="campo-grupo">
+                <label>Documento (RG / CPF):</label>
+                <input type="text" [(ngModel)]="novoDocumento" placeholder="Opcional" class="input-texto" />
+              </div>
+
+              <div class="campo-grupo">
+                <label>WhatsApp / Telefone:</label>
+                <input type="text" [(ngModel)]="novoTelefone" placeholder="Ex.: (92) 99123-4567" class="input-texto" />
+              </div>
+
+              @if (novoTipo === 'prestador') {
+                <div class="campo-grupo">
+                  <label>Empresa / Especialidade:</label>
+                  <input type="text" [(ngModel)]="novaEmpresa" placeholder="Ex.: Vivo Fibra, Eletricista" class="input-texto" />
+                </div>
+              }
+
+              <div class="campo-grupo">
+                <label>Liberado a partir de:</label>
+                <input type="date" [(ngModel)]="novaDataInicio" class="input-texto" />
+              </div>
+
+              <div class="campo-grupo">
+                <label>Válido até:</label>
+                <input type="date" [(ngModel)]="novaDataFim" class="input-texto" />
+              </div>
+
+              <div class="campo-grupo">
+                <label>Turno / Horário Permitido:</label>
+                <select [(ngModel)]="novoPeriodo" class="input-select">
+                  <option value="dia_inteiro">Qualquer Horário (06h às 23h)</option>
+                  <option value="comercial">Horário Comercial (08h às 18h)</option>
+                  <option value="manha">Manhã (08h às 12h)</option>
+                  <option value="tarde">Tarde (13h às 18h)</option>
+                  <option value="noite">Noite (18h às 23h)</option>
+                </select>
+              </div>
+
+              <div class="campo-grupo span-total">
+                <label>Observações / Instruções:</label>
+                <input type="text" [(ngModel)]="novasObservacoes" placeholder="Ex.: Acesso permitido apenas pela escada de serviço" class="input-texto" />
+              </div>
+            </div>
+
+            <div class="form-acoes">
+              <button type="button" class="btn-cancelar" (click)="mostrarFormVisitante = false">
+                Cancelar
+              </button>
+              <button type="button" class="btn-confirmar" (click)="cadastrarVisitante()" [disabled]="carregando">
+                <mat-icon>check</mat-icon>
+                Confirmar Autorização
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Filtros Rápidos -->
+        <div class="filtros-barra">
+          <button type="button" class="filtro-chip" [class.ativo]="filtroVisitantes === 'todos'" (click)="filtroVisitantes = 'todos'">
+            Todos ({{ visitantes.length }})
+          </button>
+          <button type="button" class="filtro-chip" [class.ativo]="filtroVisitantes === 'visitante'" (click)="filtroVisitantes = 'visitante'">
+            Visitantes
+          </button>
+          <button type="button" class="filtro-chip" [class.ativo]="filtroVisitantes === 'prestador'" (click)="filtroVisitantes = 'prestador'">
+            Prestadores
+          </button>
+          <button type="button" class="filtro-chip" [class.ativo]="filtroVisitantes === 'com_facial'" (click)="filtroVisitantes = 'com_facial'">
+            Com Selfie Cadastrada
+          </button>
+          <button type="button" class="filtro-chip" [class.ativo]="filtroVisitantes === 'sem_facial'" (click)="filtroVisitantes = 'sem_facial'">
+            Sem Selfie
+          </button>
+        </div>
+
+        <!-- Grade de Cards de Visitantes -->
+        <div class="grade-visitantes">
+          @for (vis of visitantesFiltrados(); track vis.id) {
+            <div class="card-visitante">
+              <div class="visitante-topo">
+                <div class="avatar-visitante">
+                  @if (vis.foto_biometria) {
+                    <img [src]="vis.foto_biometria" alt="Foto Face" class="img-visitante" />
+                  } @else {
+                    <mat-icon>person</mat-icon>
                   }
-                  @if (acesso.documento) {
-                    <span><mat-icon>badge</mat-icon> Doc: {{ acesso.documento }}</span>
-                  }
+                </div>
+                <div class="visitante-info-topo">
+                  <span class="tipo-tag" [class]="vis.tipo">{{ vis.tipo_display }}</span>
+                  <h4 class="visitante-nome">{{ vis.nome }}</h4>
+                  <span class="unidade-texto">{{ vis.morador_unidade }}</span>
                 </div>
               </div>
 
-              <span class="badge-status" [class]="'badge-' + acesso.status">
-                {{ acesso.status_display }}
-              </span>
+              <div class="visitante-corpo">
+                <div class="info-item">
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>Validade: {{ formatarDataBr(vis.data_inicio) }} até {{ formatarDataBr(vis.data_fim) }}</span>
+                </div>
+                <div class="info-item">
+                  <mat-icon>schedule</mat-icon>
+                  <span>{{ vis.periodo_display }}</span>
+                </div>
+                @if (vis.empresa) {
+                  <div class="info-item">
+                    <mat-icon>business</mat-icon>
+                    <span>{{ vis.empresa }}</span>
+                  </div>
+                }
+              </div>
+
+              <div class="visitante-status-face">
+                @if (vis.tem_biometria) {
+                  <span class="badge-face pronta">
+                    <mat-icon>verified_user</mat-icon> Selfie Biométrica Validada
+                  </span>
+                } @else {
+                  <span class="badge-face pendente">
+                    <mat-icon>hourglass_empty</mat-icon> Aguardando Selfie
+                  </span>
+                }
+              </div>
+
+              <!-- Ações do Card -->
+              <div class="visitante-acoes">
+                <button type="button" class="btn-whatsapp" (click)="copiarLinkWhatsApp(vis)" title="Compartilhar Link do WhatsApp para selfie">
+                  <mat-icon>share</mat-icon>
+                  Enviar Link WhatsApp
+                </button>
+                <button type="button" class="btn-icone-excluir" (click)="excluirVisitante(vis.id)" title="Cancelar acesso">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </div>
-
-            <div class="acesso-acoes">
-              @if (authService.isSindico && acesso.status === 'autorizado') {
-                <button class="btn-entrada" (click)="registrarEntrada(acesso.id)">
-                  <mat-icon>login</mat-icon> Registrar Entrada
-                </button>
-              }
-
-              @if (authService.isSindico && acesso.status === 'no_condominio') {
-                <button class="btn-saida" (click)="registrarSaida(acesso.id)">
-                  <mat-icon>logout</mat-icon> Registrar Saída
-                </button>
-              }
-
-              @if (acesso.status === 'autorizado') {
-                <button class="btn-cancelar" (click)="cancelar(acesso.id)">
-                  Cancelar Autorização
-                </button>
-              }
+          } @empty {
+            <div class="estado-vazio">
+              <mat-icon>group_off</mat-icon>
+              <h4>Nenhum visitante cadastrado</h4>
+              <p>Clique em "Novo Convite / Prestador" para gerar uma liberação de acesso com selfie.</p>
             </div>
-          </article>
-        }
+          }
+        </div>
       </div>
-    }
-  </section>
+    </section>
+  }
+
+  <!-- ========================================================================= -->
+  <!-- ABA 3: TERMINAL / TOTEM DA PORTARIA (CÂMERA AO VIVO) -->
+  <!-- ========================================================================= -->
+  @if (abaAtiva === 'totem') {
+    <section class="conteudo-aba">
+      <div class="painel-totem">
+        <div class="totem-grid">
+          <!-- Coluna 1: Câmera da Portaria -->
+          <div class="totem-camera-box">
+            <div class="totem-camera-header">
+              <div class="totem-status-indicator" [class.online]="cameraTotemAtiva">
+                <span class="dot-live"></span>
+                <span>{{ cameraTotemAtiva ? 'TOTEM EM OPERAÇÃO (AO VIVO)' : 'CÂMERA DESCONECTADA' }}</span>
+              </div>
+              <span class="totem-local">Portão Principal Pedestres</span>
+            </div>
+
+            <!-- Viewport de Vídeo do Totem -->
+            <div class="totem-viewport">
+              @if (cameraTotemAtiva) {
+                <video #videoTotemRef autoplay playsinline muted class="video-stream-totem"></video>
+                <div class="overlay-scan-totem" [class.escaneando]="analisandoFaceTotem">
+                  <div class="scanner-linha"></div>
+                </div>
+              } @else {
+                <div class="totem-placeholder">
+                  <mat-icon>videocam_off</mat-icon>
+                  <p>A câmera do totem da portaria está desligada.</p>
+                  <button type="button" class="btn-principal" (click)="iniciarTotem()">
+                    <mat-icon>videocam</mat-icon>
+                    Conectar Câmera da Portaria
+                  </button>
+                </div>
+              }
+            </div>
+
+            @if (cameraTotemAtiva) {
+              <div class="totem-controles">
+                <button type="button" class="btn-scan-manual" (click)="analisarFaceAoVivo()" [disabled]="analisandoFaceTotem">
+                  @if (analisandoFaceTotem) {
+                    <mat-icon class="girando">sync</mat-icon>
+                    Analisando Face...
+                  } @else {
+                    <mat-icon>face</mat-icon>
+                    Identificar Rosto Agora
+                  }
+                </button>
+
+                <button
+                  type="button"
+                  class="btn-auto-scan"
+                  [class.ativo]="totemAutoScan"
+                  (click)="toggleAutoScan()"
+                >
+                  <mat-icon>{{ totemAutoScan ? 'pause' : 'autorenew' }}</mat-icon>
+                  {{ totemAutoScan ? 'Pausar Modo Automático' : 'Auto-Scan Contínuo' }}
+                </button>
+
+                <button type="button" class="btn-desconectar" (click)="pararCameraTotem()" title="Desligar Câmera">
+                  <mat-icon>power_settings_new</mat-icon>
+                </button>
+              </div>
+            }
+
+            <!-- Card de Resultado da Leitura -->
+            @if (ultimoAcessoTotem) {
+              <div class="totem-resultado-box" [class]="ultimoAcessoTotem.status">
+                <div class="resultado-icone">
+                  @if (ultimoAcessoTotem.autorizado) {
+                    <mat-icon>check_circle</mat-icon>
+                  } @else {
+                    <mat-icon>cancel</mat-icon>
+                  }
+                </div>
+                <div class="resultado-detalhes">
+                  <h4>{{ ultimoAcessoTotem.autorizado ? 'ACESSO LIBERADO' : 'ACESSO NEGADO' }}</h4>
+                  <p class="resultado-nome"><strong>{{ ultimoAcessoTotem.nome || 'Pessoa Desconhecida' }}</strong></p>
+                  @if (ultimoAcessoTotem.unidade) {
+                    <span class="resultado-unidade">Destino: {{ ultimoAcessoTotem.unidade }}</span>
+                  }
+                  @if (ultimoAcessoTotem.similaridade) {
+                    <span class="resultado-similaridade">Similaridade IA: {{ ultimoAcessoTotem.similaridade }}%</span>
+                  }
+                  @if (ultimoAcessoTotem.motivo) {
+                    <p class="resultado-motivo">{{ ultimoAcessoTotem.motivo }}</p>
+                  }
+                </div>
+                @if (ultimoAcessoTotem.foto_recortada) {
+                  <img [src]="ultimoAcessoTotem.foto_recortada" alt="Face Identificada" class="foto-crop-resultado" />
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Coluna 2: Histórico Recente de Entradas da Portaria -->
+          <div class="totem-historico-box">
+            <div class="historico-header">
+              <h4>Últimas Leituras de Acesso</h4>
+              <button type="button" class="btn-refresh" (click)="carregarHistoricoTotem()" title="Atualizar histórico">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </div>
+
+            <div class="lista-historico">
+              @for (reg of historicoAcessos; track reg.id) {
+                <div class="historico-item" [class]="reg.status">
+                  <div class="historico-foto">
+                    @if (reg.foto_capturada) {
+                      <img [src]="reg.foto_capturada" alt="Face lida" class="img-hist" />
+                    } @else {
+                      <mat-icon>person</mat-icon>
+                    }
+                  </div>
+                  <div class="historico-info">
+                    <span class="hist-nome">{{ reg.nome_identificado }}</span>
+                    <span class="hist-destino">{{ reg.destino || 'Portaria' }}</span>
+                    <span class="hist-hora">{{ reg.created_at | date:'HH:mm:ss - dd/MM' }}</span>
+                  </div>
+                  <div class="historico-status">
+                    <span class="pill-status" [class]="reg.status">{{ reg.status_display }}</span>
+                    @if (reg.similaridade > 0) {
+                      <small class="hist-sim">{{ reg.similaridade }}%</small>
+                    }
+                  </div>
+                </div>
+              } @empty {
+                <div class="estado-vazio-historico">
+                  <mat-icon>history</mat-icon>
+                  <p>Nenhuma leitura registrada recentemente.</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
 </div>

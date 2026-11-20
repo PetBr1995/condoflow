@@ -376,3 +376,106 @@ class CondoFlowE2ETestCase(APITestCase):
         }, **headers_sindico)
         self.assertEqual(res_concluir.status_code, status.HTTP_200_OK)
         self.assertEqual(res_concluir.data['status'], 'concluido')
+
+    # ==========================================
+    # TESTE 6: RECONHECIMENTO FACIAL E TOTEM
+    # ==========================================
+    def test_biometria_facial_e_portaria_totem(self):
+        """Valida o ciclo completo de cadastro facial do morador, convite de visitantes com selfie e totem da portaria."""
+        from unittest.mock import patch
+        from .models import BiometriaFacial, Visitante, RegistroAcesso
+
+        headers_morador = self.get_jwt_header("22222222222")
+        headers_sindico = self.get_jwt_header("11111111111")
+
+        # 1. Morador consulta status antes de ter facial
+        res_face_inicial = self.client.get('/api/biometrias/minha-face/', **headers_morador)
+        self.assertEqual(res_face_inicial.status_code, status.HTTP_200_OK)
+        self.assertFalse(res_face_inicial.data['tem_biometria'])
+
+        # 2. Morador cadastra sua selfie com sucesso
+        mock_face_morador = {
+            'sucesso': True,
+            'vetor': [0.088] * 128,
+            'face_base64': 'data:image/jpeg;base64,mocked_morador_face',
+            'brilho': 120.0
+        }
+        with patch('condominio.views.processar_foto_facial', return_value=mock_face_morador):
+            res_cad_face = self.client.post('/api/biometrias/cadastrar-minha-face/', {
+                'foto_base64': 'data:image/jpeg;base64,raw_selfie_morador'
+            }, **headers_morador)
+            self.assertEqual(res_cad_face.status_code, status.HTTP_201_CREATED)
+            self.assertTrue(res_cad_face.data['sucesso'])
+
+        # 3. Consulta status pós-cadastro
+        res_face_pos = self.client.get('/api/biometrias/minha-face/', **headers_morador)
+        self.assertEqual(res_face_pos.status_code, status.HTTP_200_OK)
+        self.assertTrue(res_face_pos.data['tem_biometria'])
+        self.assertEqual(res_face_pos.data['foto_base64'], 'data:image/jpeg;base64,mocked_morador_face')
+
+        # 4. Morador cadastra um visitante / prestador
+        res_vis = self.client.post('/api/visitantes/', {
+            'nome': 'Roberto Eletricista',
+            'tipo': 'prestador',
+            'empresa': 'EletroReparos',
+            'data_inicio': '2026-11-20',
+            'data_fim': '2026-11-25',
+            'periodo': 'dia_inteiro',
+            'observacoes': 'Reparo no quadro elétrico'
+        }, **headers_morador)
+        self.assertEqual(res_vis.status_code, status.HTTP_201_CREATED)
+        token_convite = res_vis.data['codigo_acesso']
+        self.assertTrue(token_convite.startswith('CF-'))
+
+        # 5. Visitante abre o link público do WhatsApp sem login (AllowAny)
+        res_convite_pub = self.client.get(f'/api/visitantes/convite-publico/{token_convite}/')
+        self.assertEqual(res_convite_pub.status_code, status.HTTP_200_OK)
+        self.assertEqual(res_convite_pub.data['nome'], 'Roberto Eletricista')
+        self.assertFalse(res_convite_pub.data['tem_biometria'])
+
+        # 6. Visitante envia sua selfie pelo link público do celular
+        mock_face_visitante = {
+            'sucesso': True,
+            'vetor': [0.05] * 128,
+            'face_base64': 'data:image/jpeg;base64,mocked_visitante_face',
+            'brilho': 115.0
+        }
+        with patch('condominio.views.processar_foto_facial', return_value=mock_face_visitante):
+            res_selfie_vis = self.client.post(f'/api/visitantes/salvar-selfie-convite/{token_convite}/', {
+                'foto_base64': 'data:image/jpeg;base64,selfie_enviada_pelo_celular'
+            })
+            self.assertEqual(res_selfie_vis.status_code, status.HTTP_200_OK)
+            self.assertTrue(res_selfie_vis.data['sucesso'])
+
+        # 7. Totem da Portaria faz a leitura ao vivo:
+        # 7.1 Morador passa na frente da câmera (reconhecido -> Liberado!)
+        with patch('condominio.views.processar_foto_facial', return_value=mock_face_morador):
+            res_totem_morador = self.client.post('/api/portaria/identificar-face/', {
+                'foto_base64': 'data:image/jpeg;base64,frame_camera_morador',
+                'dispositivo_ponto': 'Portão Social'
+            }, **headers_sindico)
+            self.assertEqual(res_totem_morador.status_code, status.HTTP_200_OK)
+            self.assertTrue(res_totem_morador.data['autorizado'])
+            self.assertEqual(res_totem_morador.data['status'], 'autorizado')
+            self.assertEqual(res_totem_morador.data['tipo'], 'morador')
+
+        # 7.2 Pessoa desconhecida passa na frente da câmera (não reconhecido -> Negado!)
+        mock_face_estranho = {
+            'sucesso': True,
+            'vetor': [-0.088] * 128, # Vetor oposto (similaridade 0.0)
+            'face_base64': 'data:image/jpeg;base64,frame_desconhecido',
+            'brilho': 110.0
+        }
+        with patch('condominio.views.processar_foto_facial', return_value=mock_face_estranho):
+            res_totem_estranho = self.client.post('/api/portaria/identificar-face/', {
+                'foto_base64': 'data:image/jpeg;base64,frame_camera_estranho'
+            }, **headers_sindico)
+            self.assertEqual(res_totem_estranho.status_code, status.HTTP_200_OK)
+            self.assertFalse(res_totem_estranho.data['autorizado'])
+            self.assertEqual(res_totem_estranho.data['status'], 'negado')
+
+        # 8. Consulta de histórico de auditoria da portaria
+        res_hist = self.client.get('/api/portaria/historico/', **headers_sindico)
+        self.assertEqual(res_hist.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(len(res_hist.data), 2)
+

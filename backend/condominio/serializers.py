@@ -55,21 +55,27 @@ class UsuarioResumidoSerializer(serializers.ModelSerializer):
 
 class UsuarioSerializer(serializers.ModelSerializer):
     codigo_registro = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    foto_base64 = serializers.CharField(write_only=True, required=False, allow_blank=True)
     endereco = EnderecoSerializer(read_only=True)
     condominio_nome = serializers.CharField(source='condominio.nome', read_only=True)
-    
+    biometria_cadastrada = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Usuario
         fields = [
             'id', 'username', 'first_name', 'last_name',
             'cpf', 'telefone', 'is_sindico', 'condominio', 'condominio_nome',
-            'endereco', 'codigo_registro', 'password'
+            'endereco', 'codigo_registro', 'password', 'foto_base64', 'biometria_cadastrada'
         ]
         extra_kwargs = {
             'password': {'write_only': True},
             'username': {'required': False, 'allow_blank': True}
         }
         read_only_fields = ['is_sindico', 'condominio', 'is_staff', 'is_superuser', 'is_active']
+
+    def get_biometria_cadastrada(self, obj):
+        from .models import BiometriaFacial
+        return BiometriaFacial.objects.filter(usuario=obj, ativa=True).exists()
 
     def validate_cpf(self, value):
         cpf_limpo = limpar_cpf(value)
@@ -82,6 +88,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         codigo = validated_data.pop('codigo_registro', None)
+        foto_b64 = validated_data.pop('foto_base64', None)
         senha = validated_data.pop('password', None)
         cpf = limpar_cpf(validated_data.get('cpf', ''))
         
@@ -105,6 +112,14 @@ class UsuarioSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError({"codigo_registro": "O código de convite é obrigatório para cadastro."})
 
+        # Validação biométrica facial antecipada se foto fornecida
+        resultado_facial = None
+        if foto_b64 and foto_b64.strip():
+            from .facial_engine import processar_foto_facial
+            resultado_facial = processar_foto_facial(foto_b64)
+            if not resultado_facial.get('sucesso'):
+                raise serializers.ValidationError({"foto_base64": resultado_facial.get('erro', 'Rosto não identificado ou de baixa qualidade.')})
+
         # Vincula automaticamente o morador à unidade E ao condomínio correspondente!
         usuario = Usuario.objects.create(
             **validated_data,
@@ -114,6 +129,20 @@ class UsuarioSerializer(serializers.ModelSerializer):
         if senha:
             usuario.set_password(senha)
             usuario.save()
+
+        # Salva o registro biométrico se validado
+        if resultado_facial and resultado_facial.get('sucesso'):
+            from .models import BiometriaFacial
+            BiometriaFacial.objects.create(
+                condominio=casa_encontrada.condominio,
+                usuario=usuario,
+                tipo_pessoa='morador',
+                foto_base64=resultado_facial['face_base64'],
+                vetor_facial=resultado_facial['vetor'],
+                qualidade_score=resultado_facial.get('brilho', 100.0),
+                ativa=True
+            )
+
         return usuario
 
 
@@ -423,3 +452,82 @@ class EnqueteSerializer(serializers.ModelSerializer):
             criado_por=user,
             **validated_data
         )
+
+
+# ==============================================================================
+# SERIALIZERS DE RECONHECIMENTO FACIAL E CONTROLE DE ACESSO
+# ==============================================================================
+
+from .models import Visitante, BiometriaFacial, RegistroAcesso
+
+class VisitanteSerializer(serializers.ModelSerializer):
+    morador_nome = serializers.CharField(source='morador.get_full_name', read_only=True)
+    morador_unidade = serializers.CharField(source='endereco.__str__', read_only=True)
+    tipo_display = serializers.CharField(source='get_tipo_display', read_only=True)
+    periodo_display = serializers.CharField(source='get_periodo_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    tem_biometria = serializers.SerializerMethodField()
+    foto_biometria = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Visitante
+        fields = [
+            'id', 'condominio', 'morador', 'morador_nome', 'endereco', 'morador_unidade',
+            'tipo', 'tipo_display', 'nome', 'documento', 'telefone', 'empresa',
+            'data_inicio', 'data_fim', 'periodo', 'periodo_display',
+            'status', 'status_display', 'codigo_acesso', 'observacoes',
+            'tem_biometria', 'foto_biometria', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['condominio', 'morador', 'endereco', 'codigo_acesso', 'created_at', 'updated_at']
+
+    def get_tem_biometria(self, obj):
+        return obj.biometrias.filter(ativa=True).exists()
+
+    def get_foto_biometria(self, obj):
+        bio = obj.biometrias.filter(ativa=True).first()
+        return bio.foto_base64 if bio else ''
+
+
+class BiometriaFacialSerializer(serializers.ModelSerializer):
+    pessoa_nome = serializers.SerializerMethodField()
+    pessoa_unidade = serializers.SerializerMethodField()
+    tipo_pessoa_display = serializers.CharField(source='get_tipo_pessoa_display', read_only=True)
+
+    class Meta:
+        model = BiometriaFacial
+        fields = [
+            'id', 'condominio', 'usuario', 'visitante', 'tipo_pessoa', 'tipo_pessoa_display',
+            'foto_base64', 'qualidade_score', 'ativa', 'pessoa_nome', 'pessoa_unidade',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['condominio', 'created_at', 'updated_at']
+
+    def get_pessoa_nome(self, obj):
+        if obj.usuario:
+            return obj.usuario.get_full_name() or obj.usuario.username
+        if obj.visitante:
+            return obj.visitante.nome
+        return "Desconhecido"
+
+    def get_pessoa_unidade(self, obj):
+        if obj.usuario and obj.usuario.endereco:
+            return str(obj.usuario.endereco)
+        if obj.visitante and obj.visitante.endereco:
+            return str(obj.visitante.endereco)
+        return "Sem Unidade"
+
+
+class RegistroAcessoSerializer(serializers.ModelSerializer):
+    tipo_pessoa_display = serializers.CharField(source='get_tipo_pessoa_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = RegistroAcesso
+        fields = [
+            'id', 'condominio', 'tipo_pessoa', 'tipo_pessoa_display',
+            'usuario', 'visitante', 'nome_identificado', 'destino',
+            'status', 'status_display', 'motivo', 'similaridade',
+            'foto_capturada', 'dispositivo_ponto', 'created_at'
+        ]
+        read_only_fields = ['condominio', 'created_at']
+

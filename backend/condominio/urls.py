@@ -12,6 +12,9 @@ from .views import (
     AutorizacaoAcessoViewSet,
     DocumentoCondominioViewSet,
     EnqueteViewSet,
+    BiometriaFacialViewSet,
+    VisitanteViewSet,
+    PortariaTotemViewSet,
     DashboardView
 )
 
@@ -27,6 +30,9 @@ router.register('encomendas', EncomendaViewSet, basename='encomendas')
 router.register('acessos', AutorizacaoAcessoViewSet, basename='acessos')
 router.register('documentos', DocumentoCondominioViewSet, basename='documentos')
 router.register('enquetes', EnqueteViewSet, basename='enquetes')
+router.register('biometrias', BiometriaFacialViewSet, basename='biometrias')
+router.register('visitantes', VisitanteViewSet, basename='visitantes')
+router.register('portaria', PortariaTotemViewSet, basename='portaria')
 
 urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),

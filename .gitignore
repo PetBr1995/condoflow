@@ -33,3 +33,15 @@ Thumbs.db
 
 # Audit & Skills Temp
 .taste-skill/
+
+# Android & APK
+*.apk
+frontend/android/.gradle/
+frontend/android/**/.gradle/
+frontend/android/app/build/
+frontend/android/build/
+frontend/android/**/build/
+frontend/android/jdk17/
+frontend/android/local.properties
+frontend/android/capacitor-cordova-android-plugins/build/
+frontend/android/capacitor-android/build/

@@ -11,6 +11,7 @@ import { EncomendasComponent } from './pages/encomendas/encomendas.component';
 import { AcessosComponent } from './pages/acessos/acessos.component';
 import { DocumentosComponent } from './pages/documentos/documentos.component';
 import { EnquetesComponent } from './pages/enquetes/enquetes.component';
+import { ConvitePublicoComponent } from './pages/convite-publico/convite-publico.component';
 import { authGuard } from './guards/auth.guard';
 import { redirectIfAuthenticatedGuard } from './guards/redirect-authenticated.guard';
 
@@ -35,6 +36,10 @@ export const routes: Routes = [
     path: 'cadastro', 
     component: CadastroMorador,
     canActivate: [redirectIfAuthenticatedGuard]
+  },
+  {
+    path: 'convite/:token',
+    component: ConvitePublicoComponent
   },
   
   // Rotas Privadas (Protegidas por JWT)

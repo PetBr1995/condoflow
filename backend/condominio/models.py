@@ -356,3 +356,141 @@ class VotoEnquete(models.Model):
 
     def __str__(self):
         return f"{self.endereco} votou na Opção {self.opcao_escolhida} na Enquete #{self.enquete_id}"
+
+
+# ==============================================================================
+# CONTROLE DE ACESSO E RECONHECIMENTO FACIAL
+# ==============================================================================
+
+class Visitante(models.Model):
+    """Cadastro de visitantes e prestadores de serviço autorizados com regras de período."""
+    TIPO_CHOICES = [
+        ('visitante', 'Visitante / Convidado'),
+        ('prestador', 'Prestador de Serviço / Técnico'),
+        ('delivery', 'Entregador Frequente'),
+    ]
+
+    PERIODO_CHOICES = [
+        ('dia_inteiro', 'Qualquer Horário (06h às 23h)'),
+        ('comercial', 'Horário Comercial (08h às 18h)'),
+        ('manha', 'Manhã (08h às 12h)'),
+        ('tarde', 'Tarde (13h às 18h)'),
+        ('noite', 'Noite (18h às 23h)'),
+    ]
+
+    STATUS_CHOICES = [
+        ('ativo', 'Autorizado / Ativo'),
+        ('expirado', 'Expirado'),
+        ('bloqueado', 'Bloqueado'),
+        ('concluido', 'Visita Concluída'),
+    ]
+
+    condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE, related_name='visitantes', verbose_name="Condomínio")
+    morador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='visitantes_convidados', verbose_name="Morador Responsável")
+    endereco = models.ForeignKey(Endereco, on_delete=models.SET_NULL, null=True, blank=True, related_name='visitantes', verbose_name="Unidade de Destino")
+    
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='visitante', verbose_name="Tipo de Acesso")
+    nome = models.CharField(max_length=120, verbose_name="Nome Completo")
+    documento = models.CharField(max_length=30, blank=True, default="", verbose_name="RG ou CPF")
+    telefone = models.CharField(max_length=20, blank=True, default="", verbose_name="WhatsApp / Telefone")
+    empresa = models.CharField(max_length=80, blank=True, default="", verbose_name="Empresa / Serviço (ex: Enel, Pintor)")
+    
+    data_inicio = models.DateField(verbose_name="Liberado a partir de")
+    data_fim = models.DateField(verbose_name="Válido até")
+    periodo = models.CharField(max_length=20, choices=PERIODO_CHOICES, default='dia_inteiro', verbose_name="Faixa de Horário Permitida")
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativo', verbose_name="Status do Convite")
+    codigo_acesso = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Código do Convite / Token")
+    observacoes = models.TextField(blank=True, default="", verbose_name="Observações / Instruções")
+    
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Atualizado em")
+
+    class Meta:
+        verbose_name = "Visitante / Prestador"
+        verbose_name_plural = "Visitantes e Prestadores"
+        ordering = ['-created_at']
+
+    def save(self, *args, **kwargs):
+        if not self.codigo_acesso:
+            aleatorio = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            self.codigo_acesso = f"CF-{aleatorio}"
+        if not self.endereco and self.morador and self.morador.endereco:
+            self.endereco = self.morador.endereco
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"[{self.get_tipo_display()}] {self.nome} -> {self.endereco or 'Geral'}"
+
+
+class BiometriaFacial(models.Model):
+    """Armazenamento do vetor biométrico facial para moradores e visitantes."""
+    TIPO_PESSOA_CHOICES = [
+        ('morador', 'Morador'),
+        ('visitante', 'Visitante'),
+        ('prestador', 'Prestador de Serviço'),
+    ]
+
+    condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE, related_name='biometrias', verbose_name="Condomínio")
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='biometrias', null=True, blank=True, verbose_name="Morador")
+    visitante = models.ForeignKey(Visitante, on_delete=models.CASCADE, related_name='biometrias', null=True, blank=True, verbose_name="Visitante / Prestador")
+    
+    tipo_pessoa = models.CharField(max_length=20, choices=TIPO_PESSOA_CHOICES, default='morador', verbose_name="Tipo de Pessoa")
+    foto_base64 = models.TextField(verbose_name="Foto do Rosto (Base64)")
+    vetor_facial = models.JSONField(default=list, verbose_name="Vetor Numérico Facial (128d)")
+    qualidade_score = models.FloatField(default=1.0, verbose_name="Índice de Qualidade / Iluminação")
+    ativa = models.BooleanField(default=True, verbose_name="Biometria Ativa?")
+    
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Capturada em")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Atualizada em")
+
+    class Meta:
+        verbose_name = "Biometria Facial"
+        verbose_name_plural = "Biometrias Faciais"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        nome = self.usuario.get_full_name() if self.usuario else (self.visitante.nome if self.visitante else "Desconhecido")
+        return f"Biometria Facial [{self.get_tipo_pessoa_display()}]: {nome}"
+
+
+class RegistroAcesso(models.Model):
+    """Log de auditoria em tempo real de cada leitura facial na portaria/totem."""
+    TIPO_PESSOA_CHOICES = [
+        ('morador', 'Morador'),
+        ('visitante', 'Visitante'),
+        ('prestador', 'Prestador de Serviço'),
+        ('desconhecido', 'Não Identificado'),
+    ]
+
+    STATUS_CHOICES = [
+        ('autorizado', 'Acesso Liberado'),
+        ('negado', 'Acesso Negado (Não Reconhecido)'),
+        ('fora_horario', 'Acesso Negado (Fora do Horário Permitido)'),
+        ('expirado', 'Acesso Negado (Convite Expirado)'),
+        ('bloqueado', 'Acesso Negado (Bloqueado pela Administração)'),
+    ]
+
+    condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE, related_name='registros_acesso', verbose_name="Condomínio")
+    tipo_pessoa = models.CharField(max_length=20, choices=TIPO_PESSOA_CHOICES, default='desconhecido')
+    usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True, related_name='acessos_registrados')
+    visitante = models.ForeignKey(Visitante, on_delete=models.SET_NULL, null=True, blank=True, related_name='acessos_registrados')
+    
+    nome_identificado = models.CharField(max_length=120, blank=True, default="Pessoa Desconhecida", verbose_name="Nome Identificado")
+    destino = models.CharField(max_length=80, blank=True, default="", verbose_name="Destino (Bloco / Apto)")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='negado', verbose_name="Status do Acesso")
+    motivo = models.CharField(max_length=200, blank=True, default="", verbose_name="Motivo / Detalhes")
+    similaridade = models.FloatField(default=0.0, verbose_name="Grau de Similaridade (%)")
+    foto_capturada = models.TextField(blank=True, default="", verbose_name="Foto Capturada na Câmera (Base64)")
+    dispositivo_ponto = models.CharField(max_length=80, default="Portão Principal Pedestres", verbose_name="Ponto de Acesso / Totem")
+    
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Horário da Leitura")
+
+    class Meta:
+        verbose_name = "Registro de Acesso"
+        verbose_name_plural = "Histórico de Acessos"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"[{self.created_at.strftime('%d/%m/%Y %H:%M:%S')}] {self.nome_identificado} -> {self.get_status_display()}"
+

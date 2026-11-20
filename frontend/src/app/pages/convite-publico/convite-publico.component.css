@@ -1,0 +1,359 @@
+.convite-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0e1d35 0%, #0f213d 100%);
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.convite-card {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.convite-header {
+  margin-bottom: 20px;
+}
+
+.logo-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #2563eb;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.logo-box mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.convite-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.subtitulo {
+  margin: 4px 0 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.loading-box {
+  padding: 30px 0;
+  color: #2563eb;
+}
+
+.loading-box mat-icon {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 8px;
+}
+
+.alerta-erro {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.alerta-sucesso {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  padding: 24px 16px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.alerta-sucesso mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+
+.alerta-sucesso h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.detalhes-convite {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row .label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.info-row .valor {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.info-row .destaque {
+  color: #2563eb;
+  font-size: 0.95rem;
+}
+
+.tag-periodo {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.instrucoes-box {
+  padding: 16px 0;
+}
+
+.instrucoes-box h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.instrucoes-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
+.instrucoes-box li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.instrucoes-box li mat-icon {
+  color: #2563eb;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.btn-abrir-camera {
+  width: 100%;
+  padding: 14px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  transition: all 0.2s;
+}
+
+.btn-abrir-camera:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.camera-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  height: 360px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.video-stream {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* Efeito espelho */
+}
+
+.moldura-oval-guia {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 210px;
+  height: 270px;
+  border: 3px dashed rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  pointer-events: none;
+}
+
+.texto-guia {
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.controles-camera {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.btn-cancelar-camera {
+  flex: 1;
+  padding: 12px;
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-disparar {
+  flex: 2;
+  padding: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.preview-box {
+  padding: 10px 0;
+}
+
+.preview-box h5 {
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.foto-moldura {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 16px auto;
+  border: 4px solid #2563eb;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.img-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.acoes-preview {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-recapturar {
+  flex: 1;
+  padding: 12px;
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.btn-confirmar-foto {
+  flex: 2;
+  padding: 12px;
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);
+}
+
+.btn-confirmar-foto:disabled, .btn-recapturar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.girando {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
