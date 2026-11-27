@@ -50,44 +50,45 @@ export default function InteractiveHeroSim() {
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto rounded-xl border border-border bg-surface shadow-modal overflow-hidden">
-      <BorderBeam size={300} duration={14} colorFrom="#2563EB" colorTo="#38BDF8" borderWidth={1.5} />
+    <div className="relative w-full max-w-4xl mx-auto rounded-xl border border-slate-800 bg-[#070E22] shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden text-white">
+      <BorderBeam size={320} duration={12} colorFrom="#22D3EE" colorTo="#3B82F6" borderWidth={1.5} />
+
       {/* Barra de Janela / Frame de Aplicação estilo Vercel / Linear */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-page-subtle border-b border-border text-xs">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0A1329] border-b border-slate-800 text-xs">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
           </div>
-          <span className="text-border-strong mx-1">|</span>
-          <span className="font-mono text-[11px] text-ink-secondary font-medium">
+          <span className="text-slate-600 mx-1">|</span>
+          <span className="font-mono text-[11px] text-slate-400 font-medium">
             condoflow-totem-01.local
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-950/70 text-emerald-400 border border-emerald-500/40">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             LATÊNCIA: 12ms
           </span>
-          <span className="hidden sm:inline text-[11px] text-ink-muted font-mono">
+          <span className="hidden sm:inline text-[11px] text-slate-400 font-mono">
             OPENCV 4.10 AI
           </span>
         </div>
       </div>
 
       {/* Tabs de Controle da Simulação */}
-      <div className="flex items-center gap-1 px-4 py-2 bg-surface border-b border-border-subtle overflow-x-auto">
+      <div className="flex items-center gap-1 px-4 py-2 bg-[#070E22] border-b border-slate-800 overflow-x-auto">
         <button
           onClick={() => setActiveTab("facial")}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
             activeTab === "facial"
-              ? "bg-brand-slate text-white"
-              : "text-ink-secondary hover:bg-page-subtle hover:text-ink-primary"
+              ? "bg-[#131F38] text-white border border-slate-700/80 shadow-xs"
+              : "text-slate-400 hover:text-white"
           }`}
         >
-          <ScanFace className="w-3.5 h-3.5" />
+          <ScanFace className="w-3.5 h-3.5 text-cyan-400" />
           <span>Biometria Facial (Ao Vivo)</span>
         </button>
 
@@ -95,11 +96,11 @@ export default function InteractiveHeroSim() {
           onClick={() => setActiveTab("encomendas")}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
             activeTab === "encomendas"
-              ? "bg-brand-slate text-white"
-              : "text-ink-secondary hover:bg-page-subtle hover:text-ink-primary"
+              ? "bg-[#131F38] text-white border border-slate-700/80 shadow-xs"
+              : "text-slate-400 hover:text-white"
           }`}
         >
-          <PackageCheck className="w-3.5 h-3.5" />
+          <PackageCheck className="w-3.5 h-3.5 text-blue-400" />
           <span>Scanner de Encomendas</span>
         </button>
 
@@ -107,32 +108,32 @@ export default function InteractiveHeroSim() {
           onClick={() => setActiveTab("auditoria")}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
             activeTab === "auditoria"
-              ? "bg-brand-slate text-white"
-              : "text-ink-secondary hover:bg-page-subtle hover:text-ink-primary"
+              ? "bg-[#131F38] text-white border border-slate-700/80 shadow-xs"
+              : "text-slate-400 hover:text-white"
           }`}
         >
-          <ShieldCheck className="w-3.5 h-3.5" />
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
           <span>Auditoria & Eventos ({notifications.length})</span>
         </button>
       </div>
 
       {/* Conteúdo Principal do Simulador */}
-      <div className="p-4 sm:p-6 bg-white min-h-[380px] flex flex-col justify-between">
+      <div className="p-4 sm:p-6 bg-[#070E22] min-h-[380px] flex flex-col justify-between">
         {activeTab === "facial" && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             {/* Visualizador do Scanner / Câmera */}
             <div className="md:col-span-7">
-              <div className="relative rounded-lg border border-border bg-slate-950 p-4 aspect-4/3 flex flex-col justify-between overflow-hidden shadow-inner">
+              <div className="relative rounded-lg border border-slate-800 bg-[#020617] p-4 aspect-4/3 flex flex-col justify-between overflow-hidden shadow-inner">
                 {/* Linhas de Mira HUD */}
-                <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-slate-500"></div>
-                <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-slate-500"></div>
-                <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-slate-500"></div>
-                <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-slate-500"></div>
+                <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-cyan-500"></div>
+                <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-cyan-500"></div>
+                <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-cyan-500"></div>
+                <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-cyan-500"></div>
 
                 {/* Topo do Display do Totem */}
                 <div className="flex items-center justify-between z-10">
                   <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/60 border border-slate-700/60 text-[10px] font-mono text-slate-300">
-                    <Camera className="w-3 h-3 text-emerald-400" />
+                    <Camera className="w-3 h-3 text-cyan-400" />
                     <span>FEED 1080P - 60 FPS</span>
                   </div>
                   <span className="text-[10px] font-mono text-slate-400">
@@ -145,10 +146,10 @@ export default function InteractiveHeroSim() {
                   <div
                     className={`relative w-28 h-32 rounded-2xl border-2 transition-all duration-300 flex items-center justify-center ${
                       scanState === "scanning"
-                        ? "border-blue-400 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.3)] animate-pulse"
+                        ? "border-cyan-400 bg-cyan-500/10 shadow-[0_0_20px_rgba(34,211,238,0.3)] animate-pulse"
                         : scanState === "success"
                         ? "border-emerald-400 bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-                        : "border-slate-700/80 bg-slate-900/40"
+                        : "border-slate-800 bg-slate-900/40"
                     }`}
                   >
                     {scanState === "idle" && (
@@ -156,7 +157,7 @@ export default function InteractiveHeroSim() {
                     )}
 
                     {scanState === "scanning" && (
-                      <div className="flex flex-col items-center gap-1 text-blue-400">
+                      <div className="flex flex-col items-center gap-1 text-cyan-400">
                         <RefreshCw className="w-7 h-7 animate-spin" />
                         <span className="font-mono text-[9px] uppercase tracking-wider">
                           Analisando...
@@ -190,7 +191,7 @@ export default function InteractiveHeroSim() {
                       scanState === "success"
                         ? "text-emerald-400 font-semibold"
                         : scanState === "scanning"
-                        ? "text-blue-400"
+                        ? "text-cyan-400"
                         : "text-slate-300"
                     }
                   >
@@ -205,14 +206,14 @@ export default function InteractiveHeroSim() {
             {/* Painel de Controle e Disparo Interativo */}
             <div className="md:col-span-5 flex flex-col justify-between h-full space-y-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-page-subtle text-ink-secondary border border-border mb-2">
-                  <Sparkles className="w-3 h-3 text-brand-accent" />
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-950/60 text-blue-300 border border-blue-500/30 mb-2">
+                  <Sparkles className="w-3 h-3 text-cyan-400" />
                   <span>Interação ao Vivo</span>
                 </div>
-                <h4 className="font-display font-semibold text-base text-ink-primary">
+                <h4 className="font-display font-semibold text-base text-white">
                   Teste a velocidade da IA
                 </h4>
-                <p className="text-xs text-ink-secondary mt-1 leading-relaxed">
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                   Clique abaixo para simular a chegada de um morador ou de um
                   visitante com pré-cadastro via celular.
                 </p>
@@ -223,22 +224,22 @@ export default function InteractiveHeroSim() {
                 <button
                   disabled={scanState !== "idle"}
                   onClick={() => triggerScan("morador")}
-                  className="w-full flex items-center justify-between p-3 rounded-lg border border-border bg-page hover:bg-page-subtle hover:border-border-strong text-left transition-all duration-150 disabled:opacity-50"
+                  className="w-full flex items-center justify-between p-3 rounded-lg border border-slate-800 bg-[#0C162C] hover:bg-[#132244] hover:border-slate-700 text-left transition-all duration-150 disabled:opacity-50"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-md bg-brand-slate text-white flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-md bg-blue-600 text-white flex items-center justify-center">
                       <UserCheck className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className="block text-xs font-semibold text-ink-primary">
+                      <span className="block text-xs font-semibold text-white">
                         Morador Cadastrado
                       </span>
-                      <span className="block text-[10px] text-ink-muted">
+                      <span className="block text-[10px] text-slate-400">
                         Peterson Brito • Apto 101
                       </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-surface border border-border text-ink-secondary">
+                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">
                     Simular
                   </span>
                 </button>
@@ -246,34 +247,34 @@ export default function InteractiveHeroSim() {
                 <button
                   disabled={scanState !== "idle"}
                   onClick={() => triggerScan("visitante")}
-                  className="w-full flex items-center justify-between p-3 rounded-lg border border-border bg-page hover:bg-page-subtle hover:border-border-strong text-left transition-all duration-150 disabled:opacity-50"
+                  className="w-full flex items-center justify-between p-3 rounded-lg border border-slate-800 bg-[#0C162C] hover:bg-[#132244] hover:border-slate-700 text-left transition-all duration-150 disabled:opacity-50"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-md bg-blue-600 text-white flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-md bg-cyan-600 text-white flex items-center justify-center">
                       <QrCode className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className="block text-xs font-semibold text-ink-primary">
+                      <span className="block text-xs font-semibold text-white">
                         Visitante c/ QR Code
                       </span>
-                      <span className="block text-[10px] text-ink-muted">
+                      <span className="block text-[10px] text-slate-400">
                         Carlos Silva • Convidado
                       </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-surface border border-border text-ink-secondary">
+                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">
                     Simular
                   </span>
                 </button>
               </div>
 
               {/* Box de Confirmação em Tempo Real */}
-              <div className="p-3 rounded-lg bg-page-subtle border border-border text-xs">
-                <div className="flex items-center gap-1.5 text-ink-secondary font-medium mb-1">
-                  <Bell className="w-3.5 h-3.5 text-brand-slate" />
+              <div className="p-3 rounded-lg bg-[#0A1329] border border-slate-800 text-xs">
+                <div className="flex items-center gap-1.5 text-slate-300 font-medium mb-1">
+                  <Bell className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Notificação Instantânea no Morador</span>
                 </div>
-                <p className="text-[11px] text-ink-muted leading-tight">
+                <p className="text-[11px] text-slate-400 leading-tight">
                   Assim que o totem abre o portão, o morador recebe confirmação com foto e horário no app.
                 </p>
               </div>
@@ -283,29 +284,29 @@ export default function InteractiveHeroSim() {
 
         {activeTab === "encomendas" && (
           <div className="py-6 px-2 text-center max-w-md mx-auto space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-page-subtle border border-border flex items-center justify-center mx-auto text-brand-slate">
+            <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto text-cyan-400">
               <PackageCheck className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="font-display font-semibold text-base text-ink-primary">
+              <h4 className="font-display font-semibold text-base text-white">
                 Gestão Rastreável de Encomendas
               </h4>
-              <p className="text-xs text-ink-secondary mt-1">
+              <p className="text-xs text-slate-400 mt-1">
                 A portaria lê o código de barras da caixa com o leitor óptico. O sistema associa a unidade, tira uma foto e envia o push automático com aviso de recebimento.
               </p>
             </div>
-            <div className="p-3 rounded-lg bg-page border border-border text-left font-mono text-[11px] space-y-1.5 text-ink-secondary">
+            <div className="p-3 rounded-lg bg-[#0C162C] border border-slate-800 text-left font-mono text-[11px] space-y-1.5 text-slate-300">
               <div className="flex justify-between">
                 <span>Rastreio:</span>
-                <span className="text-ink-primary font-semibold">BR-749201948ML</span>
+                <span className="text-white font-semibold">BR-749201948ML</span>
               </div>
               <div className="flex justify-between">
                 <span>Destinatário:</span>
-                <span className="text-ink-primary">Apto 204 • Bloco B</span>
+                <span className="text-slate-300">Apto 204 • Bloco B</span>
               </div>
               <div className="flex justify-between">
                 <span>Status:</span>
-                <span className="text-emerald-600 font-semibold">Aguardando Retirada</span>
+                <span className="text-emerald-400 font-semibold">Aguardando Retirada</span>
               </div>
             </div>
           </div>
@@ -313,11 +314,11 @@ export default function InteractiveHeroSim() {
 
         {activeTab === "auditoria" && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-border">
-              <span className="text-xs font-semibold text-ink-primary">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <span className="text-xs font-semibold text-white">
                 Histórico Recente de Entradas & Saídas
               </span>
-              <span className="text-[10px] font-mono text-ink-muted">
+              <span className="text-[10px] font-mono text-slate-400">
                 Audit Log Seguro LGPD
               </span>
             </div>
@@ -326,13 +327,13 @@ export default function InteractiveHeroSim() {
               {notifications.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-2.5 rounded-lg border border-border bg-page text-xs"
+                  className="flex items-center justify-between p-2.5 rounded-lg border border-slate-800 bg-[#0C162C] text-xs"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                    <span className="text-ink-primary font-medium">{item.text}</span>
+                    <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <span className="text-white font-medium">{item.text}</span>
                   </div>
-                  <span className="text-[10px] font-mono text-ink-muted shrink-0 ml-3">
+                  <span className="text-[10px] font-mono text-slate-400 shrink-0 ml-3">
                     {item.time}
                   </span>
                 </div>
@@ -343,12 +344,12 @@ export default function InteractiveHeroSim() {
       </div>
 
       {/* Rodapé com Dica de Teclado ou Latência */}
-      <div className="flex items-center justify-between px-4 py-2 bg-page-subtle border-t border-border text-[11px] text-ink-secondary">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#0A1329] border-t border-slate-800 text-[11px] text-slate-400">
         <span className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5 text-ink-muted" />
+          <Clock className="w-3.5 h-3.5 text-cyan-400" />
           <span>Tempo médio de resposta do totem: 0.14 segundos</span>
         </span>
-        <span className="font-mono text-ink-muted hidden sm:inline">
+        <span className="font-mono text-slate-500 hidden sm:inline">
           Hardware Standalone Plug & Play
         </span>
       </div>
