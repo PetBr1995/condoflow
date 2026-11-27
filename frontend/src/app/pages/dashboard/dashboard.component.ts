@@ -16,16 +16,31 @@ import { AuthService } from '../../services/auth.service';
 })
 export class DashboardComponent implements OnInit {
   estatisticas: DashboardData | null = null;
+  carregando: boolean = true;
+  erroCarregamento: boolean = false;
 
-  constructor(private dashboardService: DashboardService, public authService: AuthService){}
+  constructor(
+    private dashboardService: DashboardService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.carregarDashboard();
+  }
+
+  carregarDashboard(): void {
+    this.carregando = true;
+    this.erroCarregamento = false;
+
     this.dashboardService.getEstatisticas().subscribe({
       next: (dados) => {
         this.estatisticas = dados;
+        this.carregando = false;
       },
       error: (erro) => {
         console.error('Erro ao buscar estatísticas do painel: ', erro);
+        this.erroCarregamento = true;
+        this.carregando = false;
       }
     });
   }

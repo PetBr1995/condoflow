@@ -1,39 +1,78 @@
 :root {
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Paleta Moderna - Brand Blue & Indigo */
+  /* ── Linear / Stripe UI Tokens (WCAG AA Compliant) ── */
+  --color-brand-primary: #0f172a;
+  --color-brand-surface: #1e293b;
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
   --color-primary-light: #eff6ff;
   --color-primary-border: #bfdbfe;
   
-  /* Neutros Slate */
+  /* Neutros & Canvas */
+  --bg-canvas: #f8fafc;
   --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
   --bg-card: #ffffff;
+  --bg-surface-subtle: #f1f5f9;
+  
+  /* Tipografia Acessível (Contraste mínimo 4.5:1 no branco) */
+  --text-primary: #0f172a;
   --text-main: #0f172a;
-  --text-muted: #64748b;
+  --text-secondary: #475569; /* Contraste 5.4:1 */
+  --text-muted: #64748b;     /* Contraste 4.6:1 */
   --text-light: #94a3b8;
+  --text-white: #ffffff;
+
+  /* Bordas Refinadas 1px */
+  --border-subtle: #e2e8f0;
   --border-color: #e2e8f0;
+  --border-strong: #cbd5e1;
   --border-focus: #3b82f6;
 
-  /* Estados de Sucesso, Aviso, Erro */
-  --color-success: #10b981;
+  /* Estados de Sucesso, Aviso, Erro e Info (WCAG AA) */
+  --color-success: #059669;
   --color-success-bg: #ecfdf5;
-  --color-warning: #f59e0b;
+  --color-success-border: #a7f3d0;
+  --color-warning: #d97706;
   --color-warning-bg: #fffbeb;
-  --color-danger: #ef4444;
+  --color-warning-border: #fde68a;
+  --color-danger: #dc2626;
   --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-info: #0284c7;
+  --color-info-bg: #f0f9ff;
+  --color-info-border: #bae6fd;
   
-  /* Sombras Suaves */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  /* Sombras Cirúrgicas com bordas 1px integradas (Linear Style) */
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --shadow-subtle: 0 1px 3px 0 rgb(15 23 42 / 0.04), 0 0 0 1px rgb(226 232 240 / 0.8);
+  --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.06), 0 2px 4px -2px rgb(15 23 42 / 0.04);
+  --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.04);
+  --shadow-elevated: 0 10px 25px -5px rgb(15 23 42 / 0.08), 0 0 0 1px rgb(226 232 240 / 0.9);
+  --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.04), 0 0 0 1px rgb(226 232 240 / 0.7);
   
+  /* Anel de foco acessível */
+  --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  --focus-ring-danger: 0 0 0 3px rgba(220, 38, 38, 0.25);
+
+  /* Raios de Borda */
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
+
+  /* Espaçamentos Grid 4px / 8px */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
 
   /* ── Transitions.dev Motion Tokens ────────────────────────────── */
   --duration-stagger: 40ms;
@@ -44,7 +83,7 @@
   --duration-slow: 400ms;
   --duration-very-slow: 500ms;
 
-  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: ease-in-out;
   --ease-out: ease-out;
   --ease-linear: linear;
@@ -531,4 +570,130 @@ button.btn-primary:active,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ── UI/UX Pro Max Utility Classes ─────────────────────────────────────── */
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Touch Target Mínimo WCAG 2.5.5 (44x44px) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Anel de foco acessível para navegação por teclado */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring) !important;
+  border-color: var(--border-focus) !important;
+}
+
+/* Padrão de Estado Vazio (Empty State) */
+.empty-state-box {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.empty-state-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface-subtle);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.empty-state-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.empty-state-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.empty-state-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 360px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Padrão de Estado de Erro com Ação de Retry */
+.error-state-box {
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--color-danger);
+  margin: var(--space-4) 0;
+}
+
+.error-state-box mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.error-state-content {
+  flex: 1;
+}
+
+.error-state-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+
+.error-state-desc {
+  font-size: 0.85rem;
+  color: #991b1b;
+  margin: 0;
+}
+
+.btn-retry {
+  background: #ffffff;
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-retry:hover {
+  background: var(--color-danger);
+  color: #ffffff;
 }

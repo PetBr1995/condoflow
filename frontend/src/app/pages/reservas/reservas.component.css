@@ -996,19 +996,24 @@
 .filtros button {
   background: transparent;
   border: none;
-  padding: 6px 16px;
-  border-radius: 9999px;
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
   font-size: 0.85rem;
-  font-weight: 600;
-  color: #64748b;
+  font-weight: 700;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--duration-fast) var(--ease-smooth-out);
+}
+
+.filtros button:hover {
+  color: var(--color-brand-primary);
 }
 
 .filtros button.ativo {
-  background: #0f213d;
+  background: var(--color-brand-primary);
   color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .lista-reservas {

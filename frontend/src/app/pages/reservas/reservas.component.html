@@ -359,14 +359,21 @@
     </div>
 
     @if (carregando) {
-      <div class="estado-vazio">
+      <div class="empty-state-box">
         <mat-icon class="girando">sync</mat-icon>
-        <p>Carregando solicitações...</p>
+        <p class="empty-state-desc">Carregando solicitações...</p>
       </div>
     } @else if (reservasFiltradas().length === 0) {
-      <div class="estado-vazio">
-        <mat-icon>event_busy</mat-icon>
-        <p>Nenhuma reserva encontrada para o filtro selecionado.</p>
+      <div class="empty-state-box">
+        <div class="empty-state-icon">
+          <mat-icon>event_busy</mat-icon>
+        </div>
+        <h4 class="empty-state-title">Nenhuma reserva encontrada</h4>
+        <p class="empty-state-desc">Não há agendamentos para o filtro selecionado. Escolha um dos espaços acima para realizar um novo agendamento.</p>
+        <button type="button" class="btn-novo touch-target focus-ring" (click)="mostrarFormulario = true">
+          <mat-icon>add</mat-icon>
+          <span>Agendar Agora</span>
+        </button>
       </div>
     } @else {
       <div class="lista-reservas">

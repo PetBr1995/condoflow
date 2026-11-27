@@ -1,362 +1,414 @@
 <div class="dashboard-container">
-  @if (authService.isSindico) {
-    <!-- Welcome Header Banner -->
-    <header class="dash-welcome-card">
-      <div class="dash-welcome-content">
-        <div class="condo-badge">
-          <mat-icon>business</mat-icon>
-          <span>{{ estatisticas?.condominio_nome || 'CondoFlow' }}</span>
-        </div>
-        <h1>Painel de Controle do Síndico</h1>
-        <p>Acompanhe em tempo real a operação, chamados e demandas do seu condomínio.</p>
-      </div>
-      <div class="dash-welcome-actions">
-        <a routerLink="/moradores" class="banner-btn secondary">
-          <mat-icon>person_add</mat-icon>
-          <span>Convidar Morador</span>
-        </a>
-        <a routerLink="/chamados" class="banner-btn primary">
-          <mat-icon>build</mat-icon>
-          <span>Ver Ocorrências</span>
-        </a>
-      </div>
-    </header>
 
-    <!-- Top KPI Stat Cards -->
-    <section class="kpi-grid">
-      <div class="kpi-card card-moradores">
-        <div class="kpi-icon-wrapper">
-          <mat-icon>groups</mat-icon>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Moradores Registrados</span>
-          <strong class="kpi-value">{{ estatisticas?.total_moradores || 0 }}</strong>
-          <span class="kpi-sub">Unidades vinculadas</span>
-        </div>
+  <!-- Estado de Erro de Conexão com Botão de Tentar Novamente -->
+  @if (erroCarregamento) {
+    <div class="error-state-box">
+      <mat-icon>cloud_off</mat-icon>
+      <div class="error-state-content">
+        <h4 class="error-state-title">Não foi possível carregar as informações do condomínio</h4>
+        <p class="error-state-desc">Verifique sua conexão com o servidor e tente novamente.</p>
+      </div>
+      <button type="button" class="btn-retry touch-target" (click)="carregarDashboard()">
+        <mat-icon>refresh</mat-icon>
+        <span>Recarregar</span>
+      </button>
+    </div>
+  }
+
+  <!-- Estado de Carregamento (Skeleton Shimmer) -->
+  @if (carregando) {
+    <div class="skeleton-dashboard-wrapper">
+      <div class="t-skeleton skeleton-banner"></div>
+
+      <div class="kpi-grid">
+        <div class="t-skeleton skeleton-kpi"></div>
+        <div class="t-skeleton skeleton-kpi"></div>
+        <div class="t-skeleton skeleton-kpi"></div>
+        <div class="t-skeleton skeleton-kpi"></div>
       </div>
 
-      <div class="kpi-card card-abertos">
-        <div class="kpi-icon-wrapper">
-          <mat-icon>error_outline</mat-icon>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Chamados Abertos</span>
-          <strong class="kpi-value">{{ estatisticas?.chamados_abertos || 0 }}</strong>
-          <span class="kpi-sub status-critico">Aguardando atendimento</span>
-        </div>
+      <div class="middle-grid">
+        <div class="t-skeleton skeleton-chart"></div>
+        <div class="t-skeleton skeleton-hub"></div>
       </div>
+    </div>
+  } @else if (!erroCarregamento) {
 
-      <div class="kpi-card card-andamento">
-        <div class="kpi-icon-wrapper">
-          <mat-icon>schedule</mat-icon>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Em Andamento</span>
-          <strong class="kpi-value">{{ estatisticas?.chamados_andamento || 0 }}</strong>
-          <span class="kpi-sub status-alerta">Em execução pela equipe</span>
-        </div>
-      </div>
-
-      <div class="kpi-card card-concluidos">
-        <div class="kpi-icon-wrapper">
-          <mat-icon>check_circle</mat-icon>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-label">Finalizados</span>
-          <strong class="kpi-value">{{ estatisticas?.chamados_concluidos || 0 }}</strong>
-          <span class="kpi-sub status-sucesso">Resolvidos com sucesso</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Main Content Grid: Chart + Quick Summary -->
-    <section class="middle-grid">
-      <div class="chart-card">
-        <div class="card-header-clean">
-          <div>
-            <h3>Status dos Chamados</h3>
-            <span class="card-subtitle">Distribuição por estágio de atendimento</span>
+    @if (authService.isSindico) {
+      <!-- Welcome Header Banner (Síndico) -->
+      <header class="dash-welcome-card">
+        <div class="dash-welcome-content">
+          <div class="condo-badge">
+            <mat-icon>business</mat-icon>
+            <span>{{ estatisticas?.condominio_nome || 'CondoFlow' }}</span>
           </div>
+          <h1>Painel de Controle do Síndico</h1>
+          <p>Acompanhe em tempo real a operação, ocorrências e demandas do seu condomínio.</p>
         </div>
-
-        <div class="chart-wrapper">
-          <app-chart-chamados [dados]="estatisticas"></app-chart-chamados>
+        <div class="dash-welcome-actions">
+          <a routerLink="/moradores" class="banner-btn secondary touch-target focus-ring">
+            <mat-icon>person_add</mat-icon>
+            <span>Convidar Morador</span>
+          </a>
+          <a routerLink="/chamados" class="banner-btn primary touch-target focus-ring">
+            <mat-icon>build</mat-icon>
+            <span>Ver Ocorrências</span>
+          </a>
         </div>
+      </header>
 
-        <div class="chart-legend-row">
-          <div class="legend-pill red">
-            <span class="dot"></span>
-            <span>Abertos ({{ estatisticas?.chamados_abertos || 0 }})</span>
-          </div>
-          <div class="legend-pill yellow">
-            <span class="dot"></span>
-            <span>Em Andamento ({{ estatisticas?.chamados_andamento || 0 }})</span>
-          </div>
-          <div class="legend-pill green">
-            <span class="dot"></span>
-            <span>Concluídos ({{ estatisticas?.chamados_concluidos || 0 }})</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Operations Hub -->
-      <div class="hub-card">
-        <div class="card-header-clean">
-          <div>
-            <h3>Atalhos Rápidos</h3>
-            <span class="card-subtitle">Gestão ágil da administração</span>
-          </div>
-        </div>
-
-        <div class="hub-list">
-          <a routerLink="/reservas" class="hub-item">
-            <div class="hub-icon-pill teal">
-              <mat-icon>event</mat-icon>
+      <!-- Top KPI Stat Cards (Linear Style com Números Tabulares) -->
+      <section class="kpi-grid" aria-label="Indicadores principais do condomínio">
+        <div class="kpi-card card-moradores">
+          <div class="kpi-header-row">
+            <span class="kpi-label">Moradores Registrados</span>
+            <div class="kpi-icon-wrapper">
+              <mat-icon>groups</mat-icon>
             </div>
-            <div class="hub-text">
-              <strong>Gestão de Reservas</strong>
-              <span>Aprovar agendamentos de churrasqueira e salão</span>
+          </div>
+          <div class="kpi-info">
+            <strong class="kpi-value tabular-nums">{{ estatisticas?.total_moradores || 0 }}</strong>
+            <span class="kpi-sub">
+              <mat-icon class="sub-icon">home</mat-icon> Unidades vinculadas
+            </span>
+          </div>
+        </div>
+
+        <div class="kpi-card card-abertos">
+          <div class="kpi-header-row">
+            <span class="kpi-label">Chamados Abertos</span>
+            <div class="kpi-icon-wrapper">
+              <mat-icon>error_outline</mat-icon>
             </div>
-            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+          </div>
+          <div class="kpi-info">
+            <strong class="kpi-value tabular-nums">{{ estatisticas?.chamados_abertos || 0 }}</strong>
+            <span class="kpi-sub status-critico">
+              <span class="status-dot"></span> Aguardando atendimento
+            </span>
+          </div>
+        </div>
+
+        <div class="kpi-card card-andamento">
+          <div class="kpi-header-row">
+            <span class="kpi-label">Em Andamento</span>
+            <div class="kpi-icon-wrapper">
+              <mat-icon>schedule</mat-icon>
+            </div>
+          </div>
+          <div class="kpi-info">
+            <strong class="kpi-value tabular-nums">{{ estatisticas?.chamados_andamento || 0 }}</strong>
+            <span class="kpi-sub status-alerta">
+              <span class="status-dot"></span> Em execução pela equipe
+            </span>
+          </div>
+        </div>
+
+        <div class="kpi-card card-concluidos">
+          <div class="kpi-header-row">
+            <span class="kpi-label">Finalizados</span>
+            <div class="kpi-icon-wrapper">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+          </div>
+          <div class="kpi-info">
+            <strong class="kpi-value tabular-nums">{{ estatisticas?.chamados_concluidos || 0 }}</strong>
+            <span class="kpi-sub status-sucesso">
+              <span class="status-dot"></span> Resolvidos com sucesso
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Content Grid: Chart + Quick Summary -->
+      <section class="middle-grid">
+        <div class="chart-card">
+          <div class="card-header-clean">
+            <div>
+              <h3>Status dos Chamados</h3>
+              <span class="card-subtitle">Distribuição por estágio de atendimento</span>
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <app-chart-chamados [dados]="estatisticas"></app-chart-chamados>
+          </div>
+
+          <div class="chart-legend-row">
+            <div class="legend-pill red">
+              <span class="dot"></span>
+              <span>Abertos ({{ estatisticas?.chamados_abertos || 0 }})</span>
+            </div>
+            <div class="legend-pill yellow">
+              <span class="dot"></span>
+              <span>Em Andamento ({{ estatisticas?.chamados_andamento || 0 }})</span>
+            </div>
+            <div class="legend-pill green">
+              <span class="dot"></span>
+              <span>Concluídos ({{ estatisticas?.chamados_concluidos || 0 }})</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Operations Hub -->
+        <div class="hub-card">
+          <div class="card-header-clean">
+            <div>
+              <h3>Atalhos Rápidos</h3>
+              <span class="card-subtitle">Gestão ágil da administração</span>
+            </div>
+          </div>
+
+          <div class="hub-list">
+            <a routerLink="/reservas" class="hub-item touch-target focus-ring">
+              <div class="hub-icon-pill teal">
+                <mat-icon>event</mat-icon>
+              </div>
+              <div class="hub-text">
+                <strong>Gestão de Reservas</strong>
+                <span>Aprovar agendamentos de churrasqueira e salão</span>
+              </div>
+              <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            </a>
+
+            <a routerLink="/acessos" class="hub-item touch-target focus-ring">
+              <div class="hub-icon-pill emerald">
+                <mat-icon>face_unlock</mat-icon>
+              </div>
+              <div class="hub-text">
+                <strong>Totem & Portaria Facial</strong>
+                <span>Monitoramento de acessos ao vivo e visitantes</span>
+              </div>
+              <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            </a>
+
+            <a routerLink="/encomendas" class="hub-item touch-target focus-ring">
+              <div class="hub-icon-pill amber">
+                <mat-icon>local_shipping</mat-icon>
+              </div>
+              <div class="hub-text">
+                <strong>Portaria & Encomendas</strong>
+                <span>Recebimento e entrega de correspondências</span>
+              </div>
+              <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            </a>
+
+            <a routerLink="/avisos" class="hub-item touch-target focus-ring">
+              <div class="hub-icon-pill purple">
+                <mat-icon>campaign</mat-icon>
+              </div>
+              <div class="hub-text">
+                <strong>Mural de Comunicados</strong>
+                <span>Publicar avisos importantes para os condôminos</span>
+              </div>
+              <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grid de Todos os Módulos do Sistema -->
+      <section class="modules-section">
+        <div class="section-title">
+          <h2>Módulos do Condomínio</h2>
+          <p>Acesse todas as funcionalidades administrativas da sua assinatura</p>
+        </div>
+
+        <div class="modules-grid">
+          <a routerLink="/chamados" class="module-card touch-target focus-ring">
+            <div class="module-icon-box blue">
+              <mat-icon>build</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Ocorrências & Chamados</strong>
+              <p>Gerencie pedidos de reparo, fotos e atualização de status.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
           </a>
 
-          <a routerLink="/encomendas" class="hub-item">
-            <div class="hub-icon-pill amber">
-              <mat-icon>local_shipping</mat-icon>
+          <a routerLink="/reservas" class="module-card touch-target focus-ring">
+            <div class="module-icon-box teal">
+              <mat-icon>event_available</mat-icon>
             </div>
-            <div class="hub-text">
-              <strong>Portaria & Encomendas</strong>
-              <span>Recebimento e entrega de correspondências</span>
+            <div class="module-info">
+              <strong>Reservas de Espaços</strong>
+              <p>Salão de festas, churrasqueiras e áreas sociais sem conflito.</p>
             </div>
-            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
           </a>
 
-          <a routerLink="/avisos" class="hub-item">
-            <div class="hub-icon-pill purple">
+          <a routerLink="/acessos" class="module-card touch-target focus-ring">
+            <div class="module-icon-box emerald">
+              <mat-icon>face_unlock</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Facial & Portaria</strong>
+              <p>Biometria facial, totem ao vivo e autorização de visitantes.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
+
+          <a routerLink="/avisos" class="module-card touch-target focus-ring">
+            <div class="module-icon-box purple">
               <mat-icon>campaign</mat-icon>
             </div>
-            <div class="hub-text">
-              <strong>Mural de Comunicados</strong>
-              <span>Publicar avisos importantes para os condôminos</span>
+            <div class="module-info">
+              <strong>Mural de Avisos</strong>
+              <p>Transmita informativos, manutenções e comunicados gerais.</p>
             </div>
-            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
           </a>
 
-          <a routerLink="/enquetes" class="hub-item">
-            <div class="hub-icon-pill indigo">
-              <mat-icon>poll</mat-icon>
+          <a routerLink="/encomendas" class="module-card touch-target focus-ring">
+            <div class="module-icon-box amber">
+              <mat-icon>inventory_2</mat-icon>
             </div>
-            <div class="hub-text">
-              <strong>Votações & Assembleia</strong>
-              <span>Consultar resultados e abrir enquetes</span>
+            <div class="module-info">
+              <strong>Portaria & Encomendas</strong>
+              <p>Controle inteligente de recebimento e entrega de pacotes.</p>
             </div>
-            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
+
+          <a routerLink="/documentos" class="module-card touch-target focus-ring">
+            <div class="module-icon-box slate">
+              <mat-icon>description</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Atas & Documentos</strong>
+              <p>Convenção, regulamento interno e prestações de contas.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
+
+          <a routerLink="/enquetes" class="module-card touch-target focus-ring">
+            <div class="module-icon-box indigo">
+              <mat-icon>how_to_vote</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Enquetes & Decisões</strong>
+              <p>Votações democráticas com trava de um voto por unidade.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
+
+          <a routerLink="/moradores" class="module-card touch-target focus-ring">
+            <div class="module-icon-box rose">
+              <mat-icon>home_work</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Unidades & Moradores</strong>
+              <p>Cadastro de apartamentos e códigos de convite seguros.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
           </a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Grid de Todos os Módulos do Sistema -->
-    <section class="modules-section">
-      <div class="section-title">
-        <h2>Módulos do Condomínio</h2>
-        <p>Acesse todas as funcionalidades administrativas da sua assinatura</p>
-      </div>
-
-      <div class="modules-grid">
-        <a routerLink="/chamados" class="module-card">
-          <div class="module-icon-box blue">
-            <mat-icon>build</mat-icon>
+    } @else {
+      <!-- Portal do Morador -->
+      <header class="dash-welcome-card resident-banner">
+        <div class="dash-welcome-content">
+          <div class="condo-badge">
+            <mat-icon>home</mat-icon>
+            <span>{{ estatisticas?.condominio_nome || 'CondoFlow' }}</span>
           </div>
-          <div class="module-info">
-            <strong>Ocorrências & Chamados</strong>
-            <p>Gerencie pedidos de reparo, envie fotos e atualize status.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/reservas" class="module-card">
-          <div class="module-icon-box teal">
-            <mat-icon>event_available</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Reservas de Espaços</strong>
-            <p>Salão de festas, churrasqueiras e áreas sociais sem conflito de horários.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/avisos" class="module-card">
-          <div class="module-icon-box purple">
-            <mat-icon>campaign</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Mural de Avisos</strong>
-            <p>Transmita informativos, manutenções programadas e comunicados.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/encomendas" class="module-card">
-          <div class="module-icon-box amber">
-            <mat-icon>inventory_2</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Portaria & Encomendas</strong>
-            <p>Controle inteligente de recebimento e entrega de pacotes.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/acessos" class="module-card">
-          <div class="module-icon-box emerald">
-            <mat-icon>badge</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Visitantes & Portaria</strong>
-            <p>Autorizações de entrada prévias e controle de prestadores de serviço.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/documentos" class="module-card">
-          <div class="module-icon-box slate">
-            <mat-icon>description</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Atas & Documentos</strong>
-            <p>Convenção, regulamento interno e prestações de conta em PDF.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/enquetes" class="module-card">
-          <div class="module-icon-box indigo">
-            <mat-icon>how_to_vote</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Enquetes & Decisões</strong>
-            <p>Votações democráticas com trava de um único voto por apartamento.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-
-        <a routerLink="/moradores" class="module-card">
-          <div class="module-icon-box rose">
-            <mat-icon>home_work</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Unidades & Moradores</strong>
-            <p>Cadastro de apartamentos, moradores e códigos de convite seguros.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-      </div>
-    </section>
-
-  } @else {
-    <!-- Portal do Morador -->
-    <header class="dash-welcome-card resident-banner">
-      <div class="dash-welcome-content">
-        <div class="condo-badge">
-          <mat-icon>home</mat-icon>
-          <span>{{ estatisticas?.condominio_nome || 'CondoFlow' }}</span>
+          <h1>Portal do Morador</h1>
+          <p>Tudo o que você precisa no seu condomínio de forma prática e na palma da mão.</p>
         </div>
-        <h1>Portal do Morador</h1>
-        <p>Tudo o que você precisa no seu condomínio de forma prática e na palma da mão.</p>
-      </div>
-      <div class="dash-welcome-actions">
-        <a routerLink="/chamados" class="banner-btn primary">
-          <mat-icon>add_circle</mat-icon>
-          <span>Abrir Chamado</span>
-        </a>
-      </div>
-    </header>
+        <div class="dash-welcome-actions">
+          <a routerLink="/chamados" class="banner-btn primary touch-target focus-ring">
+            <mat-icon>add_circle</mat-icon>
+            <span>Abrir Chamado</span>
+          </a>
+        </div>
+      </header>
 
-    <section class="modules-section">
-      <div class="section-title">
-        <h2>Serviços Disponíveis</h2>
-        <p>Selecione uma das opções abaixo para gerenciar sua unidade</p>
-      </div>
+      <section class="modules-section">
+        <div class="section-title">
+          <h2>Serviços Disponíveis</h2>
+          <p>Selecione uma das opções abaixo para gerenciar sua unidade</p>
+        </div>
 
-      <div class="modules-grid">
-        <a routerLink="/chamados" class="module-card">
-          <div class="module-icon-box blue">
-            <mat-icon>build</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Meus Chamados</strong>
-            <p>Solicite reparos com foto e receba feedback em tempo real.</p>
-          </div>
-          <span class="module-link-action">Abrir <mat-icon>arrow_forward</mat-icon></span>
-        </a>
+        <div class="modules-grid">
+          <a routerLink="/acessos" class="module-card touch-target focus-ring">
+            <div class="module-icon-box emerald">
+              <mat-icon>face_unlock</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Minha Biometria & Visitas</strong>
+              <p>Cadastre sua selfie para liberação automática e convide amigos.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
 
-        <a routerLink="/reservas" class="module-card">
-          <div class="module-icon-box teal">
-            <mat-icon>event_available</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Reservar Áreas de Lazer</strong>
-            <p>Reserve churrasqueiras, salão e quadras de forma instantânea.</p>
-          </div>
-          <span class="module-link-action">Reservar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
+          <a routerLink="/reservas" class="module-card touch-target focus-ring">
+            <div class="module-icon-box teal">
+              <mat-icon>event_available</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Reservar Áreas de Lazer</strong>
+              <p>Reserve churrasqueiras, salão e quadras de forma instantânea.</p>
+            </div>
+            <span class="module-link-action">Reservar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
 
-        <a routerLink="/acessos" class="module-card">
-          <div class="module-icon-box emerald">
-            <mat-icon>badge</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Liberar Visitante</strong>
-            <p>Cadastre convidados ou prestadores para entrada rápida na portaria.</p>
-          </div>
-          <span class="module-link-action">Liberar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
+          <a routerLink="/chamados" class="module-card touch-target focus-ring">
+            <div class="module-icon-box blue">
+              <mat-icon>build</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Meus Chamados</strong>
+              <p>Solicite reparos com foto e receba feedback em tempo real.</p>
+            </div>
+            <span class="module-link-action">Abrir <mat-icon>arrow_forward</mat-icon></span>
+          </a>
 
-        <a routerLink="/encomendas" class="module-card">
-          <div class="module-icon-box amber">
-            <mat-icon>inventory_2</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Minhas Encomendas</strong>
-            <p>Veja se há pacotes ou entregas aguardando retirada na portaria.</p>
-          </div>
-          <span class="module-link-action">Verificar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
+          <a routerLink="/encomendas" class="module-card touch-target focus-ring">
+            <div class="module-icon-box amber">
+              <mat-icon>inventory_2</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Minhas Encomendas</strong>
+              <p>Veja se há pacotes ou correspondências aguardando retirada.</p>
+            </div>
+            <span class="module-link-action">Verificar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
 
-        <a routerLink="/avisos" class="module-card">
-          <div class="module-icon-box purple">
-            <mat-icon>campaign</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Mural de Avisos</strong>
-            <p>Mantenha-se informado sobre manutenções e novidades do condomínio.</p>
-          </div>
-          <span class="module-link-action">Ler Avisos <mat-icon>arrow_forward</mat-icon></span>
-        </a>
+          <a routerLink="/avisos" class="module-card touch-target focus-ring">
+            <div class="module-icon-box purple">
+              <mat-icon>campaign</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Mural de Avisos</strong>
+              <p>Mantenha-se informado sobre manutenções e novidades.</p>
+            </div>
+            <span class="module-link-action">Ler Avisos <mat-icon>arrow_forward</mat-icon></span>
+          </a>
 
-        <a routerLink="/documentos" class="module-card">
-          <div class="module-icon-box slate">
-            <mat-icon>description</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Atas & Documentos</strong>
-            <p>Consulte convenção, regimento e relatórios de prestação de contas.</p>
-          </div>
-          <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
+          <a routerLink="/documentos" class="module-card touch-target focus-ring">
+            <div class="module-icon-box slate">
+              <mat-icon>description</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Atas & Documentos</strong>
+              <p>Consulte convenção, regimento e relatórios de assembleias.</p>
+            </div>
+            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
 
-        <a routerLink="/enquetes" class="module-card">
-          <div class="module-icon-box indigo">
-            <mat-icon>how_to_vote</mat-icon>
-          </div>
-          <div class="module-info">
-            <strong>Votações Virtuais</strong>
-            <p>Participe de enquetes e decisões democráticas do condomínio.</p>
-          </div>
-          <span class="module-link-action">Votar <mat-icon>arrow_forward</mat-icon></span>
-        </a>
-      </div>
-    </section>
+          <a routerLink="/enquetes" class="module-card touch-target focus-ring">
+            <div class="module-icon-box indigo">
+              <mat-icon>how_to_vote</mat-icon>
+            </div>
+            <div class="module-info">
+              <strong>Votações Virtuais</strong>
+              <p>Participe de enquetes e decisões democráticas do condomínio.</p>
+            </div>
+            <span class="module-link-action">Votar <mat-icon>arrow_forward</mat-icon></span>
+          </a>
+        </div>
+      </section>
+    }
   }
 </div>

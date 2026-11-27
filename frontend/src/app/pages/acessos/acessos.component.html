@@ -33,16 +33,16 @@
     </div>
   }
 
-  <!-- Navegação por Abas -->
-  <nav class="abas-navegacao">
+  <!-- Navegação por Abas (Segmented Control Touch-friendly) -->
+  <nav class="abas-navegacao" aria-label="Navegação de abas de acessos">
     <button
       type="button"
-      class="aba-btn"
+      class="aba-btn touch-target focus-ring"
       [class.ativa]="abaAtiva === 'facial'"
       (click)="mudarAba('facial')"
     >
       <mat-icon>photo_camera_front</mat-icon>
-      Minha Biometria Facial
+      <span>Minha Biometria Facial</span>
       @if (minhaFace.tem_biometria) {
         <span class="badge-mini ativo">Ativa</span>
       }
@@ -50,24 +50,24 @@
 
     <button
       type="button"
-      class="aba-btn"
+      class="aba-btn touch-target focus-ring"
       [class.ativa]="abaAtiva === 'visitantes'"
       (click)="mudarAba('visitantes')"
     >
       <mat-icon>badge</mat-icon>
-      Visitantes & Prestadores
-      <span class="badge-mini count">{{ visitantes.length }}</span>
+      <span>Visitantes & Prestadores</span>
+      <span class="badge-mini count tabular-nums">{{ visitantes.length }}</span>
     </button>
 
     <button
       type="button"
-      class="aba-btn"
+      class="aba-btn touch-target focus-ring"
       [class.ativa]="abaAtiva === 'totem'"
       (click)="mudarAba('totem')"
     >
       <mat-icon>videocam</mat-icon>
-      Totem da Portaria (Ao Vivo)
-      <span class="badge-mini live">Hardware / Câmera</span>
+      <span>Totem da Portaria (Ao Vivo)</span>
+      <span class="badge-mini live">Hardware</span>
     </button>
   </nav>
 
@@ -363,20 +363,26 @@
 
               <!-- Ações do Card -->
               <div class="visitante-acoes">
-                <button type="button" class="btn-whatsapp" (click)="copiarLinkWhatsApp(vis)" title="Compartilhar Link do WhatsApp para selfie">
+                <button type="button" class="btn-whatsapp touch-target focus-ring" (click)="copiarLinkWhatsApp(vis)" title="Compartilhar Link do WhatsApp para selfie">
                   <mat-icon>share</mat-icon>
-                  Enviar Link WhatsApp
+                  <span>Enviar Link WhatsApp</span>
                 </button>
-                <button type="button" class="btn-icone-excluir" (click)="excluirVisitante(vis.id)" title="Cancelar acesso">
+                <button type="button" class="btn-icone-excluir touch-target focus-ring" (click)="excluirVisitante(vis.id)" title="Cancelar acesso">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
             </div>
           } @empty {
-            <div class="estado-vazio">
-              <mat-icon>group_off</mat-icon>
-              <h4>Nenhum visitante cadastrado</h4>
-              <p>Clique em "Novo Convite / Prestador" para gerar uma liberação de acesso com selfie.</p>
+            <div class="empty-state-box span-total">
+              <div class="empty-state-icon">
+                <mat-icon>group_off</mat-icon>
+              </div>
+              <h4 class="empty-state-title">Nenhum visitante cadastrado</h4>
+              <p class="empty-state-desc">Gere um convite seguro e envie o link para o visitante registrar a selfie pelo próprio celular.</p>
+              <button type="button" class="btn-principal touch-target focus-ring" (click)="mostrarFormVisitante = true">
+                <mat-icon>person_add</mat-icon>
+                <span>Criar Primeiro Convite</span>
+              </button>
             </div>
           }
         </div>
