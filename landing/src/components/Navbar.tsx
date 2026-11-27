@@ -39,7 +39,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo & Marca */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg overflow-hidden bg-brand-slate flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105">
+            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105">
               <img src="/favicon.png" alt="CondoFlow" className="w-8 h-8 object-contain" />
             </div>
             <div className="flex items-center gap-1.5">
