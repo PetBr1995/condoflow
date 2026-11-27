@@ -5,10 +5,10 @@ import { NumberTicker } from "./magicui/number-ticker";
 
 export default function SocialProof() {
   const stats = [
-    { num: 45000, prefix: "+", suffix: "", label: "Acessos diários processados", detail: "Com 99.8% de precisão biométrica" },
-    { num: 0, prefix: "", suffix: "", isStatic: true, label: "Extravios de encomendas", detail: "Em mais de 120 condomínios auditados" },
-    { num: 14, prefix: "", suffix: "ms", label: "Tempo de resposta do totem", detail: "O mais rápido do mercado brasileiro" },
-    { num: 78, prefix: "-", suffix: "%", label: "Redução de filas no pico", detail: "Medido em entradas de pedestres e veículos" },
+    { num: 45000, prefix: "+", suffix: "", label: "Acessos processados", detail: "Com biometria facial e QR Code" },
+    { num: 0, prefix: "", suffix: "", isStatic: true, label: "Extravios de encomendas", detail: "Todas as entregas com foto e protocolo" },
+    { num: 100, prefix: "", suffix: "%", isStatic: true, label: "Plataforma 100% Web", detail: "Acesse pelo celular, tablet ou PC" },
+    { num: 85, prefix: "+", suffix: "%", label: "Adesão dos moradores", detail: "Sem atrito de instalação de aplicativos" },
   ];
 
   const testimonials = [
@@ -17,21 +17,21 @@ export default function SocialProof() {
       role: "Síndico Profissional",
       condo: "Residencial Jardins das Palmeiras • 180 aptos",
       content:
-        "O maior ganho foi acabar com as discussões de portaria e pacotes extraviados. Hoje o morador recebe a foto do pacote no mesmo segundo que a portaria recebe. A aceitação da biometria facial foi quase de 100% no primeiro mês.",
+        "O maior ganho foi acabar com as discussões de portaria e pacotes extraviados. Hoje a portaria registra a foto do pacote e o morador visualiza imediatamente no sistema. A biometria facial foi adotada com muita tranquilidade pelos condôminos.",
     },
     {
       name: "Camila Guimarães",
       role: "Diretora de Operações",
       condo: "Alliance Gestão Imobiliária • 34 condomínios",
       content:
-        "Como administradora de vários condomínios, a padronização do CondoFlow nos economizou dezenas de horas por semana. O suporte a totens locais sem travar a portaria quando a internet oscila é o grande diferencial técnico.",
+        "Como administradora de condomínios, o acesso 100% web direto pelo navegador, sem obrigar os moradores a baixar aplicativos pesados na loja, fez a adesão ser instantânea. A assembleia por enquetes digitais aumentou a participação de todos.",
     },
     {
       name: "Marcos Vinicius",
       role: "Zelador Geral",
       condo: "Condomínio Infinity Tower • 2 torres",
       content:
-        "O sistema de chamados facilitou meu dia a dia. Quando uma lâmpada queima ou um elevador para, o chamado vem com foto e eu atualizo o status pelo celular. A assembleia sabe exatamente onde o dinheiro da manutenção foi gasto.",
+        "O sistema de chamados facilitou meu dia a dia. Quando uma lâmpada queima ou um portão precisa de reparo, o chamado vem com foto e eu atualizo o status pelo celular para o síndico e o morador acompanharem.",
     },
   ];
 

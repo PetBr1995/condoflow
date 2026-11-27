@@ -86,39 +86,39 @@ export default function ProductDeepDive() {
                       Painel Executivo de Gestão & Auditoria
                     </h3>
                     <p className="text-xs text-ink-secondary mt-0.5">
-                      Controle de custos de manutenção, relatórios de acesso e assembleias digitais.
+                      Visão geral de moradores, controle de manutenções, comunicados oficiais e enquetes.
                     </p>
                   </div>
                   <span className="px-2.5 py-1 rounded text-xs font-mono font-medium bg-surface border border-border text-ink-secondary">
-                    Perfil: Administrador Global
+                    Perfil: Síndico / Administrador
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-surface border border-border space-y-1">
-                    <span className="text-xs text-ink-muted">Acessos Monitorados Hoje</span>
-                    <div className="font-display font-semibold text-xl text-ink-primary">1.284</div>
-                    <span className="text-[10px] text-emerald-600 font-medium">99.8% via Biometria</span>
+                    <span className="text-xs text-ink-muted">Moradores Cadastrados</span>
+                    <div className="font-display font-semibold text-xl text-ink-primary">128 Unidades</div>
+                    <span className="text-[10px] text-emerald-600 font-medium">Controle por bloco e apto</span>
                   </div>
                   <div className="p-4 rounded-lg bg-surface border border-border space-y-1">
-                    <span className="text-xs text-ink-muted">Chamados em Aberto</span>
-                    <div className="font-display font-semibold text-xl text-ink-primary">3</div>
-                    <span className="text-[10px] text-amber-600 font-medium">Todos dentro do SLA</span>
+                    <span className="text-xs text-ink-muted">Chamados Ativos</span>
+                    <div className="font-display font-semibold text-xl text-ink-primary">3 Chamados</div>
+                    <span className="text-[10px] text-amber-600 font-medium">Com fotos e histórico</span>
                   </div>
                   <div className="p-4 rounded-lg bg-surface border border-border space-y-1">
-                    <span className="text-xs text-ink-muted">Economia Operacional Est.</span>
-                    <div className="font-display font-semibold text-xl text-ink-primary">R$ 4.200/mês</div>
-                    <span className="text-[10px] text-blue-600 font-medium">Redução de papel e horas extras</span>
+                    <span className="text-xs text-ink-muted">Enquetes & Decisões</span>
+                    <div className="font-display font-semibold text-xl text-ink-primary">1 Em votação</div>
+                    <span className="text-[10px] text-blue-600 font-medium">Votação digital por unidade</span>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-lg bg-surface border border-border flex items-center justify-between text-xs">
                   <span className="font-medium text-ink-primary flex items-center gap-2">
                     <FileText className="w-4 h-4 text-brand-slate" />
-                    Exportar Prestação de Contas Mensal (PDF Auditável)
+                    Repositório de Atas, Balancetes e Regimento Interno
                   </span>
-                  <span className="text-[11px] font-mono text-brand-accent hover:underline cursor-pointer">
-                    Baixar Relatório Modelo
+                  <span className="text-[11px] font-mono text-brand-accent">
+                    Módulo de Documentos
                   </span>
                 </div>
               </motion.div>
@@ -136,14 +136,14 @@ export default function ProductDeepDive() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-border">
                   <div>
                     <h3 className="font-display font-semibold text-lg text-ink-primary">
-                      Central da Portaria & Monitoramento em Tempo Real
+                      Operação da Portaria & Recepção
                     </h3>
                     <p className="text-xs text-ink-secondary mt-0.5">
-                      Visualização de filas, liberação remota de emergência e cadastro de entregadores.
+                      Identificação facial rápida, consulta de autorizações de visitantes e recebimento de pacotes.
                     </p>
                   </div>
                   <span className="px-2.5 py-1 rounded text-xs font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Totens Online: 4 de 4
+                    Módulo de Portaria
                   </span>
                 </div>
 
@@ -151,20 +151,20 @@ export default function ProductDeepDive() {
                   <div className="p-4 rounded-lg bg-surface border border-border space-y-2">
                     <div className="flex items-center gap-2 text-xs font-semibold text-ink-primary">
                       <Video className="w-4 h-4 text-blue-600" />
-                      Scanner de Totem com IA
+                      Validação Facial & Câmera
                     </div>
                     <p className="text-xs text-ink-secondary">
-                      Caso alguém não consiga entrar pelo totem, o operador na portaria ou central recebe um alerta sonoro com o vídeo do portão em tela cheia.
+                      Comparação automática do rosto do morador ou visitante cadastrado com o banco biométrico OpenCV para liberação segura do acesso.
                     </p>
                   </div>
 
                   <div className="p-4 rounded-lg bg-surface border border-border space-y-2">
                     <div className="flex items-center gap-2 text-xs font-semibold text-ink-primary">
                       <Key className="w-4 h-4 text-emerald-600" />
-                      Desbloqueio com Registro de Auditoria
+                      Registro de Entradas & Encomendas
                     </div>
                     <p className="text-xs text-ink-secondary">
-                      Toda abertura forçada exige motivo gravado em log inalterável com foto do solicitante para garantir a segurança jurídica do condomínio.
+                      Registro de novos pacotes com fotos e código de rastreio, além de log detalhado de todos os visitantes com horário e morador anfitrião.
                     </p>
                   </div>
                 </div>
@@ -183,10 +183,10 @@ export default function ProductDeepDive() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-border">
                   <div>
                     <h3 className="font-display font-semibold text-lg text-ink-primary">
-                      App do Condômino: Controle Total na Palma da Mão
+                      Área do Condômino: Tudo no Celular ou Computador
                     </h3>
                     <p className="text-xs text-ink-secondary mt-0.5">
-                      Disponível em PWA e Web sem necessidade de downloads pesados.
+                      Acesso 100% web responsivo sem necessidade de instalação de aplicativos pesados.
                     </p>
                   </div>
                   <span className="px-2.5 py-1 rounded text-xs font-mono font-medium bg-blue-50 text-blue-700 border border-blue-200">
@@ -196,16 +196,16 @@ export default function ProductDeepDive() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div className="p-3.5 rounded-lg bg-surface border border-border space-y-1.5">
-                    <span className="font-semibold text-ink-primary block">Convites Instantâneos</span>
-                    <p className="text-[11px] text-ink-muted">Envie links para churrascos ou prestadores via WhatsApp em 2 cliques.</p>
+                    <span className="font-semibold text-ink-primary block">Convite com Link Público</span>
+                    <p className="text-[11px] text-ink-muted">Gere links para seus convidados enviarem selfie com antecedência via WhatsApp.</p>
                   </div>
                   <div className="p-3.5 rounded-lg bg-surface border border-border space-y-1.5">
                     <span className="font-semibold text-ink-primary block">Avisos de Pacotes</span>
-                    <p className="text-[11px] text-ink-muted">Foto da encomenda assim que o carteiro deixa na recepção.</p>
+                    <p className="text-[11px] text-ink-muted">Veja a foto da sua encomenda assim que a portaria der entrada no pacote.</p>
                   </div>
                   <div className="p-3.5 rounded-lg bg-surface border border-border space-y-1.5">
-                    <span className="font-semibold text-ink-primary block">Mural & Enquetes</span>
-                    <p className="text-[11px] text-ink-muted">Vote em decisões de melhoria predial sem precisar ir a reuniões longas.</p>
+                    <span className="font-semibold text-ink-primary block">Reservas & Enquetes</span>
+                    <p className="text-[11px] text-ink-muted">Reserve a churrasqueira e participe das assembleias e votações do prédio.</p>
                   </div>
                 </div>
               </motion.div>

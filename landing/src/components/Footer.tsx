@@ -37,8 +37,9 @@ export default function Footer() {
               <li><a href="#bento" className="hover:text-ink-primary transition-colors">Biometria Facial</a></li>
               <li><a href="#bento" className="hover:text-ink-primary transition-colors">Controle de Encomendas</a></li>
               <li><a href="#bento" className="hover:text-ink-primary transition-colors">Chamados & Manutenção</a></li>
-              <li><a href="#bento" className="hover:text-ink-primary transition-colors">Reservas de Áreas</a></li>
-              <li><a href="#demonstracao" className="hover:text-ink-primary transition-colors">Simulador de Totem</a></li>
+              <li><a href="#bento" className="hover:text-ink-primary transition-colors">Reservas de Áreas Comuns</a></li>
+              <li><a href="#bento" className="hover:text-ink-primary transition-colors">Enquetes & Assembleias</a></li>
+              <li><a href="#bento" className="hover:text-ink-primary transition-colors">Avisos & Documentos</a></li>
             </ul>
           </div>
 

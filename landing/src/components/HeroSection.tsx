@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ShieldCheck, Zap, Lock, ChevronRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, Zap, Smartphone, ChevronRight } from "lucide-react";
 import InteractiveHeroSim from "./InteractiveHeroSim";
 import { RetroGrid } from "./magicui/retro-grid";
 
@@ -19,22 +19,22 @@ export default function HeroSection() {
           {/* Pill Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50/90 shadow-xs text-xs font-medium text-slate-700">
             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-            <span className="text-blue-900 font-semibold">Nova Geração de Totens Inteligentes</span>
+            <span className="text-blue-900 font-semibold">Portaria Facial & Gestão Condominial</span>
             <span className="text-slate-300">•</span>
             <a href="#bento" className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-0.5">
-              Conheça a IA <ChevronRight className="w-3 h-3" />
+              Conheça os Recursos <ChevronRight className="w-3 h-3" />
             </a>
           </div>
 
           {/* Headline Principal */}
           <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-ink-primary tracking-tight leading-[1.12]">
-            A portaria do seu condomínio sem filas, papel e sem ponto cego.
+            A portaria e gestão do seu condomínio sem filas, papel e sem ponto cego.
           </h1>
 
-          {/* Subheadline */}
+          {/* Subheadline fiel às capacidades reais do app */}
           <p className="text-base sm:text-lg text-ink-secondary leading-relaxed max-w-2xl mx-auto">
-            Biometria facial autônoma para moradores e visitantes em menos de 14ms.
-            Rastreamento seguro de encomendas e gestão de chamados com prestação de contas em tempo real.
+            Biometria facial para moradores e visitantes, rastreamento seguro de encomendas,
+            reservas de áreas comuns, chamados de manutenção e assembleias com enquetes digitais.
           </p>
 
           {/* Grupo de Botões (Brand Accent + Secondary Card) */}
@@ -55,19 +55,19 @@ export default function HeroSection() {
             </a>
           </div>
 
-          {/* Micro-proof Badges de Confiança */}
+          {/* Micro-proof Badges fiéis ao produto real */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-2 text-xs text-ink-secondary">
             <span className="flex items-center gap-1.5 font-medium">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Conforme LGPD & Criptografia Ponta a Ponta</span>
+              <span>Conforme LGPD & Proteção de Dados</span>
             </span>
             <span className="flex items-center gap-1.5 font-medium">
               <Zap className="w-4 h-4 text-amber-500" />
-              <span>Reconhecimento Facial em 14ms</span>
+              <span>Reconhecimento Facial Integrado (OpenCV)</span>
             </span>
             <span className="flex items-center gap-1.5 font-medium">
-              <Lock className="w-4 h-4 text-blue-600" />
-              <span>Funciona mesmo sem internet local</span>
+              <Smartphone className="w-4 h-4 text-blue-600" />
+              <span>100% Web: Acesse no Celular ou Computador</span>
             </span>
           </div>
         </div>
