@@ -9,9 +9,10 @@
 
 .page-title {
   color: #0f172a;
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 28px;
   margin: 0;
 }
 
@@ -47,40 +48,38 @@
   border: 1px solid #fecaca;
 }
 
-/* Barra de Filtros, Busca e Ações */
+/* Barra de Filtros, Busca e Ações em Linha Única Sóbria */
 .toolbar-chamados-ds {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: nowrap;
 }
 
-/* Input de Busca Estilo Pílula */
+/* Input de Busca Compacto e Sóbrio */
 .search-input-box {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 9px 16px;
-  flex: 1;
-  min-width: 260px;
-  max-width: 400px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  transition: all 0.2s ease;
+  border-radius: 6px;
+  padding: 0 10px;
+  height: 34px;
+  width: 220px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.15s ease;
 }
 
 .search-input-box:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #cbd5e1;
 }
 
 .search-icon {
-  font-size: 19px;
-  width: 19px;
-  height: 19px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
   color: #94a3b8;
 }
 
@@ -89,7 +88,7 @@
   outline: none;
   background: transparent;
   width: 100%;
-  font-size: 0.88rem;
+  font-size: 13px;
   color: #0f172a;
 }
 
@@ -109,139 +108,132 @@
 }
 
 .btn-clear-search mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+/* Tabs Segmentadas Sutis (Estilo Linear / ACRU - SEM bolinhas coloridas) */
+.segmented-tabs-ds {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.tab-item {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tab-item:hover {
+  color: #0f172a;
+}
+
+.tab-item.active {
+  background-color: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.tab-count {
+  font-size: 10px;
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.tab-item.active .tab-count {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* Botão de Criação de Chamado Suave e Compacto */
+.btn-novo-suave {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: 1px solid #0f172a;
+  border-radius: 6px;
+  height: 34px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-novo-suave:hover {
+  background-color: #1e293b;
+  border-color: #1e293b;
+}
+
+.btn-novo-suave mat-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
 }
 
-/* Chips de Filtros Segmentados */
-.filter-chips-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.chip-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 9999px;
-  padding: 8px 16px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #334155;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.chip-status:hover {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-}
-
-/* Chip "Todos" Ativo no tom Dark Navy */
-.chip-todos.active {
-  background-color: #0f213d !important;
-  color: #ffffff !important;
-  border-color: #0f213d !important;
-}
-
-.chip-status.active {
-  background-color: #f1f5f9;
-  border-color: #94a3b8;
-  color: #0f172a;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dot-aberto {
-  background-color: #ef4444;
-}
-
-.dot-andamento {
-  background-color: #3b82f6;
-}
-
-.dot-concluido {
-  background-color: #22c55e;
-}
-
-/* Botão de Ação Primária (+ Novo Chamado) */
-.btn-primary-action {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #0f213d;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.18);
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-primary-action:hover {
-  background-color: #1a325a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(15, 33, 61, 0.25);
-}
-
-.btn-primary-action mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
-
-/* Lista de Cards Elevados */
+/* Lista de Linhas / Cards Compactos */
 .cards-list-ds {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
 .card-item-ds {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 14px 20px;
+  border-radius: 8px;
+  padding: 10px 14px;
+  min-height: 52px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   cursor: pointer;
-  transition: transform var(--duration-fast) var(--ease-smooth-out),
-              box-shadow var(--duration-fast) var(--ease-smooth-out),
-              border-color var(--duration-quick) ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  will-change: transform, box-shadow;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .card-item-ds:hover {
   border-color: #cbd5e1;
-  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
-  transform: translateY(-2px);
+  background-color: #fafbfc;
 }
 
-/* Quadrado Suave do Ícone (Azul Pastel) */
+/* Quadrado Compacto e Sóbrio do Ícone */
 .card-icon-box {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background-color: #dbeafe;
-  color: #1d4ed8;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -249,113 +241,125 @@
 }
 
 .card-icon-box mat-icon {
-  font-size: 22px;
-  width: 22px;
-  height: 22px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
-/* Informações Centrais */
+/* Informações Centrais com Hierarquia Rigorosa */
 .card-info-box {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .card-item-title {
   color: #0f172a;
-  font-size: 0.98rem;
-  font-weight: 700;
-  margin: 0 0 4px 0;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+  line-height: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.card-item-id {
+  font-size: 11px;
+  font-weight: 400;
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+
 .card-item-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   color: #64748b;
-  font-size: 0.8rem;
-  font-weight: 500;
-  flex-wrap: wrap;
+  font-size: 11px;
+  line-height: 14px;
 }
 
-.meta-element {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.meta-icon {
-  font-size: 14px;
-  width: 14px;
-  height: 14px;
-  color: #94a3b8;
-}
-
-.meta-divider {
+.meta-dot {
   color: #cbd5e1;
-}
-
-.meta-id {
-  font-weight: 700;
-  color: #475569;
+  font-weight: 600;
 }
 
 /* Ações e Status na Direita */
 .card-actions-box {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-/* Badge de Prioridade Estilo Pílula */
-.priority-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  border-radius: 9999px;
-  padding: 5px 12px;
-  font-size: 0.76rem;
-  font-weight: 700;
+/* Tags de Status Sóbrias */
+.status-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
 
-.priority-icon {
-  font-size: 13px;
-  width: 13px;
-  height: 13px;
+.status-aberto {
+  background-color: #fff1f2;
+  color: #e11d48;
+  border-color: #ffe4e6;
 }
 
-/* Cores de Prioridade */
-.priority-media {
-  background-color: #fef3c7;
-  color: #b45309;
+.status-em_andamento {
+  background-color: #fffbeb;
+  color: #d97706;
+  border-color: #fef3c7;
+}
+
+.status-concluido {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-color: #dcfce7;
+}
+
+/* Tag de Prioridade Sóbria */
+.priority-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  white-space: nowrap;
 }
 
 .priority-alta,
 .priority-urgente {
-  background-color: #fee2e2;
+  background-color: #fff1f2;
   color: #b91c1c;
+  border-color: #fecaca;
 }
 
 .priority-baixa {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-color: #dcfce7;
 }
 
 /* Seta Chevron */
 .chevron-arrow {
-  color: #94a3b8;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  transition: transform 0.2s ease;
-}
-
-.card-item-ds:hover .chevron-arrow {
-  transform: translateX(2px);
-  color: #0f172a;
+  color: #cbd5e1;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Estado Vazio */
@@ -388,7 +392,7 @@
 
 .empty-state-ds h3 {
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   margin-bottom: 4px;
 }
@@ -417,7 +421,7 @@
 
 .header-formulario h2 {
   font-size: 1.4rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin: 0;
 }
@@ -466,7 +470,7 @@
 
 .form-group-ds label {
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -502,30 +506,31 @@
 
 .chip-cat {
   padding: 6px 12px;
-  border-radius: 9999px;
-  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
   background-color: #f8fafc;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: #475569;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
 }
 
 .chip-cat:hover {
-  background-color: #e2e8f0;
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
 }
 
 .chip-cat.active {
-  background-color: #0f213d;
+  background-color: #0f172a;
   color: #ffffff;
-  border-color: #0f213d;
+  border-color: #0f172a;
 }
 
 .upload-box-ds {
-  border: 2px dashed #cbd5e1;
+  border: 1px dashed #cbd5e1;
   border-radius: 10px;
-  padding: 24px;
+  padding: 20px;
   text-align: center;
   background-color: #f8fafc;
   cursor: pointer;
@@ -576,7 +581,7 @@
   border: none;
   background-color: #0f213d;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2);
   transition: all 0.2s;
@@ -598,7 +603,7 @@
   padding: 5px 12px;
   border-radius: 9999px;
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .status-aberto {
@@ -618,7 +623,7 @@
 
 .detalhe-titulo {
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin: 0 0 20px 0;
 }
@@ -651,7 +656,7 @@
 
 .detalhe-secao h4 {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   margin-bottom: 8px;
 }
@@ -677,7 +682,7 @@
 
 .gestao-sindico-ds h4 {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   margin-bottom: 12px;
 }

@@ -4,110 +4,114 @@
 }
 
 <aside class="sidebar-container" [class.collapsed]="recolhida" [class.mobile-open]="!recolhida">
-  <!-- Botão Circular de Recolher/Expandir na Borda -->
-  <button 
-    type="button" 
-    class="btn-toggle-sidebar" 
-    (click)="toggleSidebar()" 
-    [title]="recolhida ? 'Expandir Menu' : 'Recolher Menu'">
-    <mat-icon>{{ recolhida ? 'chevron_right' : 'chevron_left' }}</mat-icon>
-  </button>
-
-  <!-- Topo da Sidebar: Marca CondoFlow -->
-  <div class="sidebar-brand" [routerLink]="authService.isSindico ? '/dashboard' : '/chamados'">
+  <!-- Topo da Sidebar: Marca CondoFlow (Clique para recolher/expandir) -->
+  <button
+    type="button"
+    class="sidebar-brand"
+    (click)="toggleSidebar()"
+    aria-label="Alternar menu lateral"
+  >
     <div class="brand-icon-box">
-      <mat-icon>corporate_fare</mat-icon>
+      <mat-icon>domain</mat-icon>
     </div>
-    @if (!recolhida) {
-      <div class="brand-info">
-        <span class="brand-title">CondoFlow</span>
-        @if (authService.condominioNome && authService.condominioNome !== 'CondoFlow') {
-          <small class="brand-condo" [title]="authService.condominioNome">{{ authService.condominioNome }}</small>
-        }
-      </div>
-    }
-  </div>
+    <div class="brand-info">
+      <span class="brand-title">CondoFlow</span>
+      @if (authService.condominioNome && authService.condominioNome !== 'CondoFlow') {
+        <small class="brand-condo" [title]="authService.condominioNome">{{ authService.condominioNome }}</small>
+      }
+    </div>
+    <span class="sidebar-tooltip">Expandir menu</span>
+  </button>
 
   <!-- Lista de Navegação Principal -->
   <nav class="sidebar-menu">
     @if (authService.isSindico) {
-      <a class="menu-link" routerLink="/dashboard" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}" [title]="recolhida ? 'Início' : ''">
-        <mat-icon class="menu-icon">grid_view</mat-icon>
-        @if (!recolhida) { <span class="menu-text">Início</span> }
+      <a class="menu-link" routerLink="/dashboard" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon class="menu-icon">dashboard</mat-icon>
+        <span class="menu-text">Dashboard</span>
+        <span class="sidebar-tooltip">Dashboard</span>
       </a>
     }
 
     <!-- Chamados -->
-    <a class="menu-link" routerLink="/chamados" routerLinkActive="ativo" [title]="recolhida ? (authService.isSindico ? 'Painel de Chamados' : 'Meus Chamados') : ''">
-      <mat-icon class="menu-icon">home</mat-icon>
-      @if (!recolhida) { <span class="menu-text">{{ authService.isSindico ? 'Chamados' : 'Meus Chamados' }}</span> }
+    <a class="menu-link" routerLink="/chamados" routerLinkActive="ativo">
+      <mat-icon class="menu-icon">build_circle</mat-icon>
+      <span class="menu-text">{{ authService.isSindico ? 'Chamados' : 'Meus Chamados' }}</span>
+      <span class="sidebar-tooltip">{{ authService.isSindico ? 'Chamados' : 'Meus Chamados' }}</span>
     </a>
 
     <!-- Reservas -->
-    <a class="menu-link" routerLink="/reservas" routerLinkActive="ativo" [title]="recolhida ? (authService.isSindico ? 'Reservas' : 'Minhas Reservas') : ''">
-      <mat-icon class="menu-icon">calendar_month</mat-icon>
-      @if (!recolhida) { <span class="menu-text">{{ authService.isSindico ? 'Reservas' : 'Minhas Reservas' }}</span> }
+    <a class="menu-link" routerLink="/reservas" routerLinkActive="ativo">
+      <mat-icon class="menu-icon">event</mat-icon>
+      <span class="menu-text">{{ authService.isSindico ? 'Reservas' : 'Minhas Reservas' }}</span>
+      <span class="sidebar-tooltip">{{ authService.isSindico ? 'Reservas' : 'Minhas Reservas' }}</span>
     </a>
 
-    <!-- Portaria / Acessos -->
-    <a class="menu-link" routerLink="/acessos" routerLinkActive="ativo" [title]="recolhida ? (authService.isSindico ? 'Portaria & Totem' : 'Facial & Visitas') : ''">
-      <mat-icon class="menu-icon">face</mat-icon>
-      @if (!recolhida) { <span class="menu-text">{{ authService.isSindico ? 'Portaria & Totem' : 'Facial & Visitas' }}</span> }
+    <!-- Portaria & Acessos -->
+    <a class="menu-link" routerLink="/acessos" routerLinkActive="ativo">
+      <mat-icon class="menu-icon">badge</mat-icon>
+      <span class="menu-text">{{ authService.isSindico ? 'Portaria & Totem' : 'Facial & Visitas' }}</span>
+      <span class="sidebar-tooltip">{{ authService.isSindico ? 'Portaria & Totem' : 'Facial & Visitas' }}</span>
     </a>
 
     <!-- Encomendas -->
-    <a class="menu-link" routerLink="/encomendas" routerLinkActive="ativo" [title]="recolhida ? 'Encomendas' : ''">
-      <mat-icon class="menu-icon">all_inbox</mat-icon>
-      @if (!recolhida) { <span class="menu-text">Encomendas</span> }
+    <a class="menu-link" routerLink="/encomendas" routerLinkActive="ativo">
+      <mat-icon class="menu-icon">inventory_2</mat-icon>
+      <span class="menu-text">Encomendas</span>
+      <span class="sidebar-tooltip">Encomendas</span>
     </a>
 
-    <!-- Avisos -->
-    <a class="menu-link" routerLink="/avisos" routerLinkActive="ativo" [title]="recolhida ? 'Avisos' : ''">
+    <!-- Mural de Avisos -->
+    <a class="menu-link" routerLink="/avisos" routerLinkActive="ativo">
       <mat-icon class="menu-icon">campaign</mat-icon>
-      @if (!recolhida) { <span class="menu-text">Avisos</span> }
+      <span class="menu-text">Avisos</span>
+      <span class="sidebar-tooltip">Mural de Avisos</span>
     </a>
 
     <!-- Documentos -->
-    <a class="menu-link" routerLink="/documentos" routerLinkActive="ativo" [title]="recolhida ? 'Documentos' : ''">
-      <mat-icon class="menu-icon">description</mat-icon>
-      @if (!recolhida) { <span class="menu-text">Documentos</span> }
+    <a class="menu-link" routerLink="/documentos" routerLinkActive="ativo">
+      <mat-icon class="menu-icon">folder_open</mat-icon>
+      <span class="menu-text">Documentos</span>
+      <span class="sidebar-tooltip">Documentos</span>
     </a>
 
-    <!-- Votações / Assembleia -->
-    <a class="menu-link" routerLink="/enquetes" routerLinkActive="ativo" [title]="recolhida ? 'Votações' : ''">
+    <!-- Votações / Assembleias -->
+    <a class="menu-link" routerLink="/enquetes" routerLinkActive="ativo">
       <mat-icon class="menu-icon">how_to_vote</mat-icon>
-      @if (!recolhida) { <span class="menu-text">Votações</span> }
+      <span class="menu-text">Votações</span>
+      <span class="sidebar-tooltip">Votações & Assembleias</span>
     </a>
 
-    <!-- Moradores (Exclusivo Síndico) -->
+    <!-- Gestão de Moradores (Síndico) -->
     @if (authService.isSindico) {
-      <a class="menu-link" routerLink="/moradores" routerLinkActive="ativo" [title]="recolhida ? 'Moradores' : ''">
-        <mat-icon class="menu-icon">groups</mat-icon>
-        @if (!recolhida) { <span class="menu-text">Moradores</span> }
+      <a class="menu-link" routerLink="/moradores" routerLinkActive="ativo">
+        <mat-icon class="menu-icon">group</mat-icon>
+        <span class="menu-text">Moradores</span>
+        <span class="sidebar-tooltip">Gestão de Moradores</span>
       </a>
     }
   </nav>
 
-  <!-- Rodapé da Sidebar: Perfil do Usuário e Sair -->
-  <div class="sidebar-footer">
-    <div class="user-profile-card" [title]="authService.nomeUsuario">
-      <div class="user-avatar-circle">
-        {{ authService.nomeUsuario.charAt(0).toUpperCase() }}
+  <!-- Widget Card Inferior Estilo ACRU ("Upgrade to Pro" -> "Plataforma Inteligente") -->
+  <div class="sidebar-widget-card">
+    <div class="widget-header">
+      <div class="widget-icon">
+        <mat-icon>bolt</mat-icon>
       </div>
-      @if (!recolhida) {
-        <div class="user-text-meta">
-          <strong class="user-display-name">{{ authService.nomeUsuario }}</strong>
-          <span class="user-unit-name">
-            {{ authService.isSindico ? 'Síndico Geral' : (authService.unidadeMorador || 'Morador') }}
-          </span>
-        </div>
-        <mat-icon class="user-dropdown-icon">expand_more</mat-icon>
-      }
+      <div class="widget-title">CondoFlow Hub</div>
     </div>
+    <p class="widget-desc">Gestão multi-unidades, portaria e votações integradas.</p>
+    <button type="button" class="btn-widget-action" routerLink="/avisos">
+      Ver Mural Oficial
+    </button>
+  </div>
 
-    <button type="button" class="btn-sidebar-logout" (click)="fazerLogout()" [title]="recolhida ? 'Sair da Conta' : ''">
+  <!-- Rodapé da Sidebar: Logout -->
+  <div class="sidebar-footer">
+    <button type="button" class="btn-sidebar-logout" (click)="fazerLogout()">
       <mat-icon class="logout-icon">logout</mat-icon>
-      @if (!recolhida) { <span class="logout-text">Sair</span> }
+      <span class="logout-text">Sair da conta</span>
+      <span class="sidebar-tooltip">Sair da conta</span>
     </button>
   </div>
 </aside>

@@ -1,6 +1,6 @@
-<div class="dashboard-container">
+<div class="acru-dashboard-layout">
 
-  <!-- Estado de Erro de Conexão com Botão de Tentar Novamente -->
+  <!-- Estado de Erro de Conexão -->
   @if (erroCarregamento) {
     <div class="error-state-box">
       <mat-icon>cloud_off</mat-icon>
@@ -8,407 +8,349 @@
         <h4 class="error-state-title">Não foi possível carregar as informações do condomínio</h4>
         <p class="error-state-desc">Verifique sua conexão com o servidor e tente novamente.</p>
       </div>
-      <button type="button" class="btn-retry touch-target" (click)="carregarDashboard()">
+      <button type="button" class="btn-retry" (click)="carregarDashboard()">
         <mat-icon>refresh</mat-icon>
         <span>Recarregar</span>
       </button>
     </div>
   }
 
-  <!-- Estado de Carregamento (Skeleton Shimmer) -->
+  <!-- Estado de Carregamento Skeleton -->
   @if (carregando) {
-    <div class="skeleton-dashboard-wrapper">
-      <div class="t-skeleton skeleton-banner"></div>
-
-      <div class="kpi-grid">
-        <div class="t-skeleton skeleton-kpi"></div>
-        <div class="t-skeleton skeleton-kpi"></div>
-        <div class="t-skeleton skeleton-kpi"></div>
-        <div class="t-skeleton skeleton-kpi"></div>
+    <div class="skeleton-acru-wrapper">
+      <div class="skeleton-col-main">
+        <div class="t-skeleton" style="height: 280px; border-radius: 12px;"></div>
+        <div class="t-skeleton" style="height: 110px; border-radius: 12px;"></div>
+        <div class="t-skeleton" style="height: 240px; border-radius: 12px;"></div>
       </div>
-
-      <div class="middle-grid">
-        <div class="t-skeleton skeleton-chart"></div>
-        <div class="t-skeleton skeleton-hub"></div>
+      <div class="skeleton-col-side">
+        <div class="t-skeleton" style="height: 180px; border-radius: 12px;"></div>
+        <div class="t-skeleton" style="height: 90px; border-radius: 12px;"></div>
+        <div class="t-skeleton" style="height: 360px; border-radius: 12px;"></div>
       </div>
     </div>
   } @else if (!erroCarregamento) {
 
-    @if (authService.isSindico) {
-      <!-- Welcome Header Banner (Síndico) -->
-      <header class="dash-welcome-card">
-        <div class="dash-welcome-content">
-          <div class="condo-badge">
-            <mat-icon>business</mat-icon>
-            <span>{{ estatisticas?.condominio_nome || 'CondoFlow' }}</span>
-          </div>
-          <h1>Painel de Controle do Síndico</h1>
-          <p>Acompanhe em tempo real a operação, ocorrências e demandas do seu condomínio.</p>
-        </div>
-        <div class="dash-welcome-actions">
-          <a routerLink="/moradores" class="banner-btn secondary touch-target focus-ring">
-            <mat-icon>person_add</mat-icon>
-            <span>Convidar Morador</span>
-          </a>
-          <a routerLink="/chamados" class="banner-btn primary touch-target focus-ring">
-            <mat-icon>build</mat-icon>
-            <span>Ver Ocorrências</span>
-          </a>
-        </div>
-      </header>
+    <!-- Grid Principal de Duas Colunas (Padrão ACRU) -->
+    <div class="acru-grid">
 
-      <!-- Top KPI Stat Cards (Linear Style com Números Tabulares) -->
-      <section class="kpi-grid" aria-label="Indicadores principais do condomínio">
-        <div class="kpi-card card-moradores">
-          <div class="kpi-header-row">
-            <span class="kpi-label">Moradores Registrados</span>
-            <div class="kpi-icon-wrapper">
-              <mat-icon>groups</mat-icon>
+      <!-- COLUNA PRINCIPAL (ESQUERDA 68%) -->
+      <div class="acru-main-col">
+
+        <!-- LINHA 1: Card de Visão Geral + Stack de KPIs Verticais -->
+        <div class="overview-row">
+          
+          <!-- Card de Balanço Geral / Gráfico (Estilo ACRU $12,450 Balance Overview) -->
+          <div class="acru-card card-overview-chart">
+            <div class="overview-header">
+              <div class="overview-title-block">
+                <span class="overview-kpi-num">{{ totalDemandas }} <small>demandas</small></span>
+                <span class="overview-kpi-label">Fluxo Operacional de Chamados</span>
+              </div>
+
+              <!-- Filtro de Período 7d / 30d -->
+              <div class="period-controls">
+                <div class="period-pills">
+                  <button type="button" [class.active]="filtroPeriodo === '7d'" (click)="setPeriodo('7d')">7d</button>
+                  <button type="button" [class.active]="filtroPeriodo === '30d'" (click)="setPeriodo('30d')">30d</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Legenda Sóbria -->
+            <div class="overview-legend">
+              <span class="legend-item"><span class="legend-dot dot-aberto"></span> Abertos</span>
+              <span class="legend-item"><span class="legend-dot dot-andamento"></span> Em Andamento</span>
+              <span class="legend-item"><span class="legend-dot dot-concluido"></span> Concluídos</span>
+            </div>
+
+            <!-- Gráfico / Wrapper Chart.js Integrado -->
+            <div class="chart-container-box">
+              <app-chart-chamados [dados]="estatisticas"></app-chart-chamados>
             </div>
           </div>
-          <div class="kpi-info">
-            <strong class="kpi-value tabular-nums">{{ estatisticas?.total_moradores || 0 }}</strong>
-            <span class="kpi-sub">
-              <mat-icon class="sub-icon">home</mat-icon> Unidades vinculadas
-            </span>
+
+          <!-- Coluna Empilhada de KPIs (Estilo ACRU: Total income, Total expenses, Saved balance) -->
+          <div class="acru-kpi-stack">
+            
+            <!-- KPI 1: Abertos -->
+            <div class="acru-card kpi-stack-item">
+              <div class="kpi-stack-label">Chamados Abertos</div>
+              <div class="kpi-stack-value">{{ estatisticas?.chamados_abertos || 0 }}</div>
+              <div class="kpi-stack-trend trend-alert">
+                <mat-icon>priority_high</mat-icon>
+                <span>Aguardando atendimento</span>
+              </div>
+            </div>
+
+            <!-- KPI 2: Em Andamento -->
+            <div class="acru-card kpi-stack-item">
+              <div class="kpi-stack-label">Em Execução</div>
+              <div class="kpi-stack-value">{{ estatisticas?.chamados_andamento || 0 }}</div>
+              <div class="kpi-stack-trend trend-warning">
+                <mat-icon>schedule</mat-icon>
+                <span>Equipe em campo</span>
+              </div>
+            </div>
+
+            <!-- KPI 3: Concluídos -->
+            <div class="acru-card kpi-stack-item">
+              <div class="kpi-stack-label">Concluídos com Sucesso</div>
+              <div class="kpi-stack-value">{{ estatisticas?.chamados_concluidos || 0 }}</div>
+              <div class="kpi-stack-trend trend-success">
+                <mat-icon>trending_up</mat-icon>
+                <span>{{ taxaResolucaoGeral }}% taxa de resolução</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div class="kpi-card card-abertos">
-          <div class="kpi-header-row">
-            <span class="kpi-label">Chamados Abertos</span>
-            <div class="kpi-icon-wrapper">
-              <mat-icon>error_outline</mat-icon>
+        <!-- LINHA 2: Limite Operacional + Card Informativo Rápido -->
+        <div class="middle-row">
+          
+          <!-- Card de Índice de Resolução (Estilo Monthly spending limit) -->
+          <div class="acru-card card-progress-limit">
+            <div class="card-inner-header">
+              <div>
+                <h3 class="card-title-sm">Taxa de Resolução de Demandas</h3>
+                <span class="card-sub-sm">Métrica de eficiência no atendimento</span>
+              </div>
+              <button type="button" class="btn-icon-subtle" routerLink="/chamados" title="Detalhes dos chamados">
+                <mat-icon>edit_note</mat-icon>
+              </button>
+            </div>
+
+            <!-- Barra de Progresso Segmentada Sóbria Verde/Cinza -->
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" [style.width.%]="taxaResolucaoGeral"></div>
+            </div>
+            <div class="progress-values-row">
+              <span class="val-current">{{ taxaResolucaoGeral }}% atendidos</span>
+              <span class="val-target">Meta: 90%</span>
             </div>
           </div>
-          <div class="kpi-info">
-            <strong class="kpi-value tabular-nums">{{ estatisticas?.chamados_abertos || 0 }}</strong>
-            <span class="kpi-sub status-critico">
-              <span class="status-dot"></span> Aguardando atendimento
-            </span>
-          </div>
-        </div>
 
-        <div class="kpi-card card-andamento">
-          <div class="kpi-header-row">
-            <span class="kpi-label">Em Andamento</span>
-            <div class="kpi-icon-wrapper">
-              <mat-icon>schedule</mat-icon>
+          <!-- Card de Dicas / Boletim (Estilo Optimize your budget with these quick tips) -->
+          <div class="acru-card card-quick-notice">
+            <div class="notice-content">
+              <h3 class="card-title-sm">Canal Oficial da Administração</h3>
+              <p class="notice-desc">Consulte os comunicados de manutenção, avisos gerais e regras do condomínio.</p>
+              <a class="notice-link" routerLink="/avisos">
+                <span>Ver mural de avisos</span>
+                <mat-icon>chevron_right</mat-icon>
+              </a>
+            </div>
+            <div class="notice-graphic">
+              <mat-icon class="notice-icon">campaign</mat-icon>
             </div>
           </div>
-          <div class="kpi-info">
-            <strong class="kpi-value tabular-nums">{{ estatisticas?.chamados_andamento || 0 }}</strong>
-            <span class="kpi-sub status-alerta">
-              <span class="status-dot"></span> Em execução pela equipe
-            </span>
-          </div>
+
         </div>
 
-        <div class="kpi-card card-concluidos">
-          <div class="kpi-header-row">
-            <span class="kpi-label">Finalizados</span>
-            <div class="kpi-icon-wrapper">
-              <mat-icon>check_circle</mat-icon>
+        <!-- LINHA 3: 3 Cards Inferiores (Cost analysis, Financial health, Goal tracker) -->
+        <div class="bottom-tri-row">
+
+          <!-- Card 1: Distribuição por Categoria (Estilo Cost analysis) -->
+          <div class="acru-card card-category-analysis">
+            <div class="card-inner-header">
+              <div>
+                <h3 class="card-title-sm">Demandas por Área</h3>
+                <span class="card-sub-sm">Distribuição das ocorrências</span>
+              </div>
+              <span class="badge-period">Mês atual</span>
+            </div>
+
+            <!-- Barra Segmentada Multicolor Sóbria -->
+            <div class="segmented-category-bar">
+              @for (cat of categoriasOcorrencias; track cat.nome) {
+                <div class="segment" [style.width.%]="cat.porcentagem" [style.background-color]="cat.cor" [title]="cat.nome + ': ' + cat.porcentagem + '%'"></div>
+              }
+            </div>
+
+            <!-- Lista de Categorias com Porcentagem -->
+            <div class="category-legend-list">
+              @for (cat of categoriasOcorrencias; track cat.nome) {
+                <div class="category-row">
+                  <div class="cat-left">
+                    <span class="cat-color-dot" [style.background-color]="cat.cor"></span>
+                    <span class="cat-name">{{ cat.nome }}</span>
+                  </div>
+                  <span class="cat-pct">{{ cat.porcentagem }}%</span>
+                </div>
+              }
             </div>
           </div>
-          <div class="kpi-info">
-            <strong class="kpi-value tabular-nums">{{ estatisticas?.chamados_concluidos || 0 }}</strong>
-            <span class="kpi-sub status-sucesso">
-              <span class="status-dot"></span> Resolvidos com sucesso
-            </span>
+
+          <!-- Card 2: Saúde Operacional do Condomínio (Estilo Financial health) -->
+          <div class="acru-card card-health-gauge">
+            <div class="card-inner-header">
+              <div>
+                <h3 class="card-title-sm">Saúde Operacional</h3>
+                <span class="card-sub-sm">Status global dos serviços</span>
+              </div>
+              <span class="badge-period">{{ filtroPeriodo }}</span>
+            </div>
+
+            <div class="gauge-center-block">
+              <!-- Semicírculo SVG Sóbrio (Estilo ACRU Gauge) -->
+              <div class="gauge-svg-wrap">
+                <svg viewBox="0 0 100 55" class="gauge-svg">
+                  <path d="M 10,50 A 40,40 0 0,1 90,50" fill="none" stroke="#f1f5f9" stroke-width="8" stroke-linecap="round"/>
+                  <path d="M 10,50 A 40,40 0 0,1 90,50" fill="none" stroke="#16a34a" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="125.6" stroke-dashoffset="30"/>
+                </svg>
+                <div class="gauge-text-overlay">
+                  <span class="gauge-num">{{ taxaResolucaoGeral }}%</span>
+                  <span class="gauge-caption">Índice Geral</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="gauge-footer-note">Calculado com base nas manutenções preventivas e tempo de resposta das ocorrências.</p>
+          </div>
+
+          <!-- Card 3: Metas e Manutenções Preventivas (Estilo Goal tracker) -->
+          <div class="acru-card card-goal-tracker">
+            <div class="card-inner-header">
+              <div>
+                <h3 class="card-title-sm">Manutenções Preventivas</h3>
+                <span class="card-sub-sm">Cronograma do condomínio</span>
+              </div>
+              <a class="link-add-goal" routerLink="/documentos">+ Ver Atas</a>
+            </div>
+
+            <!-- Lista de Metas com Barras de Progresso -->
+            <div class="goals-list">
+              @for (meta of metasManutencao; track meta.titulo) {
+                <div class="goal-item">
+                  <div class="goal-top">
+                    <span class="goal-title">{{ meta.titulo }}</span>
+                    <span class="goal-pct">{{ meta.valorFormatado }}</span>
+                  </div>
+                  <div class="goal-track">
+                    <div class="goal-fill" [style.width.%]="meta.progresso" [style.background-color]="meta.cor"></div>
+                  </div>
+                  <span class="goal-sub">{{ meta.periodo }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- COLUNA LATERAL DIREITA (ESTILO ACRU 32%) -->
+      <div class="acru-side-col">
+
+        <!-- 1. Crachá Digital / Identificação do Condomínio (Estilo My card verde do ACRU) -->
+        <div class="acru-card card-resident-badge">
+          <div class="badge-card-header">
+            <span class="badge-header-label">{{ authService.isSindico ? 'Administração' : 'Crachá Digital' }}</span>
+            <span class="badge-card-sub">CondoFlow ID</span>
+          </div>
+
+          <div class="digital-card-visual">
+            <div class="digital-card-top">
+              <span class="card-chip-tag">{{ authService.isSindico ? 'SÍNDICO GERAL' : 'MORADOR' }}</span>
+              <mat-icon class="card-contactless">contactless</mat-icon>
+            </div>
+            <div class="digital-card-body">
+              <span class="card-condo-name">{{ estatisticas?.condominio_nome || 'CondoFlow Residencial' }}</span>
+              <span class="card-unit-code">
+                {{ authService.isSindico ? 'Gestão Master' : (authService.unidadeMorador || 'Unidade Principal') }}
+              </span>
+            </div>
+            <div class="digital-card-footer">
+              <span class="card-user-name">{{ authService.nomeUsuario }}</span>
+              <span class="card-status-dot">Ativo</span>
+            </div>
           </div>
         </div>
-      </section>
 
-      <!-- Main Content Grid: Chart + Quick Summary -->
-      <section class="middle-grid">
-        <div class="chart-card">
-          <div class="card-header-clean">
+        <!-- 2. Ações Rápidas em Linha (Estilo Top up, Send, Request, History do ACRU) -->
+        <div class="acru-card card-quick-actions-bar">
+          <div class="quick-actions-grid">
+            <a routerLink="/chamados" class="quick-act-btn" title="Novo Chamado">
+              <div class="act-icon-box"><mat-icon>build</mat-icon></div>
+              <span class="act-label">Chamado</span>
+            </a>
+
+            <a routerLink="/reservas" class="quick-act-btn" title="Reservas">
+              <div class="act-icon-box"><mat-icon>event</mat-icon></div>
+              <span class="act-label">Reserva</span>
+            </a>
+
+            <a routerLink="/acessos" class="quick-act-btn" title="Portaria & Facial">
+              <div class="act-icon-box"><mat-icon>face</mat-icon></div>
+              <span class="act-label">Portaria</span>
+            </a>
+
+            <a routerLink="/encomendas" class="quick-act-btn" title="Encomendas">
+              <div class="act-icon-box"><mat-icon>inventory_2</mat-icon></div>
+              <span class="act-label">Pacote</span>
+            </a>
+
+            <a routerLink="/avisos" class="quick-act-btn" title="Mural Oficial">
+              <div class="act-icon-box"><mat-icon>campaign</mat-icon></div>
+              <span class="act-label">Mural</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3. Equipe & Portaria Contatos Rápidos (Estilo Quick payment do ACRU) -->
+        <div class="acru-card card-team-contacts">
+          <div class="card-inner-header">
             <div>
-              <h3>Status dos Chamados</h3>
-              <span class="card-subtitle">Distribuição por estágio de atendimento</span>
+              <h3 class="card-title-sm">Equipe & Portaria</h3>
+              <span class="card-sub-sm">Canais diretos de atendimento</span>
             </div>
           </div>
 
-          <div class="chart-wrapper">
-            <app-chart-chamados [dados]="estatisticas"></app-chart-chamados>
-          </div>
-
-          <div class="chart-legend-row">
-            <div class="legend-pill red">
-              <span class="dot"></span>
-              <span>Abertos ({{ estatisticas?.chamados_abertos || 0 }})</span>
-            </div>
-            <div class="legend-pill yellow">
-              <span class="dot"></span>
-              <span>Em Andamento ({{ estatisticas?.chamados_andamento || 0 }})</span>
-            </div>
-            <div class="legend-pill green">
-              <span class="dot"></span>
-              <span>Concluídos ({{ estatisticas?.chamados_concluidos || 0 }})</span>
-            </div>
+          <div class="team-avatars-row">
+            @for (contato of equipeContatos; track contato.nome) {
+              <div class="team-avatar-item" [title]="contato.nome + ' - ' + contato.cargo">
+                <div class="team-circle" [style.background-color]="contato.cor">
+                  {{ contato.iniciais }}
+                </div>
+                <span class="team-name">{{ contato.nome }}</span>
+              </div>
+            }
           </div>
         </div>
 
-        <!-- Quick Operations Hub -->
-        <div class="hub-card">
-          <div class="card-header-clean">
+        <!-- 4. Histórico de Atividades Recentes (Estilo Transaction history do ACRU) -->
+        <div class="acru-card card-activity-history">
+          <div class="card-inner-header">
             <div>
-              <h3>Atalhos Rápidos</h3>
-              <span class="card-subtitle">Gestão ágil da administração</span>
+              <h3 class="card-title-sm">Atividades Recentes</h3>
+              <span class="card-sub-sm">Últimas movimentações</span>
             </div>
+            <a routerLink="/chamados" class="link-view-all">Ver todas</a>
           </div>
 
-          <div class="hub-list">
-            <a routerLink="/reservas" class="hub-item touch-target focus-ring">
-              <div class="hub-icon-pill teal">
-                <mat-icon>event</mat-icon>
+          <div class="history-list">
+            @for (item of atividadesRecentes; track item.titulo) {
+              <div class="history-item">
+                <div class="history-icon-pill" [class]="'pill-' + item.tipoStatus">
+                  <mat-icon>{{ item.icone }}</mat-icon>
+                </div>
+                <div class="history-meta">
+                  <span class="history-title">{{ item.titulo }}</span>
+                  <span class="history-date">{{ item.data }}</span>
+                </div>
+                <span class="history-badge" [class]="'badge-' + item.tipoStatus">
+                  {{ item.status }}
+                </span>
               </div>
-              <div class="hub-text">
-                <strong>Gestão de Reservas</strong>
-                <span>Aprovar agendamentos de churrasqueira e salão</span>
-              </div>
-              <mat-icon class="arrow-icon">chevron_right</mat-icon>
-            </a>
-
-            <a routerLink="/acessos" class="hub-item touch-target focus-ring">
-              <div class="hub-icon-pill emerald">
-                <mat-icon>face_unlock</mat-icon>
-              </div>
-              <div class="hub-text">
-                <strong>Totem & Portaria Facial</strong>
-                <span>Monitoramento de acessos ao vivo e visitantes</span>
-              </div>
-              <mat-icon class="arrow-icon">chevron_right</mat-icon>
-            </a>
-
-            <a routerLink="/encomendas" class="hub-item touch-target focus-ring">
-              <div class="hub-icon-pill amber">
-                <mat-icon>local_shipping</mat-icon>
-              </div>
-              <div class="hub-text">
-                <strong>Portaria & Encomendas</strong>
-                <span>Recebimento e entrega de correspondências</span>
-              </div>
-              <mat-icon class="arrow-icon">chevron_right</mat-icon>
-            </a>
-
-            <a routerLink="/avisos" class="hub-item touch-target focus-ring">
-              <div class="hub-icon-pill purple">
-                <mat-icon>campaign</mat-icon>
-              </div>
-              <div class="hub-text">
-                <strong>Mural de Comunicados</strong>
-                <span>Publicar avisos importantes para os condôminos</span>
-              </div>
-              <mat-icon class="arrow-icon">chevron_right</mat-icon>
-            </a>
+            }
           </div>
         </div>
-      </section>
 
-      <!-- Grid de Todos os Módulos do Sistema -->
-      <section class="modules-section">
-        <div class="section-title">
-          <h2>Módulos do Condomínio</h2>
-          <p>Acesse todas as funcionalidades administrativas da sua assinatura</p>
-        </div>
+      </div>
 
-        <div class="modules-grid">
-          <a routerLink="/chamados" class="module-card touch-target focus-ring">
-            <div class="module-icon-box blue">
-              <mat-icon>build</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Ocorrências & Chamados</strong>
-              <p>Gerencie pedidos de reparo, fotos e atualização de status.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
+    </div>
 
-          <a routerLink="/reservas" class="module-card touch-target focus-ring">
-            <div class="module-icon-box teal">
-              <mat-icon>event_available</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Reservas de Espaços</strong>
-              <p>Salão de festas, churrasqueiras e áreas sociais sem conflito.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/acessos" class="module-card touch-target focus-ring">
-            <div class="module-icon-box emerald">
-              <mat-icon>face_unlock</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Facial & Portaria</strong>
-              <p>Biometria facial, totem ao vivo e autorização de visitantes.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/avisos" class="module-card touch-target focus-ring">
-            <div class="module-icon-box purple">
-              <mat-icon>campaign</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Mural de Avisos</strong>
-              <p>Transmita informativos, manutenções e comunicados gerais.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/encomendas" class="module-card touch-target focus-ring">
-            <div class="module-icon-box amber">
-              <mat-icon>inventory_2</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Portaria & Encomendas</strong>
-              <p>Controle inteligente de recebimento e entrega de pacotes.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/documentos" class="module-card touch-target focus-ring">
-            <div class="module-icon-box slate">
-              <mat-icon>description</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Atas & Documentos</strong>
-              <p>Convenção, regulamento interno e prestações de contas.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/enquetes" class="module-card touch-target focus-ring">
-            <div class="module-icon-box indigo">
-              <mat-icon>how_to_vote</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Enquetes & Decisões</strong>
-              <p>Votações democráticas com trava de um voto por unidade.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/moradores" class="module-card touch-target focus-ring">
-            <div class="module-icon-box rose">
-              <mat-icon>home_work</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Unidades & Moradores</strong>
-              <p>Cadastro de apartamentos e códigos de convite seguros.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-        </div>
-      </section>
-
-    } @else {
-      <!-- Portal do Morador -->
-      <header class="dash-welcome-card resident-banner">
-        <div class="dash-welcome-content">
-          <div class="condo-badge">
-            <mat-icon>home</mat-icon>
-            <span>{{ estatisticas?.condominio_nome || 'CondoFlow' }}</span>
-          </div>
-          <h1>Portal do Morador</h1>
-          <p>Tudo o que você precisa no seu condomínio de forma prática e na palma da mão.</p>
-        </div>
-        <div class="dash-welcome-actions">
-          <a routerLink="/chamados" class="banner-btn primary touch-target focus-ring">
-            <mat-icon>add_circle</mat-icon>
-            <span>Abrir Chamado</span>
-          </a>
-        </div>
-      </header>
-
-      <section class="modules-section">
-        <div class="section-title">
-          <h2>Serviços Disponíveis</h2>
-          <p>Selecione uma das opções abaixo para gerenciar sua unidade</p>
-        </div>
-
-        <div class="modules-grid">
-          <a routerLink="/acessos" class="module-card touch-target focus-ring">
-            <div class="module-icon-box emerald">
-              <mat-icon>face_unlock</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Minha Biometria & Visitas</strong>
-              <p>Cadastre sua selfie para liberação automática e convide amigos.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/reservas" class="module-card touch-target focus-ring">
-            <div class="module-icon-box teal">
-              <mat-icon>event_available</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Reservar Áreas de Lazer</strong>
-              <p>Reserve churrasqueiras, salão e quadras de forma instantânea.</p>
-            </div>
-            <span class="module-link-action">Reservar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/chamados" class="module-card touch-target focus-ring">
-            <div class="module-icon-box blue">
-              <mat-icon>build</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Meus Chamados</strong>
-              <p>Solicite reparos com foto e receba feedback em tempo real.</p>
-            </div>
-            <span class="module-link-action">Abrir <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/encomendas" class="module-card touch-target focus-ring">
-            <div class="module-icon-box amber">
-              <mat-icon>inventory_2</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Minhas Encomendas</strong>
-              <p>Veja se há pacotes ou correspondências aguardando retirada.</p>
-            </div>
-            <span class="module-link-action">Verificar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/avisos" class="module-card touch-target focus-ring">
-            <div class="module-icon-box purple">
-              <mat-icon>campaign</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Mural de Avisos</strong>
-              <p>Mantenha-se informado sobre manutenções e novidades.</p>
-            </div>
-            <span class="module-link-action">Ler Avisos <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/documentos" class="module-card touch-target focus-ring">
-            <div class="module-icon-box slate">
-              <mat-icon>description</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Atas & Documentos</strong>
-              <p>Consulte convenção, regimento e relatórios de assembleias.</p>
-            </div>
-            <span class="module-link-action">Acessar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-
-          <a routerLink="/enquetes" class="module-card touch-target focus-ring">
-            <div class="module-icon-box indigo">
-              <mat-icon>how_to_vote</mat-icon>
-            </div>
-            <div class="module-info">
-              <strong>Votações Virtuais</strong>
-              <p>Participe de enquetes e decisões democráticas do condomínio.</p>
-            </div>
-            <span class="module-link-action">Votar <mat-icon>arrow_forward</mat-icon></span>
-          </a>
-        </div>
-      </section>
-    }
   }
 </div>

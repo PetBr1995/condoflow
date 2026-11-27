@@ -1,5 +1,5 @@
 /* ====================================================
-   CondoFlow Login - Design System Oficial (Midnight Navy)
+   CondoFlow Login - SaaS Minimalista & Sóbrio (Linear / Stripe)
    ==================================================== */
 
 .login-wrapper {
@@ -8,56 +8,55 @@
   align-items: center;
   justify-content: center;
   padding: 32px 16px;
-  background-color: #f4f7fb;
-  background-image: radial-gradient(circle at 50% 0%, rgba(14, 29, 53, 0.04) 0%, transparent 60%);
+  background-color: #f8fafc;
 }
 
 .login-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 400px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 36px 32px;
-  box-shadow: 0 4px 20px -2px rgba(15, 29, 53, 0.06), 0 2px 6px -1px rgba(15, 29, 53, 0.04);
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 .login-brand {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .brand-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 14px;
-  background-color: #0e1d35;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #0f172a;
   color: #ffffff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(14, 29, 53, 0.25);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .brand-icon mat-icon {
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .login-brand h2 {
-  font-size: 1.65rem;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 600;
   color: #0f172a;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   margin: 0;
+  line-height: 26px;
 }
 
 .login-brand p {
   color: #64748b;
-  font-size: 0.9rem;
-  margin-top: 4px;
+  font-size: 13px;
+  margin-top: 2px;
   margin-bottom: 0;
 }
 
@@ -66,10 +65,10 @@
   display: flex;
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 4px;
-  margin-bottom: 24px;
-  gap: 4px;
+  border-radius: 6px;
+  padding: 2px;
+  margin-bottom: 20px;
+  gap: 2px;
 }
 
 .toggle-btn {
@@ -78,44 +77,48 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 9px 12px;
+  height: 30px;
+  padding: 0 12px;
   border: none;
   background: transparent;
   color: #64748b;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .toggle-btn mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
-/* Ativo no tom Dark Navy do Design System */
+.toggle-btn:hover {
+  color: #0f172a;
+}
+
 .toggle-btn.active {
-  background: #0f213d;
-  color: #ffffff;
-  font-weight: 700;
-  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2);
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 /* Formulário e Inputs */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .input-group label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 4px;
 }
 
 .input-wrapper {
@@ -126,75 +129,69 @@
 
 .input-icon {
   position: absolute;
-  left: 14px;
+  left: 12px;
   color: #94a3b8;
-  font-size: 19px;
-  width: 19px;
-  height: 19px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 11px 14px 11px 42px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  height: 36px;
+  padding: 0 12px 0 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
   color: #0f172a;
   background: #ffffff;
-  transition: all 0.2s ease;
+  transition: border-color 0.15s ease;
 }
 
 .input-wrapper input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #0f172a;
+  box-shadow: 0 0 0 1px #0f172a;
 }
 
 .input-wrapper input::placeholder {
   color: #94a3b8;
 }
 
-/* Botão de Submit Dark Navy */
+/* Botão de Submit Dark Slate */
 .btn-submit {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-  padding: 12px 20px;
-  background-color: #0f213d;
+  gap: 6px;
+  margin-top: 6px;
+  height: 36px;
+  padding: 0 16px;
+  background-color: #0f172a;
   color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.92rem;
-  font-weight: 700;
+  border: 1px solid #0f172a;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(15, 33, 61, 0.2);
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
-.btn-submit:hover {
-  background-color: #1a325a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(15, 33, 61, 0.25);
+.btn-submit:hover:not(:disabled) {
+  background-color: #1e293b;
+  border-color: #1e293b;
 }
 
 .btn-submit mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  transition: transform 0.2s ease;
-}
-
-.btn-submit:hover mat-icon {
-  transform: translateX(3px);
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .btn-submit:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
 }
 
 .girando {
@@ -210,67 +207,68 @@
 .alerta-erro-box {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 10px 12px;
   background-color: #fef2f2;
   border: 1px solid #fecaca;
   color: #991b1b;
-  border-radius: 8px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  margin-top: 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 14px;
 }
 
 .alerta-erro-box mat-icon {
-  font-size: 19px;
-  width: 19px;
-  height: 19px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
 /* Rodapé do Login */
 .login-footer {
   text-align: center;
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px solid #e2e8f0;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .login-footer p {
   color: #64748b;
-  font-size: 0.85rem;
-  margin: 0 0 6px 0;
+  font-size: 12px;
+  margin: 0 0 4px 0;
 }
 
 .link-cadastro {
-  color: #2563eb;
-  font-size: 0.88rem;
-  font-weight: 700;
-  text-decoration: none;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
   transition: color 0.15s ease;
 }
 
 .link-cadastro:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
+  color: #334155;
 }
 
 /* Caixa de Credenciais Demo */
 .demo-box {
-  margin-top: 20px;
-  padding: 10px 14px;
+  margin-top: 16px;
+  padding: 8px 12px;
   background-color: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
   text-align: center;
-  font-size: 0.8rem;
-  color: #475569;
+  font-size: 11px;
+  color: #64748b;
 }
 
 .demo-box code {
-  background: #e2e8f0;
-  padding: 2px 6px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 1px 5px;
   border-radius: 4px;
-  font-weight: 700;
+  font-weight: 500;
   color: #0f172a;
 }

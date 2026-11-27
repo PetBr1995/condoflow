@@ -1,34 +1,56 @@
 @if (estaLogado()) {
   <div class="app-layout" [class.sidebar-recolhida]="sidebarRecolhida">
-    <!-- Sidebar Lateral Dark Navy -->
+    <!-- Sidebar Lateral Branca ACRU Style -->
     <app-navbar [recolhida]="sidebarRecolhida" (toggle)="toggleSidebar()"></app-navbar>
 
     <!-- Área Principal de Conteúdo -->
     <div class="app-body-container">
-      <!-- Barra Superior com Notificações e Menu Mobile -->
+      <!-- Barra Superior Segmentada ACRU Style -->
       <header class="app-topbar">
-        <button type="button" class="btn-mobile-menu touch-target focus-ring" (click)="toggleSidebar()" title="Abrir Menu">
+        <button type="button" class="btn-mobile-menu" (click)="toggleSidebar()" title="Abrir Menu">
           <mat-icon>menu</mat-icon>
         </button>
 
-        <!-- Gatilho do Command Palette Linear Style (Cmd + K) -->
-        <button type="button" class="btn-command-trigger touch-target focus-ring" (click)="abrirCommandPalette()" title="Buscar ou executar comando (Ctrl + K)">
-          <mat-icon class="trigger-search-icon">search</mat-icon>
-          <span class="trigger-text">Buscar ou executar ação...</span>
-          <span class="trigger-kbd-badge"><kbd>Ctrl</kbd><kbd>K</kbd></span>
-        </button>
+        <!-- Campo de Busca Rápida Estilo ACRU (Quick search) -->
+        <div class="topbar-search-box" (click)="abrirCommandPalette()" title="Buscar no sistema (Ctrl + K)">
+          <mat-icon class="search-icon">search</mat-icon>
+          <span class="search-placeholder">Quick search...</span>
+          <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+        </div>
 
         <div class="topbar-spacer"></div>
 
+        <!-- Ações do Topo: Notificações, Configurações, Perfil e CTA -->
         <div class="topbar-actions">
-          <button type="button" class="btn-topbar-bell touch-target focus-ring" title="Avisos e Notificações">
-            <mat-icon>notifications</mat-icon>
-            <span class="bell-badge"></span>
+          <button type="button" class="topbar-icon-btn" routerLink="/avisos" title="Avisos e Notificações">
+            <mat-icon>notifications_none</mat-icon>
+            <span class="notification-dot"></span>
+          </button>
+
+          <button type="button" class="topbar-icon-btn" (click)="abrirCommandPalette()" title="Comandos e Atalhos">
+            <mat-icon>tune</mat-icon>
+          </button>
+
+          <!-- Perfil do Usuário Estilo ACRU (Avatar + Nome + Unidade) -->
+          <div class="topbar-user-pill">
+            <div class="user-avatar-circle">
+              {{ authService.nomeUsuario.charAt(0).toUpperCase() }}
+            </div>
+            <div class="user-details">
+              <span class="user-name">{{ authService.nomeUsuario }}</span>
+              <span class="user-role">{{ authService.isSindico ? 'Administração' : (authService.unidadeMorador || 'Morador') }}</span>
+            </div>
+          </div>
+
+          <!-- Botão de Ação Rápida no Topo (Compacto e Sóbrio) -->
+          <button type="button" class="btn-topbar-cta" (click)="abrirCommandPalette()" title="Ações Rápidas (Ctrl + K)">
+            <mat-icon>add</mat-icon>
+            <span>Ação Rápida</span>
           </button>
         </div>
       </header>
 
-      <!-- Canvas das Páginas do Sistema -->
+      <!-- Canvas das Páginas do Sistema (Fundo Soft Slate com Cards Brancos) -->
       <main class="app-main-canvas">
         <router-outlet></router-outlet>
       </main>

@@ -79,7 +79,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #94a3b8;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 3px 8px;
   border-radius: 5px;
   letter-spacing: 0.05em;
@@ -192,7 +192,7 @@
 
 .item-category-badge {
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #64748b;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -247,7 +247,7 @@
   color: #94a3b8;
   font-family: inherit;
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
 }

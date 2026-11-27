@@ -1,11 +1,11 @@
 /* ====================================================
-   CondoFlow Layout Principal - Sidebar + Canvas
+   CondoFlow Layout Principal - Padrão ACRU / SaaS Sóbrio
    ==================================================== */
 
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background-color: var(--app-bg, #f4f7fb);
+  background-color: var(--bg-canvas, #f1f4f8);
   position: relative;
 }
 
@@ -14,153 +14,222 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  margin-left: 240px;
-  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: var(--app-bg, #f4f7fb);
+  margin-left: 220px;
+  transition: margin-left 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: margin-left;
+  background-color: var(--bg-canvas, #f1f4f8);
 }
 
 .app-layout.sidebar-recolhida .app-body-container {
-  margin-left: 72px;
+  margin-left: 68px;
 }
 
-/* Barra Superior com Notificação e Mobile Menu */
+/* ====================================================
+   Barra Superior Segmentada (Estilo ACRU)
+   ==================================================== */
 .app-topbar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 12px;
   height: 64px;
-  padding: 0 40px;
+  padding: 0 28px;
   background-color: transparent;
 }
 
 .btn-mobile-menu {
   display: none;
-  width: 42px;
-  height: 42px;
-  border-radius: var(--radius-md, 10px);
-  border: 1px solid var(--border-subtle, #e2e8f0);
-  background: var(--bg-surface, #ffffff);
-  color: var(--text-primary, #0f172a);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
-.btn-mobile-menu:hover {
-  background-color: var(--bg-surface-subtle, #f1f5f9);
-  border-color: var(--border-strong, #cbd5e1);
+/* Campo de Busca Rápida (Quick Search) */
+.topbar-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0 14px;
+  height: 38px;
+  width: 260px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.15s ease, width 0.2s ease;
+}
+
+.topbar-search-box:hover {
+  border-color: #cbd5e1;
+  width: 290px;
+}
+
+.search-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+}
+
+.search-placeholder {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 400;
+  flex: 1;
+}
+
+.search-kbd {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.search-kbd kbd {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #64748b;
+  font-family: inherit;
 }
 
 .topbar-spacer {
   flex: 1;
 }
 
-/* Gatilho Linear Style do Command Palette (Cmd + K) */
-.btn-command-trigger {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 8px 14px;
-  color: #64748b;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: all 0.15s ease;
-  margin-left: 12px;
-  min-height: 40px;
-}
-
-.btn-command-trigger:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #0f172a;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.trigger-search-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  color: #94a3b8;
-}
-
-.trigger-text {
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.trigger-kbd-badge {
-  display: inline-flex;
-  gap: 3px;
-  margin-left: 8px;
-}
-
-.trigger-kbd-badge kbd {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 2px 5px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #64748b;
-  font-family: inherit;
-}
-
+/* Ações do Topo */
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
-.btn-topbar-bell {
+.topbar-icon-btn {
   position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   border: 1px solid #e2e8f0;
   background-color: #ffffff;
-  color: #0f172a;
+  color: #475569;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 0.15s ease;
 }
 
-.btn-topbar-bell:hover {
-  background-color: #f8fafc;
+.topbar-icon-btn:hover {
   border-color: #cbd5e1;
-  transform: translateY(-1px);
+  color: #0f172a;
 }
 
-.btn-topbar-bell mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  color: #334155;
+.topbar-icon-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.bell-badge {
+.notification-dot {
   position: absolute;
-  top: 8px;
+  top: 9px;
   right: 9px;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background-color: #ef4444;
-  border: 2px solid #ffffff;
+  background-color: #e11d48;
+}
+
+/* Pílula de Perfil de Usuário */
+.topbar-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 4px 12px 4px 6px;
+  height: 38px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  user-select: none;
+}
+
+.user-avatar-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #0f172a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 14px;
+}
+
+.user-role {
+  font-size: 10px;
+  color: #64748b;
+  line-height: 12px;
+}
+
+/* Botão CTA Principal (+ Add widget / + Novo Chamado) */
+.btn-topbar-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: 1px solid #0f172a;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  transition: background-color 0.15s ease;
+}
+
+.btn-topbar-cta:hover {
+  background-color: #1e293b;
+  border-color: #1e293b;
+}
+
+.btn-topbar-cta mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Área de Conteúdo da Aplicação */
 .app-main-canvas {
   flex: 1;
-  padding: 4px 40px 48px;
-  max-width: 1300px;
+  padding: 8px 28px 40px;
+  max-width: 1440px;
   width: 100%;
 }
 
@@ -171,16 +240,16 @@
   .app-body-container {
     margin-left: 0 !important;
   }
-  .app-main-canvas {
-    padding: 8px 16px 36px;
-  }
   .app-topbar {
     padding: 0 16px;
   }
-  .trigger-text {
-    display: none;
+  .app-main-canvas {
+    padding: 12px 16px 32px;
   }
-  .btn-command-trigger {
-    padding: 8px 10px;
+  .topbar-search-box {
+    width: 160px;
+  }
+  .user-details {
+    display: none;
   }
 }

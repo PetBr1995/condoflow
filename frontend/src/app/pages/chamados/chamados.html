@@ -19,15 +19,15 @@
     </div>
   }
 
-  <!-- Barra de Filtros, Busca e Ação Primária -->
+  <!-- Barra de Filtros, Busca e Ação Primária em Linha Única Sóbria -->
   <section class="toolbar-chamados-ds">
-    <!-- Campo de Busca Estilo Pílula -->
+    <!-- Campo de Busca Compacto e Sóbrio -->
     <div class="search-input-box">
       <mat-icon class="search-icon">search</mat-icon>
       <input 
         type="text" 
         [(ngModel)]="termoBusca" 
-        placeholder="Buscar por título ou número..." />
+        placeholder="Buscar ocorrência ou #ID..." />
       @if (termoBusca) {
         <button type="button" class="btn-clear-search" (click)="termoBusca = ''">
           <mat-icon>close</mat-icon>
@@ -35,46 +35,49 @@
       }
     </div>
 
-    <!-- Chips de Filtro por Status -->
-    <div class="filter-chips-group">
+    <!-- Tabs Segmentadas Sutis Sem Bolinhas Coloridas (Estilo ACRU / Linear) -->
+    <div class="segmented-tabs-ds">
       <button 
         type="button" 
-        class="chip-status chip-todos" 
+        class="tab-item" 
         [class.active]="filtroStatus === 'todos'" 
         (click)="filtroStatus = 'todos'">
-        Todos
+        <span>Todos</span>
+        <span class="tab-count">{{ countStatus('todos') }}</span>
       </button>
 
       <button 
         type="button" 
-        class="chip-status" 
+        class="tab-item" 
         [class.active]="filtroStatus === 'aberto'" 
         (click)="filtroStatus = 'aberto'">
-        <span class="status-dot dot-aberto"></span>
         <span>Abertos</span>
+        <span class="tab-count count-aberto">{{ countStatus('aberto') }}</span>
       </button>
 
       <button 
         type="button" 
-        class="chip-status" 
+        class="tab-item" 
         [class.active]="filtroStatus === 'em_andamento'" 
         (click)="filtroStatus = 'em_andamento'">
-        <span class="status-dot dot-andamento"></span>
         <span>Em andamento</span>
+        <span class="tab-count count-andamento">{{ countStatus('em_andamento') }}</span>
       </button>
 
       <button 
         type="button" 
-        class="chip-status" 
+        class="tab-item" 
         [class.active]="filtroStatus === 'concluido'" 
         (click)="filtroStatus = 'concluido'">
-        <span class="status-dot dot-concluido"></span>
         <span>Finalizados</span>
+        <span class="tab-count count-concluido">{{ countStatus('concluido') }}</span>
       </button>
     </div>
 
-    <!-- Botão de Criação de Chamado -->
-    <button type="button" class="btn-primary-action touch-target focus-ring" (click)="abrirNovoChamado()">
+    <div class="toolbar-spacer"></div>
+
+    <!-- Botão de Criação de Chamado Suave e Compacto -->
+    <button type="button" class="btn-novo-suave" (click)="abrirNovoChamado()">
       <mat-icon>add</mat-icon>
       <span>Novo Chamado</span>
     </button>
@@ -89,7 +92,7 @@
         </div>
         <h3>Nenhum chamado encontrado</h3>
         <p>Não há ocorrências registradas com os filtros selecionados.</p>
-        <button type="button" class="btn-primary-action touch-target focus-ring" (click)="abrirNovoChamado()" style="margin-top: 14px;">
+        <button type="button" class="btn-novo-suave" (click)="abrirNovoChamado()" style="margin-top: 14px;">
           <mat-icon>add</mat-icon>
           <span>Abrir Novo Chamado</span>
         </button>
@@ -97,37 +100,36 @@
     } @else {
       @for (chamado of chamadosFiltrados(); track chamado.id) {
         <article class="card-item-ds" (click)="selecionarChamado(chamado)">
-          <!-- Ícone da Categoria em Quadrado Suave -->
+          <!-- Ícone da Categoria Compacto e Sóbrio -->
           <div class="card-icon-box">
             <mat-icon>{{ getIconeCategoria(chamado.categoria) }}</mat-icon>
           </div>
 
-          <!-- Informações Centrais -->
+          <!-- Informações Centrais com Hierarquia Clara -->
           <div class="card-info-box">
-            <h4 class="card-item-title">{{ chamado.titulo }}</h4>
+            <div class="card-title-row">
+              <h4 class="card-item-title">{{ chamado.titulo }}</h4>
+              <span class="card-item-id">#{{ chamado.id }}</span>
+            </div>
             <div class="card-item-meta">
-              <span class="meta-element">
-                <mat-icon class="meta-icon">calendar_today</mat-icon>
-                {{ chamado.created_at | date:'dd MMM yyyy' }}
-              </span>
-              <span class="meta-divider">•</span>
-              <span class="meta-element meta-id">#{{ chamado.id }}</span>
-              <span class="meta-divider">|</span>
-              <span class="meta-element">
-                <mat-icon class="meta-icon">apartment</mat-icon>
-                {{ getLocalChamado(chamado) }}
-              </span>
+              <span>{{ chamado.created_at | date:'dd MMM yyyy' }}</span>
+              <span class="meta-dot">·</span>
+              <span>{{ getLocalChamado(chamado) }}</span>
+              @if (chamado.categoria) {
+                <span class="meta-dot">·</span>
+                <span>{{ chamado.categoria }}</span>
+              }
             </div>
           </div>
 
-          <!-- Ações e Status na Direita -->
+          <!-- Ações e Status na Direita (Sóbrio) -->
           <div class="card-actions-box">
-            <!-- Badge de Prioridade / Status Estilo Pill -->
-            <span class="priority-pill" [class]="'priority-' + (chamado.prioridade || 'media')">
-              <mat-icon class="priority-icon">schedule</mat-icon>
-              <span>{{ getPrioridadeLabel(chamado.prioridade) }}</span>
+            <span class="status-tag" [class]="'status-' + chamado.status">
+              {{ getStatusLabel(chamado.status) }}
             </span>
-
+            <span class="priority-tag" [class]="'priority-' + (chamado.prioridade || 'media')">
+              {{ getPrioridadeLabel(chamado.prioridade) }}
+            </span>
             <mat-icon class="chevron-arrow">chevron_right</mat-icon>
           </div>
         </article>

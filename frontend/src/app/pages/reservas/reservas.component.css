@@ -15,7 +15,7 @@
 
 .header-reservas h2 {
   font-size: 1.75rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin: 0 0 4px 0;
 }
@@ -44,7 +44,7 @@
 
 .btn-novo:hover {
   background-color: #1a325a;
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .alerta {
@@ -98,7 +98,7 @@
   background-color: #dbeafe;
   color: #1d4ed8;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 4px 10px;
   border-radius: 9999px;
   text-transform: uppercase;
@@ -109,7 +109,7 @@
   margin: 0;
   color: #0f172a;
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .form-instrucao {
@@ -129,7 +129,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   margin-bottom: 10px;
 }
@@ -189,7 +189,7 @@
 .mes-titulo {
   margin: 0;
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   min-width: 180px;
   text-align: center;
@@ -284,7 +284,7 @@
 .sindico-info-box h4 {
   margin: 0 0 4px 0;
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -306,7 +306,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 6px 12px;
   border-radius: 8px;
 }
@@ -339,7 +339,7 @@
   border: none;
   border-radius: 8px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
@@ -347,7 +347,7 @@
 
 .btn-sindico-liberar:hover:not(:disabled) {
   background-color: #15803d;
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .btn-sindico-bloquear {
@@ -360,14 +360,14 @@
   border: none;
   border-radius: 8px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .btn-sindico-bloquear:hover {
   background-color: #1e293b;
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .form-bloqueio-sindico {
@@ -381,7 +381,7 @@
 .form-bloqueio-sindico h5 {
   margin: 0 0 12px 0;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -425,7 +425,7 @@
   border: none;
   border-radius: 8px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -473,7 +473,7 @@
 
 .col-semana {
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -501,21 +501,21 @@
 }
 
 .dia-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: none;
   border-color: #94a3b8;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .dia-num {
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   line-height: 1.2;
 }
 
 .tag-dia {
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
   margin-top: 4px;
@@ -580,7 +580,7 @@
   color: #ffffff !important;
   border-color: #0e1d35 !important;
   box-shadow: 0 4px 14px rgba(14, 29, 53, 0.3) !important;
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .dia-btn.selecionado .dia-num {
@@ -613,7 +613,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.825rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #b91c1c;
   background-color: #fee2e2;
   padding: 4px 10px;
@@ -625,7 +625,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.825rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #6d28d9;
   background-color: #ede9fe;
   padding: 4px 10px;
@@ -658,7 +658,7 @@
 
 .card-periodo:hover:not(.indisponivel) {
   border-color: #2563eb;
-  transform: translateY(-2px);
+  transform: none;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
 }
 
@@ -692,7 +692,7 @@
 
 .badge-status-periodo {
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 3px 8px;
   border-radius: 9999px;
   text-transform: uppercase;
@@ -711,7 +711,7 @@
 .periodo-nome {
   margin: 0 0 4px 0;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -794,7 +794,7 @@
   color: #ffffff;
   border: none;
   border-radius: 8px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -803,7 +803,7 @@
 
 .btn-confirmar:hover:not(:disabled) {
   background-color: #1a325a;
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .btn-confirmar:disabled {
@@ -825,7 +825,7 @@
 
 .secao-header h3 {
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin: 0 0 4px 0;
 }
@@ -857,7 +857,7 @@
 .card-espaco:hover {
   border-color: #cbd5e1;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .espaco-card-header {
@@ -868,21 +868,28 @@
 }
 
 .espaco-icone-box {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background-color: #dbeafe;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1d4ed8;
+  color: #475569;
   flex-shrink: 0;
+}
+
+.espaco-icone-box mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .espaco-card-header h4 {
   margin: 0 0 4px 0;
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -931,7 +938,7 @@
 
 .taxa-valor {
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -944,7 +951,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 8px 14px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -974,7 +981,7 @@
 
 .reservas-topo h3 {
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin: 0 0 4px 0;
 }
@@ -986,73 +993,93 @@
 }
 
 .filtros {
-  display: flex;
-  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   background: #f1f5f9;
-  padding: 4px;
-  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+  padding: 2px;
+  border-radius: 6px;
 }
 
 .filtros button {
   background: transparent;
   border: none;
-  min-height: 40px;
-  padding: 8px 18px;
-  border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-secondary);
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-smooth-out);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: all 0.15s ease;
 }
 
 .filtros button:hover {
-  color: var(--color-brand-primary);
+  color: #0f172a;
 }
 
 .filtros button.ativo {
-  background: var(--color-brand-primary);
-  color: #ffffff;
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 .lista-reservas {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 6px;
 }
 
 .card-reserva {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 18px 20px;
+  border-radius: 8px;
+  padding: 10px 14px;
+  min-height: 52px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.card-reserva:hover {
+  border-color: #cbd5e1;
+  background-color: #fafbfc;
 }
 
 .reserva-principal {
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
+  gap: 12px;
+  align-items: center;
   flex: 1;
-  min-width: 280px;
+  min-width: 240px;
 }
 
 .reserva-icone {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background-color: #dbeafe;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1d4ed8;
+  color: #475569;
   flex-shrink: 0;
+}
+
+.reserva-icone mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .reserva-dados {
@@ -1062,23 +1089,23 @@
 .reserva-linha-1 {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 2px;
   flex-wrap: wrap;
 }
 
 .reserva-linha-1 h4 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 500;
   color: #0f172a;
+  margin: 0;
 }
 
 .badge-status {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .status-pendente {

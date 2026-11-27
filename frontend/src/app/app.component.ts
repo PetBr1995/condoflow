@@ -1,15 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, RouterLink } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CommandPaletteComponent } from './components/command-palette/command-palette.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Capacitor } from '@capacitor/core';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, CommandPaletteComponent, MatIconModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, NavbarComponent, CommandPaletteComponent, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild(CommandPaletteComponent) commandPalette?: CommandPaletteComponent;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public authService: AuthService) {}
 
   abrirCommandPalette(): void {
     this.commandPalette?.abrir();

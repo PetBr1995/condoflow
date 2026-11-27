@@ -14,39 +14,41 @@
 }
 
 .header-documentos h2 {
-  font-size: 1.625rem;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   color: var(--color-text-main, #0f172a);
   letter-spacing: -0.02em;
-  margin: 0 0 4px 0;
+  margin: 0 0 2px 0;
+  line-height: 28px;
 }
 
 .header-documentos p {
   color: var(--color-text-muted, #64748b);
-  font-size: 0.925rem;
+  font-size: 13px;
   margin: 0;
+  line-height: 20px;
 }
 
 .btn-novo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background-color: var(--color-primary, #0f213d);
+  gap: 6px;
+  background-color: #0f172a;
   color: #ffffff;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md, 8px);
-  padding: 10px 18px;
-  font-weight: 600;
-  font-size: 0.875rem;
+  border: 1px solid #0f172a;
+  border-radius: 6px;
+  height: 36px;
+  padding: 0 14px;
+  font-weight: 500;
+  font-size: 13px;
   cursor: pointer;
-  min-height: 44px;
   transition: all 0.15s ease;
-  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.05));
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 .btn-novo:hover {
-  background-color: var(--color-primary-hover, #1a3258);
-  box-shadow: var(--shadow-elevated, 0 4px 12px rgba(0, 0, 0, 0.08));
+  background-color: #1e293b;
+  border-color: #1e293b;
 }
 
 .alerta {
@@ -84,7 +86,7 @@
   margin: 0 0 16px 0;
   color: var(--color-text-main, #0f172a);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .form-grid {
@@ -166,75 +168,88 @@
 
 .filtros {
   display: inline-flex;
-  gap: 6px;
+  align-items: center;
+  gap: 2px;
   background: #f1f5f9;
-  padding: 4px;
-  border-radius: 10px;
-  border: 1px solid var(--color-border-subtle, #e2e8f0);
-  flex-wrap: wrap;
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
 }
 
 .filtro-btn {
   background: transparent;
   border: none;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 0.825rem;
-  font-weight: 600;
+  border-radius: 4px;
+  padding: 0 10px;
+  height: 28px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  color: var(--color-text-secondary, #475569);
+  color: #64748b;
   transition: all 0.15s ease;
-  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.filtro-btn:hover {
+  color: #0f172a;
 }
 
 .filtro-btn.ativo {
   background: #ffffff;
-  color: var(--color-primary, #0f213d);
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 .grid-documentos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
 .card-documento {
-  background: var(--color-surface, #ffffff);
-  border: 1px solid var(--color-border-subtle, #e2e8f0);
-  border-radius: var(--radius-lg, 12px);
-  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04));
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .card-documento:hover {
   border-color: #cbd5e1;
-  box-shadow: var(--shadow-elevated, 0 4px 12px rgba(0, 0, 0, 0.06));
+  background-color: #fafbfc;
 }
 
 .card-documento-corpo {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .icone-doc {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md, 8px);
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #16a34a;
+  color: #475569;
   flex-shrink: 0;
+}
+
+.icone-doc mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .doc-conteudo {
@@ -246,7 +261,7 @@
   background: #f1f5f9;
   color: #475569;
   font-size: 0.725rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 2px 8px;
   border-radius: 4px;
   text-transform: uppercase;
@@ -256,7 +271,7 @@
 
 .doc-conteudo h4 {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text-main, #0f172a);
   margin: 0 0 4px 0;
   line-height: 1.4;

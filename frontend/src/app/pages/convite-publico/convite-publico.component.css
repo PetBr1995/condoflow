@@ -44,7 +44,7 @@
 .convite-header h2 {
   margin: 0;
   font-size: 1.4rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -99,7 +99,7 @@
 .alerta-sucesso h4 {
   margin: 0 0 8px 0;
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .detalhes-convite {
@@ -131,7 +131,7 @@
 
 .info-row .valor {
   color: #0f172a;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .info-row .destaque {
@@ -154,7 +154,7 @@
 .instrucoes-box h4 {
   margin: 0 0 12px 0;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -189,7 +189,7 @@
   border: none;
   border-radius: 12px;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,7 +201,7 @@
 
 .btn-abrir-camera:hover {
   background: #1d4ed8;
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .camera-viewport {
@@ -262,7 +262,7 @@
   color: #475569;
   border: none;
   border-radius: 10px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -273,7 +273,7 @@
   color: #ffffff;
   border: none;
   border-radius: 10px;
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -321,7 +321,7 @@
   color: #475569;
   border: none;
   border-radius: 10px;
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -336,7 +336,7 @@
   color: #ffffff;
   border: none;
   border-radius: 10px;
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;

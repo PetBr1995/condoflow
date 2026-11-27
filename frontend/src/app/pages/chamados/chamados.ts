@@ -110,6 +110,20 @@ export class Chamados implements OnInit {
     return lista;
   }
 
+  countStatus(status: string): number {
+    if (status === 'todos') return this.chamados.length;
+    return this.chamados.filter(c => c.status === status).length;
+  }
+
+  getStatusLabel(status: string): string {
+    const s = (status || '').toLowerCase();
+    if (s === 'aberto') return 'Aberto';
+    if (s === 'em_andamento') return 'Em andamento';
+    if (s === 'concluido') return 'Finalizado';
+    if (s === 'cancelado') return 'Cancelado';
+    return status;
+  }
+
   // Helpers de Apresentação do Design System
   getIconeCategoria(categoria?: string): string {
     const cat = (categoria || '').toLowerCase();

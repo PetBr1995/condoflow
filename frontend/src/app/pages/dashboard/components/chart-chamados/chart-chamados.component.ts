@@ -41,13 +41,20 @@ export class ChartChamadosComponent implements AfterViewInit, OnChanges {
         labels: ['Em andamento', 'Concluídos', 'Abertos'],
         datasets: [{
           // 4. MÁGICA: Trocamos os números fixos pelos dados da nossa caixa!
-          data: [this.dados.chamados_andamento, this.dados.chamados_concluidos, this.dados.chamados_abertos], 
-          backgroundColor: ['#f59e0b', '#10b981', '#ef4444'],
+          data: [
+            this.dados.chamados_andamento || 0,
+            this.dados.chamados_concluidos || 0,
+            this.dados.chamados_abertos || 0
+          ], 
+          backgroundColor: ['#d97706', '#16a34a', '#e11d48'],
+          borderWidth: 2,
+          borderColor: '#ffffff'
         }]
       },
       options: {
         responsive: true,
-        cutout: '75%', 
+        maintainAspectRatio: false,
+        cutout: '72%', 
         plugins: {
           legend: { display: false }
         }
