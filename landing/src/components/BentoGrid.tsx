@@ -7,11 +7,9 @@ import {
   CalendarDays,
   Smartphone,
   CheckCircle2,
-  Clock,
   QrCode,
-  ArrowUpRight,
-  ShieldAlert,
 } from "lucide-react";
+import { MagicCard } from "./magicui/magic-card";
 
 export default function BentoGrid() {
   return (
@@ -30,10 +28,10 @@ export default function BentoGrid() {
           </p>
         </div>
 
-        {/* Grade Bento 4x4 Assimétrica */}
+        {/* Grade Bento 4x4 com MagicCard (Spotlight Interativo) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card A: Biometria Facial por IA (2 Colunas) */}
-          <div className="md:col-span-2 rounded-xl border border-border bg-surface p-6 sm:p-8 flex flex-col justify-between hover:border-border-strong hover:shadow-card-hover transition-all duration-200 group">
+          <MagicCard className="md:col-span-2 p-6 sm:p-8" gradientColor="rgba(37, 99, 235, 0.08)">
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-lg bg-page-subtle border border-border flex items-center justify-center text-brand-slate group-hover:scale-105 transition-transform">
                 <ScanFace className="w-5 h-5" />
@@ -78,10 +76,10 @@ export default function BentoGrid() {
                 </p>
               </div>
             </div>
-          </div>
+          </MagicCard>
 
           {/* Card B: Gestão de Encomendas Rastreável (1 Coluna) */}
-          <div className="rounded-xl border border-border bg-surface p-6 sm:p-8 flex flex-col justify-between hover:border-border-strong hover:shadow-card-hover transition-all duration-200 group">
+          <MagicCard className="p-6 sm:p-8" gradientColor="rgba(37, 99, 235, 0.08)">
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-lg bg-page-subtle border border-border flex items-center justify-center text-brand-slate group-hover:scale-105 transition-transform">
                 <PackageCheck className="w-5 h-5" />
@@ -110,10 +108,10 @@ export default function BentoGrid() {
                 </span>
               </div>
             </div>
-          </div>
+          </MagicCard>
 
           {/* Card C: Chamados com Linha do Tempo e SLA (1 Coluna) */}
-          <div className="rounded-xl border border-border bg-surface p-6 sm:p-8 flex flex-col justify-between hover:border-border-strong hover:shadow-card-hover transition-all duration-200 group">
+          <MagicCard className="p-6 sm:p-8" gradientColor="rgba(37, 99, 235, 0.08)">
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-lg bg-page-subtle border border-border flex items-center justify-center text-brand-slate group-hover:scale-105 transition-transform">
                 <Wrench className="w-5 h-5" />
@@ -137,10 +135,10 @@ export default function BentoGrid() {
                 <div className="text-blue-600 font-medium">Técnico designado • SLA 2h</div>
               </div>
             </div>
-          </div>
+          </MagicCard>
 
           {/* Card D: Reservas de Áreas Comuns com Regras (2 Colunas) */}
-          <div className="md:col-span-2 rounded-xl border border-border bg-surface p-6 sm:p-8 flex flex-col justify-between hover:border-border-strong hover:shadow-card-hover transition-all duration-200 group">
+          <MagicCard className="md:col-span-2 p-6 sm:p-8" gradientColor="rgba(37, 99, 235, 0.08)">
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-lg bg-page-subtle border border-border flex items-center justify-center text-brand-slate group-hover:scale-105 transition-transform">
                 <CalendarDays className="w-5 h-5" />
@@ -168,7 +166,7 @@ export default function BentoGrid() {
                 Reserva Confirmada • Taxa Quitada
               </span>
             </div>
-          </div>
+          </MagicCard>
         </div>
       </div>
     </section>

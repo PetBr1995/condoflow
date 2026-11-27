@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, ArrowRight, Sparkles } from "lucide-react";
+import { BorderBeam } from "./magicui/border-beam";
 
 export default function PricingSection() {
   const [billingCycle, setBillingCycle] = useState<"mensal" | "anual">("anual");
@@ -122,6 +123,10 @@ export default function PricingSection() {
                   : "border-border bg-page hover:border-border-strong"
               }`}
             >
+              {plan.highlight && (
+                <BorderBeam size={240} duration={10} colorFrom="#2563EB" colorTo="#38BDF8" borderWidth={1.5} />
+              )}
+
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-semibold bg-brand-slate text-white shadow-xs">

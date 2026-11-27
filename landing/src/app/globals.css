@@ -70,3 +70,30 @@ body {
   font-weight: 500;
   color: #475569;
 }
+
+/* ── Magic UI Animations ── */
+@keyframes border-beam {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes retro-grid {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(60px);
+  }
+}
+
+.animate-border-beam {
+  animation: border-beam var(--duration, 14s) infinite linear;
+}
+
+.animate-retro-grid {
+  animation: retro-grid 18s linear infinite;
+}

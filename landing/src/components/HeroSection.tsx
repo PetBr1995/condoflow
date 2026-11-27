@@ -2,14 +2,15 @@
 
 import { ArrowRight, ShieldCheck, Zap, Lock, ChevronRight } from "lucide-react";
 import InteractiveHeroSim from "./InteractiveHeroSim";
+import { RetroGrid } from "./magicui/retro-grid";
 
 export default function HeroSection() {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4200";
 
   return (
     <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
-      {/* Background sutil quadriculado / grid sutil estilo Stripe/Vercel */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f015_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f015_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
+      {/* Background RetroGrid sutil estilo Magic UI / Linear */}
+      <RetroGrid className="opacity-40" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Topo do Hero: Eyebrow Badge */}

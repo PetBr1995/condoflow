@@ -1,13 +1,14 @@
 "use client";
 
 import { Star, ShieldCheck, Quote, Building } from "lucide-react";
+import { NumberTicker } from "./magicui/number-ticker";
 
 export default function SocialProof() {
   const stats = [
-    { value: "+45.000", label: "Acessos diários processados", detail: "Com 99.8% de precisão biométrica" },
-    { value: "0", label: "Extravios de encomendas", detail: "Em mais de 120 condomínios auditados" },
-    { value: "14ms", label: "Tempo de resposta do totem", detail: "O mais rápido do mercado brasileiro" },
-    { value: "-78%", label: "Redução de filas no horário de pico", detail: "Medido em entradas de pedestres e veículos" },
+    { num: 45000, prefix: "+", suffix: "", label: "Acessos diários processados", detail: "Com 99.8% de precisão biométrica" },
+    { num: 0, prefix: "", suffix: "", isStatic: true, label: "Extravios de encomendas", detail: "Em mais de 120 condomínios auditados" },
+    { num: 14, prefix: "", suffix: "ms", label: "Tempo de resposta do totem", detail: "O mais rápido do mercado brasileiro" },
+    { num: 78, prefix: "-", suffix: "%", label: "Redução de filas no pico", detail: "Medido em entradas de pedestres e veículos" },
   ];
 
   const testimonials = [
@@ -42,7 +43,11 @@ export default function SocialProof() {
           {stats.map((stat, i) => (
             <div key={i} className="space-y-1">
               <div className="font-display font-semibold text-3xl sm:text-4xl text-ink-primary tracking-tight">
-                {stat.value}
+                {stat.isStatic ? (
+                  <span>0</span>
+                ) : (
+                  <NumberTicker value={stat.num} prefix={stat.prefix} suffix={stat.suffix} />
+                )}
               </div>
               <div className="text-xs sm:text-sm font-semibold text-ink-secondary">
                 {stat.label}

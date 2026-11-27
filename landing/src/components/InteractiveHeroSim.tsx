@@ -15,6 +15,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { BorderBeam } from "./magicui/border-beam";
 
 export default function InteractiveHeroSim() {
   const [activeTab, setActiveTab] = useState<"facial" | "encomendas" | "auditoria">("facial");
@@ -49,7 +50,8 @@ export default function InteractiveHeroSim() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto rounded-xl border border-border bg-surface shadow-modal overflow-hidden">
+    <div className="relative w-full max-w-4xl mx-auto rounded-xl border border-border bg-surface shadow-modal overflow-hidden">
+      <BorderBeam size={300} duration={14} colorFrom="#2563EB" colorTo="#38BDF8" borderWidth={1.5} />
       {/* Barra de Janela / Frame de Aplicação estilo Vercel / Linear */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-page-subtle border-b border-border text-xs">
         <div className="flex items-center gap-2">
