@@ -18,6 +18,12 @@ export class EncomendasComponent implements OnInit {
   encomendas: Encomenda[] = [];
   unidades: any[] = [];
   filtroStatus: string = 'todas';
+  termoBuscaLista: string = '';
+  buscaUnidadeForm: string = '';
+
+  carregando: boolean = true;
+  salvando: boolean = false;
+  dandoBaixaId: number | null = null;
 
   mostrarFormulario: boolean = false;
   enderecoSelecionadoId: number | null = null;
@@ -45,9 +51,16 @@ export class EncomendasComponent implements OnInit {
   }
 
   carregarEncomendas(): void {
+    this.carregando = true;
     this.encomendasService.getEncomendas().subscribe({
-      next: (dados) => this.encomendas = dados,
-      error: () => this.mensagemErro = 'Erro ao carregar encomendas.'
+      next: (dados) => {
+        this.encomendas = dados;
+        this.carregando = false;
+      },
+      error: () => {
+        this.mensagemErro = 'Não foi possível carregar as encomendas. Verifique sua conexão.';
+        this.carregando = false;
+      }
     });
   }
 
@@ -64,16 +77,53 @@ export class EncomendasComponent implements OnInit {
     });
   }
 
+  unidadesFiltradas(): any[] {
+    if (!this.buscaUnidadeForm.trim()) return this.unidades;
+    const termo = this.buscaUnidadeForm.toLowerCase();
+    return this.unidades.filter(u =>
+      (u.bloco || '').toLowerCase().includes(termo) ||
+      (u.numero || '').toLowerCase().includes(termo)
+    );
+  }
+
   encomendasFiltradas(): Encomenda[] {
-    if (this.filtroStatus === 'todas') return this.encomendas;
-    return this.encomendas.filter(e => e.status === this.filtroStatus);
+    let lista = this.encomendas;
+
+    if (this.filtroStatus !== 'todas') {
+      lista = lista.filter(e => e.status === this.filtroStatus);
+    }
+
+    if (this.termoBuscaLista.trim()) {
+      const termo = this.termoBuscaLista.toLowerCase();
+      lista = lista.filter(e =>
+        (e.numero || '').toLowerCase().includes(termo) ||
+        (e.bloco || '').toLowerCase().includes(termo) ||
+        (e.empresa_entrega || '').toLowerCase().includes(termo) ||
+        (e.descricao || '').toLowerCase().includes(termo) ||
+        (e.codigo_retirada || '').toLowerCase().includes(termo) ||
+        (e.codigo_rastreio || '').toLowerCase().includes(termo)
+      );
+    }
+
+    return lista;
+  }
+
+  totalAguardando(): number {
+    return this.encomendas.filter(e => e.status === 'aguardando_retirada').length;
+  }
+
+  totalEntregues(): number {
+    return this.encomendas.filter(e => e.status === 'entregue').length;
   }
 
   registrarChegada(): void {
     if (!this.enderecoSelecionadoId) {
-      this.mensagemErro = 'Selecione a unidade de destino.';
+      this.mensagemErro = 'Selecione a unidade de destino da encomenda.';
       return;
     }
+
+    this.salvando = true;
+    this.mensagemErro = '';
 
     this.encomendasService.registrarEncomenda({
       endereco: this.enderecoSelecionadoId,
@@ -84,21 +134,39 @@ export class EncomendasComponent implements OnInit {
       next: (enc) => {
         this.mensagemSucesso = `Encomenda registrada com sucesso para ${enc.unidade_str}! Código de retirada: ${enc.codigo_retirada}`;
         this.mostrarFormulario = false;
+        this.salvando = false;
         this.codigoRastreio = '';
+        this.buscaUnidadeForm = '';
         this.carregarEncomendas();
+
+        setTimeout(() => {
+          this.mensagemSucesso = '';
+        }, 5000);
       },
-      error: () => this.mensagemErro = 'Erro ao registrar encomenda.'
+      error: () => {
+        this.mensagemErro = 'Erro ao registrar encomenda. Verifique os dados e tente novamente.';
+        this.salvando = false;
+      }
     });
   }
 
   darBaixa(id: number): void {
     if (confirm('Confirmar a entrega do pacote ao morador?')) {
+      this.dandoBaixaId = id;
       this.encomendasService.darBaixa(id).subscribe({
         next: () => {
-          this.mensagemSucesso = 'Entrega confirmada com sucesso!';
+          this.mensagemSucesso = 'Entrega confirmada com sucesso! O status foi atualizado.';
+          this.dandoBaixaId = null;
           this.carregarEncomendas();
+
+          setTimeout(() => {
+            this.mensagemSucesso = '';
+          }, 4000);
         },
-        error: () => alert('Erro ao dar baixa na encomenda.')
+        error: () => {
+          this.dandoBaixaId = null;
+          this.mensagemErro = 'Erro ao confirmar entrega.';
+        }
       });
     }
   }

@@ -1,163 +1,382 @@
 <div class="encomendas-page">
+  <!-- Header da Página -->
   <header class="header-encomendas">
-    <div>
+    <div class="header-info">
       <h2>Portaria & Encomendas</h2>
-      <p>Controle de encomendas recebidas na portaria e aviso aos moradores</p>
+      <p>Rastreamento seguro de pacotes recebidos e aviso instantâneo aos condôminos</p>
     </div>
 
     @if (authService.isSindico) {
-      <button class="btn-novo touch-target focus-ring" (click)="mostrarFormulario = !mostrarFormulario">
-        <mat-icon>{{ mostrarFormulario ? 'close' : 'inventory_2' }}</mat-icon>
-        {{ mostrarFormulario ? 'Fechar' : 'Receber Encomenda' }}
+      <button 
+        type="button" 
+        class="btn-primary focus-ring" 
+        (click)="mostrarFormulario = !mostrarFormulario"
+        [attr.aria-expanded]="mostrarFormulario"
+      >
+        <mat-icon>{{ mostrarFormulario ? 'close' : 'add_box' }}</mat-icon>
+        <span>{{ mostrarFormulario ? 'Fechar Cadastro' : 'Receber Nova Encomenda' }}</span>
       </button>
     }
   </header>
 
+  <!-- Feedback de Sucesso -->
   @if (mensagemSucesso) {
-    <div class="alerta alerta-sucesso">
-      <mat-icon>check_circle</mat-icon>
-      <span>{{ mensagemSucesso }}</span>
+    <div class="alerta alerta-sucesso" role="status">
+      <div class="alerta-conteudo">
+        <mat-icon class="alerta-icone">check_circle</mat-icon>
+        <span>{{ mensagemSucesso }}</span>
+      </div>
+      <button type="button" class="btn-fechar-alerta" (click)="mensagemSucesso = ''" aria-label="Fechar alerta">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
   }
 
+  <!-- Feedback de Erro -->
   @if (mensagemErro) {
-    <div class="alerta alerta-erro">
-      <mat-icon>error</mat-icon>
-      <span>{{ mensagemErro }}</span>
+    <div class="alerta alerta-erro" role="alert">
+      <div class="alerta-conteudo">
+        <mat-icon class="alerta-icone">error_outline</mat-icon>
+        <span>{{ mensagemErro }}</span>
+      </div>
+      <button type="button" class="btn-fechar-alerta" (click)="mensagemErro = ''" aria-label="Fechar alerta">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
   }
 
+  <!-- Formulário de Registro Rápido (Portaria / Síndico) -->
   @if (mostrarFormulario && authService.isSindico) {
-    <section class="card-formulario">
-      <h3>Registrar Chegada de Pacote na Portaria</h3>
+    <section class="card-formulario animate-slide-down">
+      <div class="form-header">
+        <div class="form-title-group">
+          <div class="form-icon-box">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <div>
+            <h3>Registrar Chegada de Pacote na Portaria</h3>
+            <p>O morador receberá uma notificação automática no app com o código de retirada.</p>
+          </div>
+        </div>
+      </div>
 
       <div class="form-grid">
-        <div class="campo">
-          <label>Unidade / Apartamento Destino</label>
-          <select [(ngModel)]="enderecoSelecionadoId">
-            @for (unid of unidades; track unid.id) {
-              <option [value]="unid.id">Bloco {{ unid.bloco }} - Apto {{ unid.numero }}</option>
-            }
-          </select>
+        <!-- 1. Unidade de Destino com Busca Rápida -->
+        <div class="campo campo-destaque">
+          <label for="filtro-unidade">
+            <span>Unidade / Apartamento Destino</span>
+            <span class="label-dica">Digite para filtrar</span>
+          </label>
+          <div class="input-com-icone">
+            <mat-icon>domain</mat-icon>
+            <input 
+              id="filtro-unidade"
+              type="text" 
+              [(ngModel)]="buscaUnidadeForm" 
+              placeholder="Ex: 101 ou Bloco A..." 
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="select-unidade-wrapper">
+            <select 
+              id="select-unidade"
+              [(ngModel)]="enderecoSelecionadoId" 
+              class="select-custom"
+              aria-label="Selecionar unidade de destino"
+            >
+              @if (unidadesFiltradas().length === 0) {
+                <option [value]="null" disabled>Nenhum apartamento encontrado</option>
+              } @else {
+                @for (unid of unidadesFiltradas(); track unid.id) {
+                  <option [value]="unid.id">Bloco {{ unid.bloco }} — Apto {{ unid.numero }}</option>
+                }
+              }
+            </select>
+          </div>
         </div>
 
+        <!-- 2. Transportadora -->
         <div class="campo">
-          <label>Transportadora / Origem</label>
-          <select [(ngModel)]="empresaEntrega">
-            @for (emp of empresasDisponiveis; track emp) {
-              <option [value]="emp">{{ emp }}</option>
-            }
-          </select>
+          <label for="empresa-entrega">Transportadora / Origem</label>
+          <div class="select-wrapper">
+            <select id="empresa-entrega" [(ngModel)]="empresaEntrega" class="select-custom">
+              @for (emp of empresasDisponiveis; track emp) {
+                <option [value]="emp">{{ emp }}</option>
+              }
+            </select>
+          </div>
         </div>
 
+        <!-- 3. Descrição do Pacote -->
         <div class="campo">
-          <label>Descrição do Pacote</label>
-          <input type="text" [(ngModel)]="descricao" placeholder="Ex.: Caixa média papelão / Envelope" />
+          <label for="descricao-pacote">Descrição do Pacote</label>
+          <div class="input-com-icone">
+            <mat-icon>notes</mat-icon>
+            <input 
+              id="descricao-pacote"
+              type="text" 
+              [(ngModel)]="descricao" 
+              placeholder="Ex.: Caixa média papelão / Envelope" 
+            />
+          </div>
         </div>
 
+        <!-- 4. Código de Rastreio (Opcional) -->
         <div class="campo">
-          <label>Código de Rastreio (Opcional)</label>
-          <input type="text" [(ngModel)]="codigoRastreio" placeholder="Ex.: BR123456789" />
+          <label for="codigo-rastreio">
+            <span>Código de Rastreio</span>
+            <span class="label-opcional">(Opcional)</span>
+          </label>
+          <div class="input-com-icone">
+            <mat-icon>qr_code_scanner</mat-icon>
+            <input 
+              id="codigo-rastreio"
+              type="text" 
+              [(ngModel)]="codigoRastreio" 
+              placeholder="Ex.: BR123456789ML" 
+            />
+          </div>
         </div>
       </div>
 
       <div class="form-acoes">
-        <button class="btn-confirmar" (click)="registrarChegada()">
-          Salvar e Notificar Morador
+        <button 
+          type="button" 
+          class="btn-cancelar focus-ring" 
+          (click)="mostrarFormulario = false"
+          [disabled]="salvando"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn-confirmar focus-ring" 
+          (click)="registrarChegada()"
+          [disabled]="salvando || !enderecoSelecionadoId"
+        >
+          @if (salvando) {
+            <span class="spinner-mini"></span>
+            <span>Salvando...</span>
+          } @else {
+            <mat-icon>save</mat-icon>
+            <span>Salvar e Notificar Morador</span>
+          }
         </button>
       </div>
     </section>
   }
 
+  <!-- Barra de Filtros e Busca Rápida na Lista -->
   <section class="secao-encomendas">
-    <div class="topo-filtros">
-      <h3>{{ authService.isSindico ? 'Todas as Encomendas na Portaria' : 'Minhas Encomendas' }}</h3>
-      <div class="filtros">
-        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroStatus === 'todas'" (click)="filtroStatus = 'todas'">Todas</button>
-        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroStatus === 'aguardando_retirada'" (click)="filtroStatus = 'aguardando_retirada'">Aguardando Retirada</button>
-        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroStatus === 'entregue'" (click)="filtroStatus = 'entregue'">Entregues</button>
+    <div class="barra-ferramentas">
+      <div class="topo-filtros-tabs">
+        <button 
+          type="button"
+          class="tab-btn focus-ring" 
+          [class.ativo]="filtroStatus === 'todas'" 
+          (click)="filtroStatus = 'todas'"
+        >
+          <span>Todas</span>
+          <span class="tab-badge">{{ encomendas.length }}</span>
+        </button>
+        <button 
+          type="button"
+          class="tab-btn focus-ring" 
+          [class.ativo]="filtroStatus === 'aguardando_retirada'" 
+          (click)="filtroStatus = 'aguardando_retirada'"
+        >
+          <span class="dot-status dot-aguardando"></span>
+          <span>Aguardando Retirada</span>
+          <span class="tab-badge badge-alerta">{{ totalAguardando() }}</span>
+        </button>
+        <button 
+          type="button"
+          class="tab-btn focus-ring" 
+          [class.ativo]="filtroStatus === 'entregue'" 
+          (click)="filtroStatus = 'entregue'"
+        >
+          <span class="dot-status dot-entregue"></span>
+          <span>Entregues</span>
+          <span class="tab-badge">{{ totalEntregues() }}</span>
+        </button>
       </div>
-    </div>
 
-    @if (encomendasFiltradas().length === 0) {
-      <div class="empty-state-box">
-        <mat-icon>markunread_mailbox</mat-icon>
-        <div class="empty-title">Nenhuma encomenda encontrada</div>
-        <p class="empty-desc">Não há pacotes registrados para o filtro selecionado no momento.</p>
-        @if (authService.isSindico && !mostrarFormulario) {
-          <button class="btn-novo touch-target focus-ring" style="margin-top: 12px;" (click)="mostrarFormulario = true">
-            <mat-icon>inventory_2</mat-icon> Registrar Nova Encomenda
+      <!-- Campo de Busca em Tempo Real -->
+      <div class="busca-input-box">
+        <mat-icon class="busca-icon">search</mat-icon>
+        <input 
+          type="text" 
+          [(ngModel)]="termoBuscaLista" 
+          placeholder="Buscar por apto, rastreio, morador..." 
+          aria-label="Buscar encomendas na lista"
+        />
+        @if (termoBuscaLista) {
+          <button type="button" class="btn-limpar-busca" (click)="termoBuscaLista = ''">
+            <mat-icon>close</mat-icon>
           </button>
         }
       </div>
-    } @else {
+    </div>
+
+    <!-- 1. Estado de Carregamento (Skeleton) -->
+    @if (carregando) {
+      <div class="skeletons-wrapper" aria-busy="true" aria-label="Carregando encomendas">
+        @for (item of [1, 2, 3]; track item) {
+          <div class="skeleton-card">
+            <div class="skeleton-icone"></div>
+            <div class="skeleton-conteudo">
+              <div class="skeleton-linha w-40"></div>
+              <div class="skeleton-linha w-60"></div>
+              <div class="skeleton-linha w-30"></div>
+            </div>
+            <div class="skeleton-lateral">
+              <div class="skeleton-badge"></div>
+              <div class="skeleton-botao"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- 2. Estado Vazio (Empty State) -->
+    @else if (encomendasFiltradas().length === 0) {
+      <div class="empty-state-card">
+        <div class="empty-icon-box">
+          <mat-icon>inbox</mat-icon>
+        </div>
+        <h4>Nenhuma encomenda encontrada</h4>
+        <p>
+          @if (termoBuscaLista) {
+            Não encontramos nenhum pacote correspondente a "<strong>{{ termoBuscaLista }}</strong>".
+          } @else if (filtroStatus === 'aguardando_retirada') {
+            Excelente! Não há nenhum pacote pendente de retirada na portaria neste momento.
+          } @else {
+            Não há pacotes registrados para este filtro.
+          }
+        </p>
+
+        @if (authService.isSindico && !mostrarFormulario) {
+          <button 
+            type="button" 
+            class="btn-primary btn-empty focus-ring" 
+            (click)="mostrarFormulario = true"
+          >
+            <mat-icon>add_box</mat-icon>
+            <span>Receber Novo Pacote</span>
+          </button>
+        }
+      </div>
+    }
+
+    <!-- 3. Lista de Encomendas -->
+    @else {
       <div class="lista-encomendas">
         @for (enc of encomendasFiltradas(); track enc.id) {
-          <article class="card-encomenda" [class.encomenda-retirada]="enc.status === 'entregue'">
+          <article 
+            class="card-encomenda" 
+            [class.card-entregue]="enc.status === 'entregue'"
+          >
+            <!-- Coluna Principal / Dados da Encomenda -->
             <div class="encomenda-principal">
-              <div class="icone-transportadora" [class]="'icone-transportadora ' + getCarrierBrand(enc.empresa_entrega).classe">
-                <mat-icon>{{ enc.status === 'entregue' ? 'task_alt' : getCarrierBrand(enc.empresa_entrega).icone }}</mat-icon>
+              <div class="transportadora-squircle" [class]="'transportadora-squircle ' + getCarrierBrand(enc.empresa_entrega).classe">
+                <mat-icon>{{ enc.status === 'entregue' ? 'check_circle' : getCarrierBrand(enc.empresa_entrega).icone }}</mat-icon>
               </div>
-              <div class="detalhes">
-                <div class="detalhes-header">
+
+              <div class="detalhes-bloco">
+                <div class="detalhes-topline">
                   <span class="badge-transportadora" [class]="'badge-transportadora ' + getCarrierBrand(enc.empresa_entrega).classe">
                     {{ enc.empresa_entrega }}
                   </span>
-                  <span class="separador">·</span>
+                  @if (enc.codigo_rastreio) {
+                    <span class="tag-rastreio font-mono">#{{ enc.codigo_rastreio }}</span>
+                  }
+                  <span class="separador-ponto">·</span>
                   <span class="descricao-pacote">{{ enc.descricao }}</span>
                 </div>
-                <p class="destino">Destino: <strong>Bloco {{ enc.bloco }} - Apto {{ enc.numero }}</strong></p>
-                <small class="data tabular-nums">Recebido em: {{ enc.data_recebimento | date:'dd/MM/yyyy HH:mm' }}</small>
 
-                <!-- Mini Timeline Stepper (Recebido -> Notificado -> Entregue) -->
-                <div class="mini-timeline">
-                  <div class="step-item step-concluido">
+                <div class="unidade-destino">
+                  <span>Destino:</span>
+                  <strong>Bloco {{ enc.bloco }} — Apto {{ enc.numero }}</strong>
+                </div>
+
+                <div class="metadados-recebimento">
+                  <mat-icon class="meta-icon">schedule</mat-icon>
+                  <span>Recebido em {{ enc.data_recebimento | date:'dd/MM/yyyy às HH:mm' }}</span>
+                </div>
+
+                <!-- Mini Timeline Visual Limpa -->
+                <div class="mini-stepper" aria-hidden="true">
+                  <div class="step-node step-ok">
                     <span class="step-dot"></span>
-                    <span class="step-label">Portaria</span>
+                    <span class="step-text">Portaria</span>
                   </div>
-                  <div class="step-line active"></div>
-                  <div class="step-item step-concluido">
+                  <div class="step-track track-active"></div>
+                  <div class="step-node step-ok">
                     <span class="step-dot"></span>
-                    <span class="step-label">Notificado</span>
+                    <span class="step-text">Notificado</span>
                   </div>
-                  <div class="step-line" [class.active]="enc.status === 'entregue'"></div>
-                  <div class="step-item" [class.step-concluido]="enc.status === 'entregue'">
+                  <div class="step-track" [class.track-active]="enc.status === 'entregue'"></div>
+                  <div class="step-node" [class.step-ok]="enc.status === 'entregue'">
                     <span class="step-dot"></span>
-                    <span class="step-label">{{ enc.status === 'entregue' ? 'Entregue' : 'Aguardando' }}</span>
+                    <span class="step-text">{{ enc.status === 'entregue' ? 'Entregue' : 'Aguardando' }}</span>
                   </div>
                 </div>
               </div>
             </div>
 
+            <!-- Coluna Lateral / Código e Ação de Baixa -->
             <div class="encomenda-lateral">
-              <span class="badge-status" [class]="'badge-' + enc.status">
-                {{ enc.status_display }}
-              </span>
+              <div class="badge-status-container">
+                <span class="badge-status" [class]="'badge-status-' + enc.status">
+                  <span class="status-indicator-dot"></span>
+                  {{ enc.status_display }}
+                </span>
+              </div>
 
               @if (enc.status === 'aguardando_retirada') {
-                <div class="codigo-retirada-box">
-                  <div class="codigo-topo">
-                    <small>Cód. Retirada</small>
+                <div class="codigo-retirada-card">
+                  <div class="codigo-header">
+                    <span class="codigo-label">CÓD. RETIRADA</span>
                     <button
                       type="button"
                       class="btn-copiar-mini focus-ring"
                       (click)="copiarCodigo(enc.codigo_retirada, enc.id)"
-                      [title]="codigoCopiadoId === enc.id ? 'Copiado!' : 'Copiar código'"
+                      [title]="codigoCopiadoId === enc.id ? 'Código copiado!' : 'Copiar código'"
                     >
                       <mat-icon>{{ codigoCopiadoId === enc.id ? 'check' : 'content_copy' }}</mat-icon>
-                      <span>{{ codigoCopiadoId === enc.id ? 'Copiado!' : 'Copiar' }}</span>
+                      <span>{{ codigoCopiadoId === enc.id ? 'Copiado' : 'Copiar' }}</span>
                     </button>
                   </div>
-                  <strong class="tabular-nums">{{ enc.codigo_retirada }}</strong>
+                  <div class="codigo-valor font-mono">
+                    {{ enc.codigo_retirada }}
+                  </div>
                 </div>
 
                 @if (authService.isSindico) {
-                  <button class="btn-dar-baixa touch-target focus-ring" (click)="darBaixa(enc.id)">
-                    <mat-icon>check</mat-icon> Confirmar Entrega
+                  <button 
+                    type="button"
+                    class="btn-dar-baixa focus-ring" 
+                    (click)="darBaixa(enc.id)"
+                    [disabled]="dandoBaixaId === enc.id"
+                  >
+                    @if (dandoBaixaId === enc.id) {
+                      <span class="spinner-mini-dark"></span>
+                      <span>Baixando...</span>
+                    } @else {
+                      <mat-icon>task_alt</mat-icon>
+                      <span>Confirmar Entrega</span>
+                    }
                   </button>
                 }
               } @else {
-                <small class="data-retirada tabular-nums">Retirado em {{ enc.data_retirada | date:'dd/MM/yyyy HH:mm' }}</small>
+                <div class="entregue-info-box">
+                  <mat-icon class="entregue-icon">verified</mat-icon>
+                  <div>
+                    <span class="entregue-label">Entregue ao morador</span>
+                    <span class="entregue-data font-mono">{{ enc.data_retirada | date:'dd/MM/yyyy HH:mm' }}</span>
+                  </div>
+                </div>
               }
             </div>
           </article>

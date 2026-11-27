@@ -1,9 +1,14 @@
+/* ==========================================================================
+   Módulo: Portaria & Encomendas - UI/UX Pro Max (Sober SaaS Standard)
+   ========================================================================== */
+
 .encomendas-page {
   padding: 24px;
-  max-width: 1000px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
+/* ── Header da Página ── */
 .header-encomendas {
   display: flex;
   justify-content: space-between;
@@ -13,23 +18,24 @@
   gap: 16px;
 }
 
-.header-encomendas h2 {
+.header-info h2 {
   font-size: 20px;
   font-weight: 600;
-  color: var(--color-text-main, #0f172a);
+  color: #0f172a;
   letter-spacing: -0.02em;
-  margin: 0 0 2px 0;
+  margin: 0 0 4px 0;
   line-height: 28px;
 }
 
-.header-encomendas p {
-  color: var(--color-text-muted, #64748b);
+.header-info p {
+  color: #64748b;
   font-size: 13px;
   margin: 0;
   line-height: 20px;
 }
 
-.btn-novo {
+/* ── Botões Primários e Secundários ── */
+.btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -37,28 +43,74 @@
   color: #ffffff;
   border: 1px solid #0f172a;
   border-radius: 6px;
-  height: 36px;
+  height: 38px;
   padding: 0 14px;
   font-weight: 500;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.15s ease;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  user-select: none;
 }
 
-.btn-novo:hover {
+.btn-primary:hover {
   background-color: #1e293b;
   border-color: #1e293b;
 }
 
+.btn-primary mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* ── Alertas de Feedback ── */
 .alerta {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--radius-md, 8px);
+  padding: 10px 14px;
+  border-radius: 8px;
   margin-bottom: 20px;
-  font-size: 0.9rem;
+  font-size: 13px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.alerta-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alerta-icone {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.btn-fechar-alerta {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.btn-fechar-alerta:hover {
+  opacity: 1;
+}
+
+.btn-fechar-alerta mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .alerta-sucesso {
@@ -73,20 +125,73 @@
   border: 1px solid #fecaca;
 }
 
+/* ── Card de Formulário (Registrar Encomenda) ── */
 .card-formulario {
-  background: var(--color-surface, #ffffff);
-  border: 1px solid var(--color-border-subtle, #e2e8f0);
-  border-radius: var(--radius-lg, 12px);
-  padding: 24px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.05));
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
-.card-formulario h3 {
-  margin: 0 0 16px 0;
-  color: var(--color-text-main, #0f172a);
-  font-size: 1.15rem;
+.animate-slide-down {
+  animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-header {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.form-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.form-icon-box mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.form-title-group h3 {
+  margin: 0 0 2px 0;
+  font-size: 15px;
   font-weight: 600;
+  color: #0f172a;
+}
+
+.form-title-group p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
 }
 
 .form-grid {
@@ -95,430 +200,679 @@
   gap: 16px;
 }
 
-.campo label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-text-secondary, #334155);
-  margin-bottom: 6px;
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.campo input, .campo select {
+.campo label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label-dica {
+  font-size: 11px;
+  font-weight: 400;
+  color: #94a3b8;
+}
+
+.label-opcional {
+  font-size: 11px;
+  font-weight: 400;
+  color: #94a3b8;
+}
+
+.input-com-icone {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-com-icone mat-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.input-com-icone input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border-subtle, #cbd5e1);
-  border-radius: var(--radius-md, 8px);
-  font-size: 0.925rem;
-  color: var(--color-text-main, #0f172a);
+  padding: 8px 12px 8px 34px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #0f172a;
   background: #ffffff;
   box-sizing: border-box;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.15s ease;
+  font-family: inherit;
 }
 
-.campo input:focus, .campo select:focus {
+.input-com-icone input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #0f172a;
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.08);
+}
+
+.select-wrapper,
+.select-unidade-wrapper {
+  margin-top: 4px;
+}
+
+.select-custom {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.select-custom:focus {
+  outline: none;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.08);
 }
 
 .form-acoes {
-  margin-top: 18px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancelar {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0 14px;
+  height: 36px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-cancelar:hover {
+  background: #f8fafc;
+  color: #0f172a;
 }
 
 .btn-confirmar {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #059669;
+  background: #0f172a;
   color: #ffffff;
-  border: none;
-  border-radius: var(--radius-md, 8px);
-  padding: 10px 20px;
-  font-weight: 600;
-  font-size: 0.875rem;
+  border: 1px solid #0f172a;
+  border-radius: 6px;
+  padding: 0 16px;
+  height: 36px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  min-height: 44px;
-  transition: background-color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
-.btn-confirmar:hover {
-  background: #047857;
+.btn-confirmar:hover:not(:disabled) {
+  background: #1e293b;
 }
 
+.btn-confirmar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinner-mini {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Barra de Ferramentas (Tabs + Busca) ── */
 .secao-encomendas {
   margin-top: 8px;
 }
 
-.topo-filtros {
+.barra-ferramentas {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 16px;
   flex-wrap: wrap;
-  gap: 12px;
 }
 
-.topo-filtros h3 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--color-text-main, #0f172a);
-  margin: 0;
-}
-
-.filtros {
+.topo-filtros-tabs {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
   background: #f1f5f9;
-  padding: 2px;
-  border-radius: 6px;
   border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
 }
 
-.filtro-btn {
-  background: transparent;
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
   border: none;
-  border-radius: 4px;
-  padding: 0 10px;
-  height: 28px;
+  background: transparent;
   font-size: 12px;
   font-weight: 500;
-  cursor: pointer;
   color: #64748b;
-  transition: all 0.15s ease;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  user-select: none;
 }
 
-.filtro-btn:hover {
+.tab-btn:hover {
   color: #0f172a;
 }
 
-.filtro-btn.ativo {
+.tab-btn.ativo {
   background: #ffffff;
   color: #0f172a;
-  font-weight: 600;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
+.tab-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.tab-btn.ativo .tab-badge {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.badge-alerta {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.dot-status {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dot-aguardando {
+  background-color: #f59e0b;
+}
+
+.dot-entregue {
+  background-color: #10b981;
+}
+
+.busca-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+}
+
+.busca-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.busca-input-box input {
+  width: 100%;
+  padding: 7px 30px 7px 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 12px;
+  color: #0f172a;
+  transition: all 0.15s ease;
+}
+
+.busca-input-box input:focus {
+  outline: none;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.06);
+}
+
+.btn-limpar-busca {
+  position: absolute;
+  right: 6px;
+  background: transparent;
+  border: none;
+  padding: 2px;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-limpar-busca mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Skeletons de Carregamento ── */
+.skeletons-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.skeleton-icone {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  flex-shrink: 0;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.skeleton-conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-linha {
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.w-30 { width: 30%; }
+.w-40 { width: 40%; }
+.w-60 { width: 60%; }
+
+.skeleton-lateral {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.skeleton-badge {
+  width: 90px;
+  height: 20px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.skeleton-botao {
+  width: 120px;
+  height: 32px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── Empty State Amigável ── */
+.empty-state-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 48px 24px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.empty-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  color: #64748b;
+}
+
+.empty-icon-box mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.empty-state-card h4 {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.empty-state-card p {
+  margin: 0 auto;
+  font-size: 13px;
+  color: #64748b;
+  max-width: 420px;
+  line-height: 20px;
+}
+
+.btn-empty {
+  margin-top: 18px;
+}
+
+/* ── Lista de Cards de Encomenda ── */
 .lista-encomendas {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .card-encomenda {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 10px 14px;
-  min-height: 52px;
+  border-radius: 10px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-  flex-wrap: wrap;
-  gap: 12px;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  gap: 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .card-encomenda:hover {
   border-color: #cbd5e1;
-  background-color: #fafbfc;
+  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.04);
 }
 
-.card-encomenda.encomenda-retirada {
-  background: #f8fafc;
-  opacity: 0.88;
+.card-encomenda.card-entregue {
+  background: #fafafa;
+  border-color: #f1f5f9;
+  opacity: 0.9;
 }
 
+/* Coluna Principal do Card */
 .encomenda-principal {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 14px;
   flex: 1;
-  min-width: 240px;
+  min-width: 0;
 }
 
-.icone-transportadora {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+.transportadora-squircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #475569;
   flex-shrink: 0;
+  color: #0f172a;
 }
 
-.icone-transportadora mat-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-}
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #1d4ed8;
-  flex-shrink: 0;
-  transition: transform 0.15s ease;
+.transportadora-squircle mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
-/* Marcas Oficiais das Transportadoras */
-.icone-transportadora.brand-meli {
-  background: #fef9c3;
-  border-color: #fde047;
-  color: #854d0e;
+/* Cores Sutis de Transportadoras */
+.brand-meli { color: #d97706; background: #fffbeb; border-color: #fde68a; }
+.brand-amazon { color: #0284c7; background: #f0f9ff; border-color: #bae6fd; }
+.brand-correios { color: #ca8a04; background: #fefce8; border-color: #fef08a; }
+.brand-shopee { color: #ea580c; background: #fff7ed; border-color: #fed7aa; }
+.brand-magalu { color: #2563eb; background: #eff6ff; border-color: #bfdbfe; }
+.brand-loggi { color: #059669; background: #ecfdf5; border-color: #a7f3d0; }
+
+.detalhes-bloco {
+  flex: 1;
+  min-width: 0;
 }
 
-.icone-transportadora.brand-amazon {
-  background: #0f172a;
-  border-color: #334155;
-  color: #f97316;
-}
-
-.icone-transportadora.brand-correios {
-  background: #0284c7;
-  border-color: #0369a1;
-  color: #fde047;
-}
-
-.icone-transportadora.brand-shopee {
-  background: #fff7ed;
-  border-color: #fdba74;
-  color: #ea580c;
-}
-
-.icone-transportadora.brand-magalu {
-  background: #eff6ff;
-  border-color: #93c5fd;
-  color: #2563eb;
-}
-
-.icone-transportadora.brand-loggi {
-  background: #ecfeff;
-  border-color: #67e8f9;
-  color: #0891b2;
-}
-
-.icone-transportadora.icone-entregue {
-  background: #ecfdf5 !important;
-  border-color: #a7f3d0 !important;
-  color: #059669 !important;
-}
-
-.detalhes-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.badge-transportadora {
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.02em;
-}
-
-.badge-transportadora.brand-meli {
-  background: #fef08a;
-  color: #713f12;
-  border: 1px solid #facc15;
-}
-
-.badge-transportadora.brand-amazon {
-  background: #1e293b;
-  color: #fb923c;
-  border: 1px solid #334155;
-}
-
-.badge-transportadora.brand-correios {
-  background: #0369a1;
-  color: #fef08a;
-  border: 1px solid #0284c7;
-}
-
-.badge-transportadora.brand-shopee {
-  background: #ffedd5;
-  color: #c2410c;
-  border: 1px solid #fed7aa;
-}
-
-.badge-transportadora.brand-magalu {
-  background: #dbeafe;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-}
-
-.badge-transportadora.brand-loggi {
-  background: #cffafe;
-  color: #0e7490;
-  border: 1px solid #a5f3fc;
-}
-
-.badge-transportadora.brand-generica {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-}
-
-/* Mini Timeline Stepper (Portaria -> Notificado -> Entregue) */
-.mini-timeline {
+.detalhes-topline {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
 }
 
-.step-item {
+.badge-transportadora {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.tag-rastreio {
+  font-size: 11px;
+  font-family: inherit;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.separador-ponto {
+  color: #cbd5e1;
+}
+
+.descricao-pacote {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unidade-destino {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.unidade-destino strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.metadados-recebimento {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.meta-icon {
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Mini Stepper de Status ── */
+.mini-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.step-node {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
 .step-dot {
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #cbd5e1;
 }
 
-.step-concluido .step-dot {
-  background: #10b981;
-  box-shadow: 0 0 4px #10b981;
-}
-
-.step-label {
-  font-size: 0.72rem;
-  color: #64748b;
-  font-weight: 600;
-}
-
-.step-concluido .step-label {
-  color: #0f172a;
-}
-
-.step-line {
-  flex: 1;
-  height: 2px;
-  background: #e2e8f0;
-  max-width: 32px;
-}
-
-.step-line.active {
-  background: #10b981;
-}
-
-.detalhes strong {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-text-main, #0f172a);
-}
-
-.separador {
+.step-text {
+  font-size: 10px;
+  font-weight: 500;
   color: #94a3b8;
 }
 
-.descricao-pacote {
-  color: var(--color-text-secondary, #475569);
-  font-size: 0.95rem;
+.step-node.step-ok .step-dot {
+  background: #10b981;
 }
 
-.detalhes .destino {
-  margin: 4px 0 2px 0;
-  font-size: 0.875rem;
-  color: var(--color-text-secondary, #475569);
+.step-node.step-ok .step-text {
+  color: #059669;
 }
 
-.detalhes .destino strong {
-  color: var(--color-text-main, #0f172a);
-  font-size: 0.9rem;
+.step-track {
+  width: 16px;
+  height: 1px;
+  background: #e2e8f0;
 }
 
-.detalhes .data {
-  color: var(--color-text-muted, #94a3b8);
-  font-size: 0.775rem;
+.step-track.track-active {
+  background: #10b981;
 }
 
+/* ── Coluna Lateral do Card ── */
 .encomenda-lateral {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .badge-status {
-  padding: 2px 7px;
-  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 11px;
   font-weight: 500;
-  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 5px;
+  letter-spacing: 0.01em;
 }
 
-.badge-aguardando_retirada {
-  background-color: #fef3c7;
+.status-indicator-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.badge-status-aguardando_retirada {
+  background: #fffbeb;
   color: #92400e;
   border: 1px solid #fde68a;
 }
 
-.badge-entregue {
-  background-color: #ecfdf5;
+.badge-status-aguardando_retirada .status-indicator-dot {
+  background: #f59e0b;
+}
+
+.badge-status-entregue {
+  background: #ecfdf5;
   color: #065f46;
   border: 1px solid #a7f3d0;
 }
 
-.codigo-retirada-box {
-  background: #f8fafc;
-  border: 1px dashed #3b82f6;
-  border-radius: 8px;
-  padding: 6px 12px;
-  text-align: right;
-  min-width: 140px;
+.badge-status-entregue .status-indicator-dot {
+  background: #10b981;
 }
 
-.codigo-topo {
+.codigo-retirada-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 110px;
+}
+
+.codigo-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 2px;
+  gap: 6px;
 }
 
-.codigo-topo small {
-  font-size: 0.65rem;
-  color: #64748b;
-  text-transform: uppercase;
-  font-weight: 600;
+.codigo-label {
+  font-size: 9px;
+  font-weight: 500;
+  color: #94a3b8;
   letter-spacing: 0.04em;
 }
 
 .btn-copiar-mini {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: #2563eb;
+  background: transparent;
+  border: none;
   cursor: pointer;
-  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: #64748b;
+  padding: 0;
+  transition: color 0.12s ease;
 }
 
 .btn-copiar-mini:hover {
-  background: #eff6ff;
-  border-color: #93c5fd;
+  color: #0f172a;
 }
 
 .btn-copiar-mini mat-icon {
@@ -527,42 +881,86 @@
   height: 11px;
 }
 
-.codigo-retirada-box strong {
-  display: block;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 1.15rem;
+.codigo-valor {
+  font-size: 13px;
   font-weight: 600;
-  color: #1d4ed8;
-  letter-spacing: 0.05em;
+  color: #0f172a;
+  letter-spacing: 0.06em;
 }
 
 .btn-dar-baixa {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: #059669;
+  gap: 5px;
+  background: #0f172a;
   color: #ffffff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: var(--radius-md, 8px);
-  font-size: 0.85rem;
-  font-weight: 600;
+  border: 1px solid #0f172a;
+  border-radius: 6px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  min-height: 40px;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.15s ease;
 }
 
-.btn-dar-baixa:hover {
-  background: #047857;
-  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+.btn-dar-baixa:hover:not(:disabled) {
+  background: #1e293b;
 }
 
-.data-retirada {
-  color: var(--color-text-muted, #64748b);
-  font-size: 0.8rem;
+.btn-dar-baixa:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-@media (max-width: 640px) {
+.btn-dar-baixa mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.spinner-mini-dark {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.entregue-info-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #065f46;
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.entregue-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  color: #10b981;
+}
+
+.entregue-label {
+  display: block;
+  font-size: 10px;
+  color: #166534;
+}
+
+.entregue-data {
+  display: block;
+  font-size: 10px;
+  color: #15803d;
+}
+
+/* ── Responsividade Mobile ── */
+@media (max-width: 680px) {
   .encomendas-page {
     padding: 16px;
   }
@@ -573,25 +971,39 @@
   }
 
   .encomenda-lateral {
-    align-items: flex-start;
-    border-top: 1px solid var(--color-border-subtle, #e2e8f0);
+    align-items: stretch;
+    border-top: 1px solid #f1f5f9;
     padding-top: 12px;
+    margin-top: 6px;
   }
 
-  .codigo-retirada-box {
-    text-align: left;
+  .codigo-retirada-card {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn-dar-baixa {
+    height: 40px;
+    justify-content: center;
+  }
+
+  .barra-ferramentas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .busca-input-box {
+    min-width: 100%;
+  }
+
+  .topo-filtros-tabs {
     width: 100%;
-    box-sizing: border-box;
+    justify-content: space-between;
   }
 
-  .filtros {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .filtro-btn {
+  .tab-btn {
     flex: 1;
-    text-align: center;
-    white-space: nowrap;
+    justify-content: center;
   }
 }
