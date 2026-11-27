@@ -14,8 +14,8 @@ export default function Footer() {
           {/* Coluna de Marca */}
           <div className="col-span-2 space-y-3">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-brand-slate text-white flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-white" />
+              <div className="w-7 h-7 rounded-lg overflow-hidden bg-brand-slate flex items-center justify-center">
+                <img src="/favicon.png" alt="CondoFlow" className="w-7 h-7 object-contain" />
               </div>
               <span className="font-display font-semibold text-base text-ink-primary tracking-tight">
                 CondoFlow
