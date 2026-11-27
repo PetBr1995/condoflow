@@ -18,7 +18,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 py-3 px-4 sm:px-6 lg:px-8 bg-[#050C1E]/90 backdrop-blur-md border-b border-slate-800/60">
+    <header className="sticky top-0 z-50 py-3.5 px-4 sm:px-6 lg:px-8 bg-white/90 backdrop-blur-md border-b border-border shadow-xs">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo & Marca */}
         <Link href="/" className="flex items-center gap-2.5 group">
@@ -26,10 +26,10 @@ export default function Navbar() {
             <img src="/favicon.png" alt="CondoFlow" className="w-8 h-8 object-contain" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-display font-semibold text-lg text-white tracking-tight">
+            <span className="font-display font-semibold text-lg text-ink-primary tracking-tight">
               CondoFlow
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-medium text-teal-300 bg-teal-950/60 border border-teal-500/40">
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-medium text-brand-accent bg-blue-50 border border-blue-200">
               v2.0
             </span>
           </div>
@@ -41,7 +41,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
+              className="text-sm font-medium text-ink-secondary hover:text-ink-primary transition-colors"
             >
               {link.label}
             </a>
@@ -49,16 +49,16 @@ export default function Navbar() {
         </nav>
 
         {/* Ações / Botões */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
           <a
             href={`${appUrl}/login`}
-            className="text-sm font-medium text-slate-300 hover:text-white px-3 py-2 transition-colors"
+            className="text-sm font-semibold text-ink-secondary hover:text-ink-primary px-3 py-2 transition-colors"
           >
             Entrar
           </a>
           <a
             href={`${appUrl}/cadastro-morador`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-300 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-400/80 px-4 py-2 rounded-full shadow-[0_0_15px_rgba(45,212,191,0.25)] transition-all duration-150 active:scale-98"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-brand-accent hover:bg-brand-accent-hover px-4 py-2 rounded-lg shadow-xs transition-all duration-150 active:scale-98"
           >
             <span>Começar Agora</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -69,7 +69,7 @@ export default function Navbar() {
         <div className="flex md:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-md text-ink-secondary hover:text-ink-primary hover:bg-slate-100 transition-colors"
             aria-label="Abrir menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -85,7 +85,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-slate-800 bg-[#070E22] px-4 pt-3 pb-6 space-y-3 mt-3 rounded-xl"
+            className="md:hidden border-t border-border bg-white px-4 pt-3 pb-6 space-y-3 mt-3 rounded-xl shadow-modal"
           >
             <div className="flex flex-col space-y-2">
               {navLinks.map((link) => (
@@ -93,23 +93,23 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm font-medium text-slate-300 hover:text-white py-1.5 transition-colors"
+                  className="text-sm font-medium text-ink-secondary hover:text-ink-primary py-1.5 transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex flex-col gap-2.5">
+            <div className="pt-4 border-t border-border flex flex-col gap-2.5">
               <a
                 href={`${appUrl}/login`}
-                className="w-full text-center text-sm font-semibold text-slate-300 hover:text-white py-2 rounded-lg border border-slate-700 bg-slate-900"
+                className="w-full text-center text-sm font-semibold text-ink-primary hover:bg-slate-50 py-2 rounded-lg border border-border bg-white"
               >
                 Entrar no Sistema
               </a>
               <a
                 href={`${appUrl}/cadastro-morador`}
-                className="w-full text-center text-sm font-semibold text-teal-300 bg-teal-500/10 border border-teal-400/80 py-2.5 rounded-full shadow-xs"
+                className="w-full text-center text-sm font-semibold text-white bg-brand-accent hover:bg-brand-accent-hover py-2.5 rounded-lg shadow-xs"
               >
                 Criar Conta / Começar
               </a>
