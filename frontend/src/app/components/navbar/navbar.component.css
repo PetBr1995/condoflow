@@ -320,20 +320,67 @@
   color: #e11d48;
 }
 
-/* Estado Recolhido */
+/* Estado Recolhido - Centralização Perfeita dos Ícones */
 .sidebar-container.collapsed .sidebar-brand {
   padding: 16px 0;
   justify-content: center;
+  gap: 0;
+  width: 100%;
+}
+
+.sidebar-container.collapsed .brand-info {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  max-width: 0;
+  pointer-events: none;
+}
+
+.sidebar-container.collapsed .sidebar-menu {
+  overflow: visible;
+  padding: 12px 0;
+  align-items: center;
 }
 
 .sidebar-container.collapsed .menu-link {
-  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
   padding: 0;
+  justify-content: center;
+  gap: 0;
+  border-radius: 8px;
+}
+
+.sidebar-container.collapsed .menu-text {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  max-width: 0;
+  pointer-events: none;
+}
+
+.sidebar-container.collapsed .sidebar-footer {
+  padding: 8px 0 14px;
+  align-items: center;
 }
 
 .sidebar-container.collapsed .btn-sidebar-logout {
-  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
   padding: 0;
+  justify-content: center;
+  gap: 0;
+  border-radius: 8px;
+}
+
+.sidebar-container.collapsed .logout-text {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  max-width: 0;
+  pointer-events: none;
 }
 
 /* ====================================================
@@ -347,7 +394,6 @@
   display: flex;
   align-items: center;
   position: absolute;
-  left: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%) scale(0.96);
   background-color: #0f172a;
@@ -363,6 +409,15 @@
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
   z-index: 1200;
   transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sidebar-container.collapsed .sidebar-brand .sidebar-tooltip {
+  left: calc(100% + 8px);
+}
+
+.sidebar-container.collapsed .menu-link .sidebar-tooltip,
+.sidebar-container.collapsed .btn-sidebar-logout .sidebar-tooltip {
+  left: calc(100% + 22px);
 }
 
 /* Seta discreta apontando para o item */
