@@ -301,15 +301,32 @@
   padding: 8px 0;
 }
 
+/* Backdrop Mobile */
+.sidebar-mobile-backdrop {
+  display: none;
+}
+
 /* Mobile Responsivo */
 @media (max-width: 900px) {
+  .sidebar-mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    animation: t-fade-in 0.2s ease-out;
+  }
+
   .sidebar-container {
     transform: translateX(-100%);
     width: 240px;
+    z-index: 1000;
   }
 
   .sidebar-container.mobile-open {
     transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
   }
 
   .btn-toggle-sidebar {

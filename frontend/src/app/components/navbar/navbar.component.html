@@ -1,4 +1,9 @@
-<aside class="sidebar-container" [class.collapsed]="recolhida">
+<!-- Backdrop para fechar o menu no mobile -->
+@if (!recolhida) {
+  <div class="sidebar-mobile-backdrop" (click)="toggleSidebar()"></div>
+}
+
+<aside class="sidebar-container" [class.collapsed]="recolhida" [class.mobile-open]="!recolhida">
   <!-- Botão Circular de Recolher/Expandir na Borda -->
   <button 
     type="button" 

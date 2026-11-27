@@ -6,7 +6,7 @@
     </div>
 
     @if (authService.isSindico) {
-      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+      <button class="btn-novo touch-target focus-ring" (click)="mostrarFormulario = !mostrarFormulario">
         <mat-icon>{{ mostrarFormulario ? 'close' : 'inventory_2' }}</mat-icon>
         {{ mostrarFormulario ? 'Fechar' : 'Receber Encomenda' }}
       </button>
@@ -73,29 +73,59 @@
     <div class="topo-filtros">
       <h3>{{ authService.isSindico ? 'Todas as Encomendas na Portaria' : 'Minhas Encomendas' }}</h3>
       <div class="filtros">
-        <button [class.ativo]="filtroStatus === 'todas'" (click)="filtroStatus = 'todas'">Todas</button>
-        <button [class.ativo]="filtroStatus === 'aguardando_retirada'" (click)="filtroStatus = 'aguardando_retirada'">Aguardando Retirada</button>
-        <button [class.ativo]="filtroStatus === 'entregue'" (click)="filtroStatus = 'entregue'">Entregues</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroStatus === 'todas'" (click)="filtroStatus = 'todas'">Todas</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroStatus === 'aguardando_retirada'" (click)="filtroStatus = 'aguardando_retirada'">Aguardando Retirada</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroStatus === 'entregue'" (click)="filtroStatus = 'entregue'">Entregues</button>
       </div>
     </div>
 
     @if (encomendasFiltradas().length === 0) {
-      <div class="estado-vazio">
+      <div class="empty-state-box">
         <mat-icon>markunread_mailbox</mat-icon>
-        <p>Nenhuma encomenda encontrada.</p>
+        <div class="empty-title">Nenhuma encomenda encontrada</div>
+        <p class="empty-desc">Não há pacotes registrados para o filtro selecionado no momento.</p>
+        @if (authService.isSindico && !mostrarFormulario) {
+          <button class="btn-novo touch-target focus-ring" style="margin-top: 12px;" (click)="mostrarFormulario = true">
+            <mat-icon>inventory_2</mat-icon> Registrar Nova Encomenda
+          </button>
+        }
       </div>
     } @else {
       <div class="lista-encomendas">
         @for (enc of encomendasFiltradas(); track enc.id) {
           <article class="card-encomenda" [class.encomenda-retirada]="enc.status === 'entregue'">
             <div class="encomenda-principal">
-              <div class="icone-transportadora">
-                <mat-icon>local_shipping</mat-icon>
+              <div class="icone-transportadora" [class]="'icone-transportadora ' + getCarrierBrand(enc.empresa_entrega).classe">
+                <mat-icon>{{ enc.status === 'entregue' ? 'task_alt' : getCarrierBrand(enc.empresa_entrega).icone }}</mat-icon>
               </div>
               <div class="detalhes">
-                <strong>{{ enc.empresa_entrega }}</strong> — <span>{{ enc.descricao }}</span>
+                <div class="detalhes-header">
+                  <span class="badge-transportadora" [class]="'badge-transportadora ' + getCarrierBrand(enc.empresa_entrega).classe">
+                    {{ enc.empresa_entrega }}
+                  </span>
+                  <span class="separador">·</span>
+                  <span class="descricao-pacote">{{ enc.descricao }}</span>
+                </div>
                 <p class="destino">Destino: <strong>Bloco {{ enc.bloco }} - Apto {{ enc.numero }}</strong></p>
-                <small class="data">Recebido em: {{ enc.data_recebimento | date:'dd/MM/yyyy HH:mm' }}</small>
+                <small class="data tabular-nums">Recebido em: {{ enc.data_recebimento | date:'dd/MM/yyyy HH:mm' }}</small>
+
+                <!-- Mini Timeline Stepper (Recebido -> Notificado -> Entregue) -->
+                <div class="mini-timeline">
+                  <div class="step-item step-concluido">
+                    <span class="step-dot"></span>
+                    <span class="step-label">Portaria</span>
+                  </div>
+                  <div class="step-line active"></div>
+                  <div class="step-item step-concluido">
+                    <span class="step-dot"></span>
+                    <span class="step-label">Notificado</span>
+                  </div>
+                  <div class="step-line" [class.active]="enc.status === 'entregue'"></div>
+                  <div class="step-item" [class.step-concluido]="enc.status === 'entregue'">
+                    <span class="step-dot"></span>
+                    <span class="step-label">{{ enc.status === 'entregue' ? 'Entregue' : 'Aguardando' }}</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -106,17 +136,28 @@
 
               @if (enc.status === 'aguardando_retirada') {
                 <div class="codigo-retirada-box">
-                  <small>Cód. Retirada</small>
-                  <strong>{{ enc.codigo_retirada }}</strong>
+                  <div class="codigo-topo">
+                    <small>Cód. Retirada</small>
+                    <button
+                      type="button"
+                      class="btn-copiar-mini focus-ring"
+                      (click)="copiarCodigo(enc.codigo_retirada, enc.id)"
+                      [title]="codigoCopiadoId === enc.id ? 'Copiado!' : 'Copiar código'"
+                    >
+                      <mat-icon>{{ codigoCopiadoId === enc.id ? 'check' : 'content_copy' }}</mat-icon>
+                      <span>{{ codigoCopiadoId === enc.id ? 'Copiado!' : 'Copiar' }}</span>
+                    </button>
+                  </div>
+                  <strong class="tabular-nums">{{ enc.codigo_retirada }}</strong>
                 </div>
 
                 @if (authService.isSindico) {
-                  <button class="btn-dar-baixa" (click)="darBaixa(enc.id)">
+                  <button class="btn-dar-baixa touch-target focus-ring" (click)="darBaixa(enc.id)">
                     <mat-icon>check</mat-icon> Confirmar Entrega
                   </button>
                 }
               } @else {
-                <small class="data-retirada">Retirado em {{ enc.data_retirada | date:'dd/MM/yyyy HH:mm' }}</small>
+                <small class="data-retirada tabular-nums">Retirado em {{ enc.data_retirada | date:'dd/MM/yyyy HH:mm' }}</small>
               }
             </div>
           </article>

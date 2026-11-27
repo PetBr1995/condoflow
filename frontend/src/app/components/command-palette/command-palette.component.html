@@ -1,0 +1,71 @@
+@if (visivel) {
+  <div class="command-backdrop" (click)="fechar()">
+    <div class="command-modal" (click)="$event.stopPropagation()">
+      <!-- Campo de Busca no Topo -->
+      <div class="command-search-header">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          #inputBusca
+          type="text"
+          [(ngModel)]="termoBusca"
+          placeholder="O que você deseja fazer ou acessar?..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <span class="esc-badge" (click)="fechar()">ESC</span>
+      </div>
+
+      <!-- Lista de Resultados e Ações -->
+      <div class="command-list" role="listbox">
+        @if (itensFiltrados.length === 0) {
+          <div class="command-vazio">
+            <mat-icon>search_off</mat-icon>
+            <p>Nenhuma ação ou página encontrada para "<strong>{{ termoBusca }}</strong>"</p>
+          </div>
+        } @else {
+          @for (item of itensFiltrados; track item.id; let i = $index) {
+            <div
+              class="command-item"
+              [class.selecionado]="i === indiceSelecionado"
+              (click)="executar(item)"
+              (mouseenter)="indiceSelecionado = i"
+              role="option"
+              [attr.aria-selected]="i === indiceSelecionado"
+            >
+              <div class="item-icon-box">
+                <mat-icon>{{ item.icone }}</mat-icon>
+              </div>
+
+              <div class="item-content">
+                <span class="item-title">{{ item.titulo }}</span>
+                @if (item.descricao) {
+                  <span class="item-desc">{{ item.descricao }}</span>
+                }
+              </div>
+
+              <span class="item-category-badge">{{ item.categoria }}</span>
+
+              <mat-icon class="item-enter-icon">keyboard_return</mat-icon>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Rodapé com Atalhos de Teclado -->
+      <div class="command-footer">
+        <div class="shortcut-tip">
+          <kbd>↑</kbd><kbd>↓</kbd>
+          <span>para navegar</span>
+        </div>
+        <div class="shortcut-tip">
+          <kbd>↵</kbd>
+          <span>para selecionar</span>
+        </div>
+        <div class="shortcut-tip">
+          <kbd>ESC</kbd>
+          <span>para fechar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+}

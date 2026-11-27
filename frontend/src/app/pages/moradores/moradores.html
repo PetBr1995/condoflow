@@ -94,9 +94,12 @@
     </div>
 
     @if (unidades.length === 0) {
-      <div class="empty-state">
-        <mat-icon>apartment</mat-icon>
-        <p>Nenhuma unidade cadastrada neste condomínio ainda.</p>
+      <div class="empty-state-box">
+        <div class="empty-state-icon">
+          <mat-icon>apartment</mat-icon>
+        </div>
+        <h4 class="empty-state-title">Nenhuma unidade cadastrada</h4>
+        <p class="empty-state-desc">Utilize o formulário acima para cadastrar a primeira unidade e gerar o código de ativação do condomínio.</p>
       </div>
     } @else {
       <div class="units-grid">
@@ -104,11 +107,11 @@
           <div class="unit-card">
             <div class="unit-info">
               <span class="unit-title">Bloco {{ unidade.bloco }} • Apto {{ unidade.numero }}</span>
-              <span class="code-badge">{{ unidade.codigo_registro }}</span>
+              <span class="code-badge tabular-nums">{{ unidade.codigo_registro }}</span>
             </div>
             <button 
               type="button" 
-              class="btn-copy-sm"
+              class="btn-copy-sm touch-target focus-ring"
               [class.copied]="codigoCopiado === unidade.codigo_registro"
               (click)="copiarCodigo(unidade.codigo_registro)"
               [title]="'Copiar código ' + unidade.codigo_registro">
@@ -134,9 +137,12 @@
     </div>
 
     @if (moradores.length === 0) {
-      <div class="empty-state">
-        <mat-icon>person_off</mat-icon>
-        <p>Nenhum morador registrado ainda.</p>
+      <div class="empty-state-box">
+        <div class="empty-state-icon">
+          <mat-icon>person_off</mat-icon>
+        </div>
+        <h4 class="empty-state-title">Nenhum morador registrado</h4>
+        <p class="empty-state-desc">Os moradores aparecerão aqui automaticamente assim que criarem suas contas com os códigos de ativação.</p>
       </div>
     } @else {
       <div class="residents-table-wrapper">
@@ -169,8 +175,8 @@
                     Bloco {{ morador.endereco.bloco || '-' }} / Apto {{ morador.endereco.numero || '-' }}
                   </span>
                 </td>
-                <td>{{ morador.cpf }}</td>
-                <td>{{ morador.telefone || '-' }}</td>
+                <td class="tabular-nums">{{ morador.cpf }}</td>
+                <td class="tabular-nums">{{ morador.telefone || '-' }}</td>
                 <td>
                   <span class="role-badge" [class.sindico]="morador.is_sindico">
                     {{ morador.is_sindico ? 'Síndico' : 'Morador' }}
@@ -178,7 +184,7 @@
                 </td>
                 <td style="text-align: right;">
                   <button 
-                    class="btn-delete" 
+                    class="btn-delete touch-target focus-ring" 
                     type="button" 
                     (click)="pedirExclusao(morador)"
                     title="Excluir cadastro do morador">

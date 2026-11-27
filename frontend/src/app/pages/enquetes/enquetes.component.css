@@ -1,6 +1,6 @@
 .enquetes-page {
   padding: 24px;
-  max-width: 900px;
+  max-width: 950px;
   margin: 0 auto;
 }
 
@@ -14,28 +14,39 @@
 }
 
 .header-enquetes h2 {
-  font-size: 1.8rem;
+  font-size: 1.625rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--color-text-main, #0f172a);
+  letter-spacing: -0.02em;
   margin: 0 0 4px 0;
 }
 
 .header-enquetes p {
-  color: #64748b;
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.925rem;
   margin: 0;
 }
 
 .btn-novo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: #0284c7;
+  background-color: var(--color-primary, #0f213d);
   color: #ffffff;
-  border: none;
-  border-radius: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 8px);
   padding: 10px 18px;
   font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
+  min-height: 44px;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.btn-novo:hover {
+  background-color: var(--color-primary-hover, #1a3258);
+  box-shadow: var(--shadow-elevated, 0 4px 12px rgba(0, 0, 0, 0.08));
 }
 
 .alerta {
@@ -43,8 +54,9 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 8px);
   margin-bottom: 20px;
+  font-size: 0.9rem;
 }
 
 .alerta-sucesso {
@@ -60,17 +72,19 @@
 }
 
 .card-formulario {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
   padding: 24px;
   margin-bottom: 28px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.05));
 }
 
 .card-formulario h3 {
   margin: 0 0 16px 0;
-  color: #0f172a;
+  color: var(--color-text-main, #0f172a);
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 
 .form-grid {
@@ -81,19 +95,29 @@
 
 .campo label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary, #334155);
   margin-bottom: 6px;
 }
 
 .campo input, .campo textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border: 1px solid var(--color-border-subtle, #cbd5e1);
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.925rem;
+  color: var(--color-text-main, #0f172a);
+  background: #ffffff;
   box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.campo input:focus, .campo textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .form-acoes {
@@ -103,13 +127,23 @@
 }
 
 .btn-confirmar {
-  background: #10b981;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #059669;
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md, 8px);
   padding: 10px 20px;
   font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
+  min-height: 44px;
+  transition: background-color 0.15s ease;
+}
+
+.btn-confirmar:hover {
+  background: #047857;
 }
 
 .lista-enquetes {
@@ -119,15 +153,21 @@
 }
 
 .card-enquete {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04));
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.card-enquete:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-elevated, 0 4px 12px rgba(0, 0, 0, 0.06));
 }
 
 .card-enquete.encerrada {
-  opacity: 0.8;
+  opacity: 0.85;
   background: #f8fafc;
 }
 
@@ -141,148 +181,176 @@
 }
 
 .badge-status {
+  display: inline-block;
   padding: 3px 8px;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.725rem;
   font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .badge-ativa {
   background: #dbeafe;
-  color: #1d4ed8;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
 }
 
 .badge-inativa {
   background: #f1f5f9;
   color: #64748b;
+  border: 1px solid #e2e8f0;
 }
 
 .enquete-topo h4 {
   font-size: 1.25rem;
-  color: #0f172a;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
   margin: 8px 0 4px 0;
+  letter-spacing: -0.01em;
 }
 
 .enquete-topo .desc {
-  font-size: 0.95rem;
-  color: #475569;
+  font-size: 0.925rem;
+  color: var(--color-text-secondary, #475569);
   margin: 0 0 10px 0;
+  line-height: 1.5;
 }
 
 .enquete-topo .prazo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: #64748b;
-  font-size: 0.85rem;
+  gap: 6px;
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.825rem;
 }
 
 .enquete-topo .prazo mat-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
+  color: #94a3b8;
 }
 
 .btn-encerrar {
-  background: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fca5a5;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md, 8px);
+  padding: 8px 14px;
+  font-size: 0.825rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 38px;
+  transition: all 0.15s ease;
+}
+
+.btn-encerrar:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
 }
 
 .opcoes-voto {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .item-opcao {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 14px;
-  transition: border-color 0.2s;
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 14px 16px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .item-opcao.votada {
-  border-color: #0284c7;
-  background: #f0f9ff;
+  border-color: #2563eb;
+  background: #eff6ff;
 }
 
 .opcao-dados {
   display: flex;
   justify-content: space-between;
-  font-size: 0.95rem;
+  align-items: center;
+  font-size: 0.925rem;
   margin-bottom: 8px;
-  color: #1e293b;
+  color: var(--color-text-main, #0f172a);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.opcao-dados strong {
+  font-weight: 600;
+}
+
+.voto-meta {
+  color: var(--color-text-secondary, #475569);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .barra-fundo {
   background: #e2e8f0;
-  border-radius: 4px;
-  height: 10px;
+  border-radius: 9999px;
+  height: 8px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .barra-progresso {
-  background: #0284c7;
+  background: #2563eb;
   height: 100%;
-  border-radius: 4px;
+  border-radius: 9999px;
   transition: width 0.4s ease-in-out;
 }
 
 .btn-votar {
-  background: #0284c7;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-primary, #0f213d);
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 0.85rem;
+  border-radius: var(--radius-md, 8px);
+  padding: 8px 16px;
+  font-size: 0.825rem;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 4px;
+  min-height: 38px;
+  transition: background-color 0.15s ease;
 }
 
 .btn-votar:hover {
-  background: #0369a1;
+  background: var(--color-primary-hover, #1a3258);
 }
 
 .voto-confirmado {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin-top: 16px;
-  padding: 8px 12px;
+  padding: 10px 16px;
   background: #ecfdf5;
   color: #065f46;
-  border-radius: 6px;
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius-md, 8px);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 .voto-confirmado mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #059669;
 }
 
-.estado-vazio {
-  text-align: center;
-  padding: 40px;
-  background: #f8fafc;
-  border-radius: 10px;
-  border: 1px dashed #cbd5e1;
-  color: #64748b;
-}
+@media (max-width: 640px) {
+  .enquetes-page {
+    padding: 16px;
+  }
 
-.estado-vazio mat-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
-  color: #94a3b8;
+  .card-enquete {
+    padding: 16px;
+  }
 }

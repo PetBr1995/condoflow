@@ -29,6 +29,7 @@ export class EncomendasComponent implements OnInit {
 
   mensagemSucesso: string = '';
   mensagemErro: string = '';
+  codigoCopiadoId: number | null = null;
 
   constructor(
     public encomendasService: EncomendasService,
@@ -100,5 +101,37 @@ export class EncomendasComponent implements OnInit {
         error: () => alert('Erro ao dar baixa na encomenda.')
       });
     }
+  }
+
+  copiarCodigo(codigo: string, id: number): void {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(codigo).then(() => {
+        this.codigoCopiadoId = id;
+        setTimeout(() => this.codigoCopiadoId = null, 2500);
+      });
+    }
+  }
+
+  getCarrierBrand(empresa: string): { classe: string, icone: string } {
+    const nome = (empresa || '').toLowerCase();
+    if (nome.includes('mercado livre')) {
+      return { classe: 'brand-meli', icone: 'local_mall' };
+    }
+    if (nome.includes('amazon')) {
+      return { classe: 'brand-amazon', icone: 'inventory' };
+    }
+    if (nome.includes('correios') || nome.includes('sedex')) {
+      return { classe: 'brand-correios', icone: 'markunread_mailbox' };
+    }
+    if (nome.includes('shopee')) {
+      return { classe: 'brand-shopee', icone: 'shopping_bag' };
+    }
+    if (nome.includes('magalu')) {
+      return { classe: 'brand-magalu', icone: 'storefront' };
+    }
+    if (nome.includes('loggi')) {
+      return { classe: 'brand-loggi', icone: 'moped' };
+    }
+    return { classe: 'brand-generica', icone: 'local_shipping' };
   }
 }

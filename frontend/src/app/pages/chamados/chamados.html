@@ -74,7 +74,7 @@
     </div>
 
     <!-- Botão de Criação de Chamado -->
-    <button type="button" class="btn-primary-action" (click)="abrirNovoChamado()">
+    <button type="button" class="btn-primary-action touch-target focus-ring" (click)="abrirNovoChamado()">
       <mat-icon>add</mat-icon>
       <span>Novo Chamado</span>
     </button>
@@ -89,6 +89,10 @@
         </div>
         <h3>Nenhum chamado encontrado</h3>
         <p>Não há ocorrências registradas com os filtros selecionados.</p>
+        <button type="button" class="btn-primary-action touch-target focus-ring" (click)="abrirNovoChamado()" style="margin-top: 14px;">
+          <mat-icon>add</mat-icon>
+          <span>Abrir Novo Chamado</span>
+        </button>
       </div>
     } @else {
       @for (chamado of chamadosFiltrados(); track chamado.id) {

@@ -1,6 +1,6 @@
 .encomendas-page {
   padding: 24px;
-  max-width: 950px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -14,28 +14,38 @@
 }
 
 .header-encomendas h2 {
-  font-size: 1.8rem;
+  font-size: 1.625rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--color-text-main, #0f172a);
+  letter-spacing: -0.02em;
   margin: 0 0 4px 0;
 }
 
 .header-encomendas p {
-  color: #64748b;
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.925rem;
   margin: 0;
 }
 
 .btn-novo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: #0284c7;
+  background-color: var(--color-primary, #0f213d);
   color: #ffffff;
-  border: none;
-  border-radius: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 8px);
   padding: 10px 18px;
   font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.btn-novo:hover {
+  background-color: var(--color-primary-hover, #1a3258);
+  box-shadow: var(--shadow-elevated, 0 4px 12px rgba(0, 0, 0, 0.08));
 }
 
 .alerta {
@@ -43,8 +53,9 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 8px);
   margin-bottom: 20px;
+  font-size: 0.9rem;
 }
 
 .alerta-sucesso {
@@ -60,17 +71,19 @@
 }
 
 .card-formulario {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
   padding: 24px;
   margin-bottom: 28px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.05));
 }
 
 .card-formulario h3 {
   margin: 0 0 16px 0;
-  color: #0f172a;
+  color: var(--color-text-main, #0f172a);
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 
 .form-grid {
@@ -81,19 +94,28 @@
 
 .campo label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary, #334155);
   margin-bottom: 6px;
 }
 
 .campo input, .campo select {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border: 1px solid var(--color-border-subtle, #cbd5e1);
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.925rem;
+  color: var(--color-text-main, #0f172a);
+  background: #ffffff;
   box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.campo input:focus, .campo select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .form-acoes {
@@ -103,13 +125,27 @@
 }
 
 .btn-confirmar {
-  background: #10b981;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #059669;
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md, 8px);
   padding: 10px 20px;
   font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
+  min-height: 44px;
+  transition: background-color 0.15s ease;
+}
+
+.btn-confirmar:hover {
+  background: #047857;
+}
+
+.secao-encomendas {
+  margin-top: 8px;
 }
 
 .topo-filtros {
@@ -122,30 +158,39 @@
 }
 
 .topo-filtros h3 {
-  font-size: 1.25rem;
-  color: #1e293b;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
   margin: 0;
 }
 
 .filtros {
   display: flex;
   gap: 8px;
-}
-
-.filtros button {
   background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  color: #475569;
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
 }
 
-.filtros button.ativo {
-  background: #0284c7;
-  color: white;
-  border-color: #0284c7;
+.filtro-btn {
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-text-secondary, #475569);
+  transition: all 0.15s ease;
+  min-height: 36px;
+}
+
+.filtro-btn.ativo {
+  background: #ffffff;
+  color: var(--color-primary, #0f213d);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .lista-encomendas {
@@ -155,137 +200,374 @@
 }
 
 .card-encomenda {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 16px 20px;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border-subtle, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: 18px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04));
   flex-wrap: wrap;
   gap: 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.card-encomenda:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-elevated, 0 4px 12px rgba(0, 0, 0, 0.06));
 }
 
 .card-encomenda.encomenda-retirada {
   background: #f8fafc;
-  opacity: 0.8;
+  opacity: 0.88;
 }
 
 .encomenda-principal {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1;
+  min-width: 260px;
 }
 
 .icone-transportadora {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  background: #e0f2fe;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md, 8px);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0284c7;
+  color: #1d4ed8;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+/* Marcas Oficiais das Transportadoras */
+.icone-transportadora.brand-meli {
+  background: #fef9c3;
+  border-color: #fde047;
+  color: #854d0e;
+}
+
+.icone-transportadora.brand-amazon {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f97316;
+}
+
+.icone-transportadora.brand-correios {
+  background: #0284c7;
+  border-color: #0369a1;
+  color: #fde047;
+}
+
+.icone-transportadora.brand-shopee {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #ea580c;
+}
+
+.icone-transportadora.brand-magalu {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+.icone-transportadora.brand-loggi {
+  background: #ecfeff;
+  border-color: #67e8f9;
+  color: #0891b2;
+}
+
+.icone-transportadora.icone-entregue {
+  background: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #059669 !important;
+}
+
+.detalhes-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge-transportadora {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.badge-transportadora.brand-meli {
+  background: #fef08a;
+  color: #713f12;
+  border: 1px solid #facc15;
+}
+
+.badge-transportadora.brand-amazon {
+  background: #1e293b;
+  color: #fb923c;
+  border: 1px solid #334155;
+}
+
+.badge-transportadora.brand-correios {
+  background: #0369a1;
+  color: #fef08a;
+  border: 1px solid #0284c7;
+}
+
+.badge-transportadora.brand-shopee {
+  background: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.badge-transportadora.brand-magalu {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-transportadora.brand-loggi {
+  background: #cffafe;
+  color: #0e7490;
+  border: 1px solid #a5f3fc;
+}
+
+.badge-transportadora.brand-generica {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+/* Mini Timeline Stepper (Portaria -> Notificado -> Entregue) */
+.mini-timeline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #cbd5e1;
+}
+
+.step-concluido .step-dot {
+  background: #10b981;
+  box-shadow: 0 0 4px #10b981;
+}
+
+.step-label {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.step-concluido .step-label {
+  color: #0f172a;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  max-width: 32px;
+}
+
+.step-line.active {
+  background: #10b981;
 }
 
 .detalhes strong {
   font-size: 1.05rem;
-  color: #0f172a;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+}
+
+.separador {
+  color: #94a3b8;
+}
+
+.descricao-pacote {
+  color: var(--color-text-secondary, #475569);
+  font-size: 0.95rem;
 }
 
 .detalhes .destino {
-  margin: 4px 0;
+  margin: 4px 0 2px 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #475569);
+}
+
+.detalhes .destino strong {
+  color: var(--color-text-main, #0f172a);
   font-size: 0.9rem;
-  color: #475569;
 }
 
 .detalhes .data {
-  color: #94a3b8;
-  font-size: 0.8rem;
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 0.775rem;
 }
 
 .encomenda-lateral {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: 10px;
 }
 
 .badge-status {
   padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.03em;
+  display: inline-block;
 }
 
 .badge-aguardando_retirada {
   background-color: #fef3c7;
-  color: #b45309;
+  color: #92400e;
+  border: 1px solid #fde68a;
 }
 
 .badge-entregue {
   background-color: #ecfdf5;
-  color: #047857;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
 }
 
 .codigo-retirada-box {
-  background: #f1f5f9;
-  border: 1px dashed #0284c7;
-  border-radius: 6px;
-  padding: 4px 10px;
+  background: #f8fafc;
+  border: 1px dashed #3b82f6;
+  border-radius: 8px;
+  padding: 6px 12px;
   text-align: right;
+  min-width: 140px;
 }
 
-.codigo-retirada-box small {
-  display: block;
-  font-size: 0.7rem;
+.codigo-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.codigo-topo small {
+  font-size: 0.65rem;
   color: #64748b;
   text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.btn-copiar-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #2563eb;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-copiar-mini:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.btn-copiar-mini mat-icon {
+  font-size: 11px;
+  width: 11px;
+  height: 11px;
 }
 
 .codigo-retirada-box strong {
-  font-family: monospace;
-  font-size: 1rem;
-  color: #0284c7;
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1d4ed8;
+  letter-spacing: 0.05em;
 }
 
 .btn-dar-baixa {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: #10b981;
-  color: white;
+  gap: 6px;
+  background: #059669;
+  color: #ffffff;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md, 8px);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 40px;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-dar-baixa:hover {
-  background: #059669;
+  background: #047857;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
 }
 
 .data-retirada {
-  color: #64748b;
+  color: var(--color-text-muted, #64748b);
   font-size: 0.8rem;
 }
 
-.estado-vazio {
-  text-align: center;
-  padding: 40px;
-  background: #f8fafc;
-  border-radius: 10px;
-  border: 1px dashed #cbd5e1;
-  color: #64748b;
-}
+@media (max-width: 640px) {
+  .encomendas-page {
+    padding: 16px;
+  }
 
-.estado-vazio mat-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
-  color: #94a3b8;
+  .card-encomenda {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .encomenda-lateral {
+    align-items: flex-start;
+    border-top: 1px solid var(--color-border-subtle, #e2e8f0);
+    padding-top: 12px;
+  }
+
+  .codigo-retirada-box {
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .filtros {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .filtro-btn {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+  }
 }

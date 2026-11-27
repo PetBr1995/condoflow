@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CommandPaletteComponent } from './components/command-palette/command-palette.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Capacitor } from '@capacitor/core';
@@ -8,7 +9,7 @@ import { Capacitor } from '@capacitor/core';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, MatIconModule],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, CommandPaletteComponent, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -17,7 +18,13 @@ export class AppComponent implements OnInit {
   sidebarRecolhida: boolean = false;
   isNativeMobile: boolean = Capacitor.isNativePlatform();
 
+  @ViewChild(CommandPaletteComponent) commandPalette?: CommandPaletteComponent;
+
   constructor(private router: Router) {}
+
+  abrirCommandPalette(): void {
+    this.commandPalette?.abrir();
+  }
 
   ngOnInit(): void {
     if (this.isNativeMobile) {

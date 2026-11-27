@@ -6,7 +6,7 @@
     </div>
 
     @if (authService.isSindico) {
-      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+      <button class="btn-novo touch-target focus-ring" (click)="mostrarFormulario = !mostrarFormulario">
         <mat-icon>{{ mostrarFormulario ? 'close' : 'campaign' }}</mat-icon>
         {{ mostrarFormulario ? 'Fechar' : 'Novo Comunicado' }}
       </button>
@@ -49,8 +49,8 @@
       </div>
 
       <div class="form-acoes">
-        <button class="btn-confirmar" (click)="publicarAviso()">
-          Publicar no Mural
+        <button class="btn-confirmar touch-target focus-ring" (click)="publicarAviso()">
+          <mat-icon>send</mat-icon> Publicar no Mural
         </button>
       </div>
     </section>
@@ -58,9 +58,15 @@
 
   <section class="lista-avisos">
     @if (avisos.length === 0) {
-      <div class="estado-vazio">
-        <mat-icon>info</mat-icon>
-        <p>Nenhum comunicado publicado no momento.</p>
+      <div class="empty-state-box">
+        <mat-icon>campaign</mat-icon>
+        <div class="empty-title">Nenhum comunicado publicado</div>
+        <p class="empty-desc">Não há informativos ou avisos no mural no momento.</p>
+        @if (authService.isSindico && !mostrarFormulario) {
+          <button class="btn-novo touch-target focus-ring" style="margin-top: 12px;" (click)="mostrarFormulario = true">
+            <mat-icon>campaign</mat-icon> Publicar Primeiro Comunicado
+          </button>
+        }
       </div>
     } @else {
       @for (aviso of avisos; track aviso.id) {
@@ -74,7 +80,7 @@
             </div>
 
             @if (authService.isSindico) {
-              <button class="btn-excluir" (click)="excluir(aviso.id)">
+              <button class="btn-excluir touch-target focus-ring" (click)="excluir(aviso.id)" title="Excluir comunicado">
                 <mat-icon>delete</mat-icon>
               </button>
             }
@@ -83,8 +89,8 @@
           <p class="aviso-conteudo">{{ aviso.conteudo }}</p>
 
           <footer class="aviso-rodape">
-            <span><mat-icon>person</mat-icon> Publicado por {{ aviso.autor_nome || 'Administração' }}</span>
-            <span><mat-icon>schedule</mat-icon> {{ aviso.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="autor-tag"><mat-icon>person</mat-icon> {{ aviso.autor_nome || 'Administração' }}</span>
+            <span class="data-tag tabular-nums"><mat-icon>schedule</mat-icon> {{ aviso.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
           </footer>
         </article>
       }

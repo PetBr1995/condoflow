@@ -407,18 +407,46 @@
               <span class="totem-local">Portão Principal Pedestres</span>
             </div>
 
-            <!-- Viewport de Vídeo do Totem -->
+            <!-- Telemetria de Hardware Linear/Kisi Style -->
+            <div class="totem-telemetry-bar">
+              <div class="telemetry-pill">
+                <span class="telemetry-dot" [class.live]="cameraTotemAtiva"></span>
+                <span>{{ cameraTotemAtiva ? '1080p · 30 FPS' : 'STANDBY' }}</span>
+              </div>
+              <div class="telemetry-pill">
+                <mat-icon>memory</mat-icon>
+                <span>OPENCV BIOMETRICS V2</span>
+              </div>
+              <div class="telemetry-pill">
+                <mat-icon>speed</mat-icon>
+                <span>LATÊNCIA: 16ms</span>
+              </div>
+            </div>
+
+            <!-- Viewport de Vídeo do Totem com HUD Biométrico -->
             <div class="totem-viewport">
               @if (cameraTotemAtiva) {
                 <video #videoTotemRef autoplay playsinline muted class="video-stream-totem"></video>
-                <div class="overlay-scan-totem" [class.escaneando]="analisandoFaceTotem">
-                  <div class="scanner-linha"></div>
+                
+                <!-- HUD Biométrico com Cantoneiras e Linha Laser de Varredura -->
+                <div class="biometric-hud-overlay" [class.scanning]="analisandoFaceTotem || totemAutoScan">
+                  <div class="reticle-corner corner-tl"></div>
+                  <div class="reticle-corner corner-tr"></div>
+                  <div class="reticle-corner corner-bl"></div>
+                  <div class="reticle-corner corner-br"></div>
+                  
+                  <div class="hud-center-target">
+                    <div class="target-circle"></div>
+                    <span class="hud-target-label">{{ analisandoFaceTotem ? 'ANALISANDO BIOMETRIA...' : 'POSICIONE O ROSTO' }}</span>
+                  </div>
+
+                  <div class="laser-scanner-line"></div>
                 </div>
               } @else {
                 <div class="totem-placeholder">
                   <mat-icon>videocam_off</mat-icon>
                   <p>A câmera do totem da portaria está desligada.</p>
-                  <button type="button" class="btn-principal" (click)="iniciarTotem()">
+                  <button type="button" class="btn-principal touch-target focus-ring" (click)="iniciarTotem()">
                     <mat-icon>videocam</mat-icon>
                     Conectar Câmera da Portaria
                   </button>
@@ -428,7 +456,7 @@
 
             @if (cameraTotemAtiva) {
               <div class="totem-controles">
-                <button type="button" class="btn-scan-manual" (click)="analisarFaceAoVivo()" [disabled]="analisandoFaceTotem">
+                <button type="button" class="btn-scan-manual touch-target focus-ring" (click)="analisarFaceAoVivo()" [disabled]="analisandoFaceTotem">
                   @if (analisandoFaceTotem) {
                     <mat-icon class="girando">sync</mat-icon>
                     Analisando Face...
@@ -440,7 +468,7 @@
 
                 <button
                   type="button"
-                  class="btn-auto-scan"
+                  class="btn-auto-scan touch-target focus-ring"
                   [class.ativo]="totemAutoScan"
                   (click)="toggleAutoScan()"
                 >
@@ -448,13 +476,13 @@
                   {{ totemAutoScan ? 'Pausar Modo Automático' : 'Auto-Scan Contínuo' }}
                 </button>
 
-                <button type="button" class="btn-desconectar" (click)="pararCameraTotem()" title="Desligar Câmera">
+                <button type="button" class="btn-desconectar touch-target focus-ring" (click)="pararCameraTotem()" title="Desligar Câmera">
                   <mat-icon>power_settings_new</mat-icon>
                 </button>
               </div>
             }
 
-            <!-- Card de Resultado da Leitura -->
+            <!-- Card de Resultado da Leitura com Efeito Glow -->
             @if (ultimoAcessoTotem) {
               <div class="totem-resultado-box" [class]="ultimoAcessoTotem.status">
                 <div class="resultado-icone">
@@ -468,10 +496,10 @@
                   <h4>{{ ultimoAcessoTotem.autorizado ? 'ACESSO LIBERADO' : 'ACESSO NEGADO' }}</h4>
                   <p class="resultado-nome"><strong>{{ ultimoAcessoTotem.nome || 'Pessoa Desconhecida' }}</strong></p>
                   @if (ultimoAcessoTotem.unidade) {
-                    <span class="resultado-unidade">Destino: {{ ultimoAcessoTotem.unidade }}</span>
+                    <span class="resultado-unidade">Destino: <strong>{{ ultimoAcessoTotem.unidade }}</strong></span>
                   }
                   @if (ultimoAcessoTotem.similaridade) {
-                    <span class="resultado-similaridade">Similaridade IA: {{ ultimoAcessoTotem.similaridade }}%</span>
+                    <span class="resultado-similaridade tabular-nums">Similaridade IA: <strong>{{ ultimoAcessoTotem.similaridade }}%</strong></span>
                   }
                   @if (ultimoAcessoTotem.motivo) {
                     <p class="resultado-motivo">{{ ultimoAcessoTotem.motivo }}</p>

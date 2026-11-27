@@ -6,7 +6,7 @@
     </div>
 
     @if (authService.isSindico) {
-      <button class="btn-novo" (click)="mostrarFormulario = !mostrarFormulario">
+      <button class="btn-novo touch-target focus-ring" (click)="mostrarFormulario = !mostrarFormulario">
         <mat-icon>{{ mostrarFormulario ? 'close' : 'upload_file' }}</mat-icon>
         {{ mostrarFormulario ? 'Fechar' : 'Novo Documento' }}
       </button>
@@ -63,8 +63,8 @@
       </div>
 
       <div class="form-acoes">
-        <button class="btn-confirmar" (click)="fazerUpload()">
-          Fazer Upload e Publicar
+        <button class="btn-confirmar touch-target focus-ring" (click)="fazerUpload()">
+          <mat-icon>cloud_upload</mat-icon> Fazer Upload e Publicar
         </button>
       </div>
     </section>
@@ -73,42 +73,50 @@
   <section class="secao-documentos">
     <div class="topo-filtros">
       <div class="filtros">
-        <button [class.ativo]="filtroCategoria === 'todas'" (click)="filtroCategoria = 'todas'">Todos</button>
-        <button [class.ativo]="filtroCategoria === 'regimento'" (click)="filtroCategoria = 'regimento'">Regimento & Convenção</button>
-        <button [class.ativo]="filtroCategoria === 'ata'" (click)="filtroCategoria = 'ata'">Atas de Assembleia</button>
-        <button [class.ativo]="filtroCategoria === 'financeiro'" (click)="filtroCategoria = 'financeiro'">Prestação de Contas</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroCategoria === 'todas'" (click)="filtroCategoria = 'todas'">Todos</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroCategoria === 'regimento'" (click)="filtroCategoria = 'regimento'">Regimento & Convenção</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroCategoria === 'ata'" (click)="filtroCategoria = 'ata'">Atas de Assembleia</button>
+        <button class="filtro-btn touch-target focus-ring" [class.ativo]="filtroCategoria === 'financeiro'" (click)="filtroCategoria = 'financeiro'">Prestação de Contas</button>
       </div>
     </div>
 
     @if (documentosFiltrados().length === 0) {
-      <div class="estado-vazio">
+      <div class="empty-state-box">
         <mat-icon>folder_open</mat-icon>
-        <p>Nenhum documento encontrado para este filtro.</p>
+        <div class="empty-title">Nenhum documento encontrado</div>
+        <p class="empty-desc">Não há atas ou documentos disponíveis para a categoria selecionada.</p>
+        @if (authService.isSindico && !mostrarFormulario) {
+          <button class="btn-novo touch-target focus-ring" style="margin-top: 12px;" (click)="mostrarFormulario = true">
+            <mat-icon>upload_file</mat-icon> Publicar Primeiro Documento
+          </button>
+        }
       </div>
     } @else {
       <div class="grid-documentos">
         @for (doc of documentosFiltrados(); track doc.id) {
           <article class="card-documento">
-            <div class="icone-doc">
-              <mat-icon>description</mat-icon>
-            </div>
+            <div class="card-documento-corpo">
+              <div class="icone-doc">
+                <mat-icon>description</mat-icon>
+              </div>
 
-            <div class="doc-conteudo">
-              <span class="categoria-badge">{{ doc.categoria_display }}</span>
-              <h4>{{ doc.titulo }}</h4>
-              @if (doc.descricao) {
-                <p class="desc">{{ doc.descricao }}</p>
-              }
-              <small class="info">Publicado em {{ doc.created_at | date:'dd/MM/yyyy' }} · {{ doc.tamanho_kb }} KB</small>
+              <div class="doc-conteudo">
+                <span class="categoria-badge">{{ doc.categoria_display }}</span>
+                <h4>{{ doc.titulo }}</h4>
+                @if (doc.descricao) {
+                  <p class="desc">{{ doc.descricao }}</p>
+                }
+                <small class="info tabular-nums">Publicado em {{ doc.created_at | date:'dd/MM/yyyy' }} · {{ doc.tamanho_kb }} KB</small>
+              </div>
             </div>
 
             <div class="doc-acoes">
-              <a [href]="doc.arquivo" target="_blank" class="btn-baixar">
+              <a [href]="doc.arquivo" target="_blank" class="btn-baixar touch-target focus-ring">
                 <mat-icon>download</mat-icon> Baixar / Visualizar
               </a>
 
               @if (authService.isSindico) {
-                <button class="btn-excluir" (click)="excluir(doc.id)" title="Excluir Documento">
+                <button class="btn-excluir touch-target focus-ring" (click)="excluir(doc.id)" title="Excluir Documento">
                   <mat-icon>delete</mat-icon>
                 </button>
               }

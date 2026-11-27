@@ -826,17 +826,19 @@
 }
 
 .totem-camera-box {
-  background: #0f172a;
+  background: #0b1324;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 20px;
   color: #ffffff;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
 }
 
 .totem-camera-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .totem-status-indicator {
@@ -846,6 +848,7 @@
   font-size: 0.8rem;
   font-weight: 800;
   color: #94a3b8;
+  letter-spacing: 0.04em;
 }
 
 .totem-status-indicator.online {
@@ -866,21 +869,68 @@
 
 .totem-local {
   font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/* Barra de Telemetria Linear/Kisi Style */
+.totem-telemetry-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.telemetry-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.telemetry-pill mat-icon {
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+  color: #64748b;
+}
+
+.telemetry-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.telemetry-dot.live {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
 }
 
 .totem-viewport {
   position: relative;
   width: 100%;
   height: 380px;
-  background: #000000;
-  border-radius: 12px;
+  background: #020617;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .video-stream-totem {
@@ -890,27 +940,110 @@
   transform: scaleX(-1);
 }
 
-.overlay-scan-totem {
+/* Overlay HUD Biométrico */
+.biometric-hud-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  background: radial-gradient(circle at center, transparent 40%, rgba(2, 6, 23, 0.4) 100%);
 }
 
-.overlay-scan-totem.escaneando .scanner-linha {
+/* Cantoneiras Reticulares */
+.reticle-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: rgba(56, 189, 248, 0.7);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.corner-tl {
+  top: 36px;
+  left: 36px;
+  border-width: 3px 0 0 3px;
+  border-top-left-radius: 8px;
+}
+
+.corner-tr {
+  top: 36px;
+  right: 36px;
+  border-width: 3px 3px 0 0;
+  border-top-right-radius: 8px;
+}
+
+.corner-bl {
+  bottom: 36px;
+  left: 36px;
+  border-width: 0 0 3px 3px;
+  border-bottom-left-radius: 8px;
+}
+
+.corner-br {
+  bottom: 36px;
+  right: 36px;
+  border-width: 0 3px 3px 0;
+  border-bottom-right-radius: 8px;
+}
+
+.hud-center-target {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.target-circle {
+  width: 140px;
+  height: 180px;
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+  animation: pulseTarget 2s ease-in-out infinite;
+}
+
+@keyframes pulseTarget {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.03); opacity: 1; }
+}
+
+.hud-target-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.1em;
+  background: rgba(11, 19, 36, 0.75);
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  text-transform: uppercase;
+}
+
+/* Linha Laser de Varredura */
+.laser-scanner-line {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: #22c55e;
-  box-shadow: 0 0 10px #22c55e;
-  animation: scanLine 1.5s ease-in-out infinite;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #38bdf8 50%, transparent 100%);
+  box-shadow: 0 0 12px #38bdf8;
+  opacity: 0;
 }
 
-@keyframes scanLine {
-  0% { top: 0%; }
-  50% { top: 100%; }
-  100% { top: 0%; }
+.biometric-hud-overlay.scanning .laser-scanner-line {
+  opacity: 1;
+  animation: scanLaser 1.8s ease-in-out infinite;
+}
+
+@keyframes scanLaser {
+  0% { top: 10%; opacity: 0.3; }
+  50% { top: 90%; opacity: 1; }
+  100% { top: 10%; opacity: 0.3; }
 }
 
 .totem-placeholder {

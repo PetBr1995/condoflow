@@ -5,11 +5,23 @@
 
     <!-- Área Principal de Conteúdo -->
     <div class="app-body-container">
-      <!-- Barra Superior com Notificações -->
+      <!-- Barra Superior com Notificações e Menu Mobile -->
       <header class="app-topbar">
+        <button type="button" class="btn-mobile-menu touch-target focus-ring" (click)="toggleSidebar()" title="Abrir Menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <!-- Gatilho do Command Palette Linear Style (Cmd + K) -->
+        <button type="button" class="btn-command-trigger touch-target focus-ring" (click)="abrirCommandPalette()" title="Buscar ou executar comando (Ctrl + K)">
+          <mat-icon class="trigger-search-icon">search</mat-icon>
+          <span class="trigger-text">Buscar ou executar ação...</span>
+          <span class="trigger-kbd-badge"><kbd>Ctrl</kbd><kbd>K</kbd></span>
+        </button>
+
         <div class="topbar-spacer"></div>
+
         <div class="topbar-actions">
-          <button type="button" class="btn-topbar-bell" title="Avisos e Notificações">
+          <button type="button" class="btn-topbar-bell touch-target focus-ring" title="Avisos e Notificações">
             <mat-icon>notifications</mat-icon>
             <span class="bell-badge"></span>
           </button>
@@ -21,6 +33,9 @@
         <router-outlet></router-outlet>
       </main>
     </div>
+
+    <!-- Modal Global de Command Palette (Cmd+K) -->
+    <app-command-palette></app-command-palette>
   </div>
 } @else {
   <!-- Páginas Públicas (Landing Page, Login, Cadastro) sem sidebar -->
