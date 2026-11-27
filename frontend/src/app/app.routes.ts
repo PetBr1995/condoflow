@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { LandingComponent } from './pages/landing/landing.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { Chamados } from './pages/chamados/chamados';
@@ -19,13 +18,12 @@ export const routes: Routes = [
   // Rotas Públicas (com redirecionamento automático caso já esteja autenticado)
   { 
     path: '', 
-    component: LandingComponent,
-    canActivate: [redirectIfAuthenticatedGuard]
+    pathMatch: 'full',
+    redirectTo: 'login'
   },
   { 
     path: 'landing', 
-    component: LandingComponent,
-    canActivate: [redirectIfAuthenticatedGuard]
+    redirectTo: 'login'
   },
   { 
     path: 'login', 
