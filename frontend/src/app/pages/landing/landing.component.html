@@ -14,11 +14,11 @@
 
       <!-- Desktop Nav -->
       <nav class="lp-nav-links">
-        <a (click)="scrollToSection('recursos')">Recursos</a>
-        <a (click)="scrollToSection('bento')">Módulos</a>
+        <a (click)="scrollToSection('bento')">Recursos</a>
         <a (click)="scrollToSection('demonstracao')">Demonstração</a>
         <a (click)="scrollToSection('visoes')">Visões do Sistema</a>
         <a (click)="scrollToSection('precos')">Planos</a>
+        <a (click)="scrollToSection('faq')">Dúvidas Frequentes</a>
       </nav>
 
       <!-- Desktop CTAs -->
@@ -27,7 +27,7 @@
           <span>Entrar</span>
         </a>
         <a routerLink="/cadastro" class="btn-lp-primary">
-          <span>Começar Agora</span>
+          <span>Testar 14 Dias Grátis</span>
           <mat-icon>arrow_forward</mat-icon>
         </a>
       </div>
@@ -41,14 +41,14 @@
     <!-- Mobile Dropdown -->
     @if (menuMobileAberto) {
       <div class="lp-mobile-dropdown">
-        <a (click)="scrollToSection('recursos')">Recursos</a>
-        <a (click)="scrollToSection('bento')">Módulos</a>
+        <a (click)="scrollToSection('bento')">Recursos</a>
         <a (click)="scrollToSection('demonstracao')">Demonstração</a>
         <a (click)="scrollToSection('visoes')">Visões do Sistema</a>
         <a (click)="scrollToSection('precos')">Planos</a>
+        <a (click)="scrollToSection('faq')">Dúvidas Frequentes</a>
         <div class="lp-mobile-actions">
           <a routerLink="/login" class="btn-lp-login-mobile">Entrar na Portaria</a>
-          <a routerLink="/cadastro" class="btn-lp-primary-mobile">Cadastrar Morador</a>
+          <a routerLink="/cadastro" class="btn-lp-primary-mobile">Testar 14 Dias Grátis</a>
         </div>
       </div>
     }
@@ -60,47 +60,50 @@
       <!-- Pill Badge -->
       <div class="lp-hero-pill">
         <span class="pulse-dot"></span>
-        <span class="pill-text-strong">Portaria Facial & Gestão Condominial</span>
+        <span class="pill-text-strong">Portaria Inteligente Sem Obras</span>
         <span class="pill-divider">•</span>
         <a (click)="scrollToSection('bento')" class="pill-link">
-          <span>Conheça os Recursos</span>
+          <span>Sem tags, chaves ou taxas extras</span>
           <mat-icon>chevron_right</mat-icon>
         </a>
       </div>
 
       <!-- Headline & Subheadline -->
       <h1 class="lp-hero-title">
-        A portaria e gestão do seu condomínio sem filas, papel e sem ponto cego.
+        A portaria do seu condomínio com biometria facial, encomendas rastreadas e zero reclamações no seu WhatsApp.
       </h1>
       <p class="lp-hero-subtitle">
-        Biometria facial para moradores e visitantes, rastreamento seguro de encomendas, reservas de áreas comuns, chamados de manutenção e assembleias com enquetes digitais.
+        Dê adeus aos livros de papel, às tags que se perdem e às filas na portaria. O CondoFlow integra controle de acesso biométrico via webcam e a gestão completa do condomínio em um sistema 100% web.
       </p>
 
       <!-- CTAs -->
       <div class="lp-hero-ctas">
         <a routerLink="/cadastro" class="btn-hero-main">
-          <span>Começar Avaliação de 14 Dias</span>
+          <span>Iniciar Teste Grátis de 14 Dias</span>
           <mat-icon>arrow_forward</mat-icon>
         </a>
         <a (click)="scrollToSection('demonstracao')" class="btn-hero-secondary">
           <mat-icon>play_circle</mat-icon>
-          <span>Ver Demonstração da Plataforma</span>
+          <span>Ver Demonstração ao Vivo</span>
         </a>
       </div>
+      <p class="hero-cta-reassurance">
+        <mat-icon>check_circle</mat-icon> Sem cartão de crédito &bull; Implantação imediata &bull; Cancele a qualquer momento
+      </p>
 
       <!-- Micro-proof Badges -->
       <div class="lp-hero-proofs">
         <span class="proof-item">
           <mat-icon class="icon-green">verified_user</mat-icon>
-          <span>Conforme LGPD & Proteção de Dados</span>
+          <span>Conforme LGPD & Proteção de Dados Sensíveis</span>
         </span>
         <span class="proof-item">
-          <mat-icon class="icon-amber">bolt</mat-icon>
-          <span>Reconhecimento Facial Integrado (OpenCV)</span>
+          <mat-icon class="icon-amber">videocam</mat-icon>
+          <span>Sem Equipamentos Caros: Funciona com Webcam Comum</span>
         </span>
         <span class="proof-item">
-          <mat-icon class="icon-blue">devices</mat-icon>
-          <span>100% Web: Celular ou Computador</span>
+          <mat-icon class="icon-blue">cloud_done</mat-icon>
+          <span>100% Web: Direto no Navegador ou Celular</span>
         </span>
       </div>
 
@@ -143,7 +146,7 @@
                   <span class="sim-muted">Bloco B · Apto 302 · Moradora</span>
                   <div class="sim-telemetry">
                     <span class="pill-sim-liberado">Entrada Liberada</span>
-                    <span class="text-sim-simil">99.4% Similaridade IA</span>
+                    <span class="text-sim-simil">Liberado em 0.8s • Reconhecido</span>
                   </div>
                 </div>
               </div>
@@ -186,7 +189,7 @@
                 <div class="sim-booking-info">
                   <strong>Churrasqueira Gourmet 01</strong>
                   <span class="sim-muted">Turno Noite (18h às 23h)</span>
-                  <span class="sim-reserved-by">Reservado por Apto 201</span>
+                  <span class="sim-reserved-by">Sem risco de reserva duplicada</span>
                 </div>
               </div>
             </div>
@@ -200,9 +203,9 @@
   <section id="bento" class="lp-bento-section">
     <div class="lp-section-container">
       <div class="lp-section-header">
-        <span class="lp-tag">MÓDULOS REAIS INTEGRADOS</span>
-        <h2>Tudo o que seu condomínio precisa em um único sistema sóbrio e veloz.</h2>
-        <p>Elimine as planilhas soltas, os cadernos de papel na portaria e o ruído descontrolado em grupos de mensagens.</p>
+        <span class="lp-tag">MÓDULOS INTEGRADOS DE VERDADE</span>
+        <h2>A tranquilidade que o síndico precisa. A agilidade que o morador espera.</h2>
+        <p>Elimine as planilhas soltas, os livros de papel da portaria e as cobranças descontroladas em grupos de WhatsApp.</p>
       </div>
 
       <div class="lp-bento-grid">
@@ -211,18 +214,18 @@
           <div class="bento-icon-box blue">
             <mat-icon>photo_camera_front</mat-icon>
           </div>
-          <h3>Biometria Facial & Auto-Cadastro de Visitantes</h3>
+          <h3>Entrada Liberada pelo Rosto em 1 Segundo</h3>
           <p>
-            Reconhecimento facial com IA OpenCV direto no navegador via webcam ou totem. Moradores geram convites com links públicos seguros para que visitantes cadastrem suas selfies previamente pelo celular.
+            Sem chaves esquecidas ou tags que quebram. Moradores e prestadores entram com biometria facial segura pelo navegador com qualquer webcam. Visitantes recebem um link no WhatsApp para cadastrar a selfie antes de chegar, acabando com as filas na portaria.
           </p>
           <div class="bento-mini-preview">
             <div class="mini-hud-box">
               <div class="mini-hud-reticle"></div>
-              <span>Retícula Biométrica Instantânea</span>
+              <span>Identificação Biométrica Segura</span>
             </div>
             <div class="mini-hud-pill">
               <mat-icon>check_circle</mat-icon>
-              <span>100% no Navegador</span>
+              <span>Funciona com Qualquer Webcam Comum</span>
             </div>
           </div>
         </div>
@@ -232,9 +235,9 @@
           <div class="bento-icon-box amber">
             <mat-icon>markunread_mailbox</mat-icon>
           </div>
-          <h3>Controle de Encomendas</h3>
+          <h3>Fim das Encomendas Extraviadas na Guarita</h3>
           <p>
-            Entrada de pacotes com identificação automática de transportadora (Mercado Livre, Amazon, Correios, Shopee), código de retirada protegido e confirmação de entrega ao morador.
+            O porteiro registra pacotes em 5 segundos identificando a transportadora (Mercado Livre, Amazon, Correios, Shopee). O morador recebe aviso instantâneo no celular e retira com código de segurança anti-fraude.
           </p>
         </div>
 
@@ -243,9 +246,9 @@
           <div class="bento-icon-box green">
             <mat-icon>calendar_month</mat-icon>
           </div>
-          <h3>Reservas de Áreas Comuns</h3>
+          <h3>Reservas de Espaços Sem Brigas entre Vizinhos</h3>
           <p>
-            Agendamento simples de churrasqueiras, salões de festas e quadras por turnos (Manhã, Tarde, Noite). Sistema anti-conflito garante que nenhum espaço seja reservado em duplicidade.
+            Agendamento simples de churrasqueiras e salões por turnos (Manhã, Tarde e Noite). O sistema anti-conflito impede reservas duplicadas e permite bloqueios administrativos para manutenção.
           </p>
         </div>
 
@@ -254,9 +257,9 @@
           <div class="bento-icon-box purple">
             <mat-icon>handyman</mat-icon>
           </div>
-          <h3>Chamados & Manutenções</h3>
+          <h3>Chamados de Manutenção com Fotos e Histórico</h3>
           <p>
-            Moradores reportam avarias com fotos e localização. O síndico acompanha status em tempo real (Aberto, Em Andamento, Concluído) e mantém histórico para prestação de contas.
+            Moradores registram avarias diretamente pelo celular com fotos. O síndico acompanha status em tempo real, delega serviços e gera relatórios claros para prestação de contas na assembleia.
           </p>
         </div>
 
@@ -265,9 +268,9 @@
           <div class="bento-icon-box teal">
             <mat-icon>how_to_vote</mat-icon>
           </div>
-          <h3>Assembleias Virtuais & Consultas Digitais</h3>
+          <h3>Consultas e Assembleias Virtuais Auditáveis</h3>
           <p>
-            Decisões coletivas registradas com rigor: uma unidade, um voto. Enquetes com barras de porcentagem ao vivo, prazos de encerramento automáticos e auditoria transparente para evitar questionamentos.
+            Decisões coletivas registradas com transparência: uma unidade, um voto. Enquetes com apuração em tempo real e prazos automáticos, evitando discussões desgastantes e contestações jurídicas.
           </p>
         </div>
       </div>
@@ -303,14 +306,14 @@
         @if (abaVisaoAtiva === 'sindico') {
           <div class="visao-content">
             <div class="visao-text">
-              <h3>Controle absoluto, métricas claras e zero atrito com condôminos</h3>
-              <p>O síndico gerencia todas as ocorrências em um painel central: chamados em aberto, controle de inadimplência, agendamentos futuros e publicação de editais e atas de reunião em PDF com conformidade LGPD.</p>
+              <h3>Gestão transparente, histórico auditável e paz de espírito na prestação de contas</h3>
+              <p>O síndico centraliza ocorrências, controle de inadimplência, agendamentos futuros e publicação de editais e atas em PDF com total conformidade jurídica e proteção LGPD.</p>
               <ul class="visao-bullets">
-                <li><mat-icon>check_circle</mat-icon> Dashboard consolidado de ocupação e chamados</li>
-                <li><mat-icon>check_circle</mat-icon> Emissão de comunicados com alerta de urgência</li>
-                <li><mat-icon>check_circle</mat-icon> Exportação de relatórios para prestação de contas</li>
+                <li><mat-icon>check_circle</mat-icon> Dashboard consolidado de ocupação, chamados e acessos</li>
+                <li><mat-icon>check_circle</mat-icon> Mural digital de avisos oficiais com confirmação de leitura</li>
+                <li><mat-icon>check_circle</mat-icon> Exportação instantânea de relatórios para prestação de contas</li>
               </ul>
-              <a routerLink="/login" class="btn-visao-cta">Acessar Painel do Síndico</a>
+              <a routerLink="/cadastro" class="btn-visao-cta">Testar Painel do Síndico por 14 Dias</a>
             </div>
             <div class="visao-metric-box">
               <div class="metric-pill">
@@ -319,7 +322,7 @@
               </div>
               <div class="metric-pill">
                 <strong>-80%</strong>
-                <span>Tempo em Atendimentos</span>
+                <span>Mensagens Repetitivas no WhatsApp</span>
               </div>
             </div>
           </div>
@@ -328,19 +331,19 @@
         @if (abaVisaoAtiva === 'portaria') {
           <div class="visao-content">
             <div class="visao-text">
-              <h3>Liberação biométrica ultra-rápida e registro seguro de entregas</h3>
-              <p>A portaria ganha um totem inteligente ao vivo. Pedestres cadastrados entram sem necessitar de chaves ou tags que se perdem. O porteiro registra pacotes em segundos com código de entrega anti-fraude.</p>
+              <h3>Portaria sem gargalos: liberação em 1 segundo e controle blindado de pacotes</h3>
+              <p>A guarita ganha uma tela ágil que opera com qualquer webcam comum. Pedestres cadastrados entram sem travar a fila. O porteiro registra pacotes em segundos com código de entrega anti-fraude.</p>
               <ul class="visao-bullets">
-                <li><mat-icon>check_circle</mat-icon> Scanner facial em tempo real com indicador HUD</li>
-                <li><mat-icon>check_circle</mat-icon> Registro rápido de pacotes por transportadora</li>
+                <li><mat-icon>check_circle</mat-icon> Câmera ao vivo com reconhecimento facial em tempo real</li>
+                <li><mat-icon>check_circle</mat-icon> Triagem rápida de pacotes por transportadora com recibo digital</li>
                 <li><mat-icon>check_circle</mat-icon> Lista de visitantes pré-autorizados pelos moradores</li>
               </ul>
-              <a routerLink="/login" class="btn-visao-cta">Acessar Operação da Portaria</a>
+              <a (click)="scrollToSection('demonstracao')" class="btn-visao-cta">Ver Simulação da Portaria</a>
             </div>
             <div class="visao-metric-box">
               <div class="metric-pill">
-                <strong>&lt; 2s</strong>
-                <span>Tempo Médio de Liberação</span>
+                <strong>&lt; 1s</strong>
+                <span>Tempo Médio de Entrada</span>
               </div>
               <div class="metric-pill">
                 <strong>Zero</strong>
@@ -353,14 +356,14 @@
         @if (abaVisaoAtiva === 'morador') {
           <div class="visao-content">
             <div class="visao-text">
-              <h3>Autonomia completa e comodidade na palma da mão</h3>
-              <p>O morador cadastra sua selfie, reserva a churrasqueira para o final de semana, gera convites de WhatsApp para seus convidados com QR Code e é avisado na hora que uma encomenda chega.</p>
+              <h3>Autonomia para o morador, valorização para o patrimônio de todos</h3>
+              <p>Pelo navegador do celular, o morador cadastra sua selfie, reserva áreas de lazer sem burocracia, convida amigos via WhatsApp com QR Code seguro e recebe aviso imediato quando um pacote chega.</p>
               <ul class="visao-bullets">
-                <li><mat-icon>check_circle</mat-icon> Notificação instantânea na chegada de pacotes</li>
-                <li><mat-icon>check_circle</mat-icon> Convite rápido para visitantes via link do WhatsApp</li>
-                <li><mat-icon>check_circle</mat-icon> Acompanhamento de chamados e votação em enquetes</li>
+                <li><mat-icon>check_circle</mat-icon> Notificação instantânea no celular na chegada de encomendas</li>
+                <li><mat-icon>check_circle</mat-icon> Convite expresso para visitantes via link do WhatsApp</li>
+                <li><mat-icon>check_circle</mat-icon> Abertura de chamados com fotos e votação em assembleias</li>
               </ul>
-              <a routerLink="/cadastro" class="btn-visao-cta">Cadastrar Meu Apartamento</a>
+              <a routerLink="/cadastro" class="btn-visao-cta">Experimentar com Meu Condomínio</a>
             </div>
             <div class="visao-metric-box">
               <div class="metric-pill">
@@ -368,8 +371,8 @@
                 <span>Satisfação dos Condôminos</span>
               </div>
               <div class="metric-pill">
-                <strong>24/7</strong>
-                <span>Acesso Prático pelo Celular</span>
+                <strong>100% Web</strong>
+                <span>Sem Baixar App Pesado</span>
               </div>
             </div>
           </div>
@@ -462,15 +465,119 @@
           <a routerLink="/login" class="btn-plan-outline">Falar com Especialista</a>
         </div>
       </div>
+
+      <!-- Ancoragem e Redução de Risco de Preço -->
+      <div class="pricing-risk-reversal">
+        <div class="risk-item">
+          <mat-icon>lock_open</mat-icon>
+          <span>Sem fidelidade obrigatória &bull; Cancele a qualquer momento</span>
+        </div>
+        <div class="risk-item">
+          <mat-icon>credit_card_off</mat-icon>
+          <span>Teste grátis de 14 dias sem informar cartão</span>
+        </div>
+        <div class="risk-item">
+          <mat-icon>headset_mic</mat-icon>
+          <span>Migração e suporte inclusos em todos os planos</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 7. Final Call to Action Banner -->
+  <!-- 7. Seção de FAQ Estratégico (Quebra de Objeções) -->
+  <section id="faq" class="lp-faq-section">
+    <div class="lp-section-container">
+      <div class="lp-section-header">
+        <span class="lp-tag">RESPOSTAS DIRETAS</span>
+        <h2>Perguntas frequentes de síndicos e administradoras.</h2>
+        <p>Transparência total sobre equipamentos, custos, segurança e implantação no seu condomínio.</p>
+      </div>
+
+      <div class="lp-faq-accordion">
+        <!-- Pergunta 1 -->
+        <div class="faq-item" [class.open]="faqAberta === 0">
+          <button type="button" class="faq-question" (click)="toggleFaq(0)">
+            <span>Preciso comprar câmeras especiais, totens caros ou quebrar paredes?</span>
+            <mat-icon>{{ faqAberta === 0 ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          @if (faqAberta === 0) {
+            <div class="faq-answer">
+              <p>
+                <strong>Não! Essa é uma das maiores economias do CondoFlow.</strong> O sistema é 100% web e opera com qualquer webcam USB comum (a partir de R$ 90), notebook ou tablet conectado à internet. Não há necessidade de obras civis, servidores físicos barulhentos na guarita ou contratos abusivos de comodato com empresas de hardware.
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Pergunta 2 -->
+        <div class="faq-item" [class.open]="faqAberta === 1">
+          <button type="button" class="faq-question" (click)="toggleFaq(1)">
+            <span>Como o sistema garante conformidade rigorosa com a LGPD?</span>
+            <mat-icon>{{ faqAberta === 1 ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          @if (faqAberta === 1) {
+            <div class="faq-answer">
+              <p>
+                Tratamos os dados faciais como dados altamente sensíveis segundo a Lei Geral de Proteção de Dados (LGPD). Os rostos são processados em representações numéricas vetoriais protegidas por criptografia. O condomínio tem histórico auditável em tempo real, termo de consentimento e visibilidade clara para síndicos e condôminos.
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Pergunta 3 -->
+        <div class="faq-item" [class.open]="faqAberta === 2">
+          <button type="button" class="faq-question" (click)="toggleFaq(2)">
+            <span>Moradores idosos ou visitantes precisam baixar aplicativo pesado?</span>
+            <mat-icon>{{ faqAberta === 2 ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          @if (faqAberta === 2) {
+            <div class="faq-answer">
+              <p>
+                <strong>Zero complicação.</strong> O CondoFlow funciona direto no navegador do celular (Safari, Chrome ou qualquer outro). Os visitantes recebem um link no WhatsApp enviado pelo próprio morador e cadastram a selfie em 20 segundos antes da visita, sem precisar criar contas complexas ou baixar nada das lojas de aplicativos.
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Pergunta 4 -->
+        <div class="faq-item" [class.open]="faqAberta === 3">
+          <button type="button" class="faq-question" (click)="toggleFaq(3)">
+            <span>Como funciona a avaliação gratuita de 14 dias?</span>
+            <mat-icon>{{ faqAberta === 3 ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          @if (faqAberta === 3) {
+            <div class="faq-answer">
+              <p>
+                Você cria a conta do condomínio em menos de 2 minutos, sem precisar cadastrar cartão de crédito. Durante 14 dias corridos, você e seus porteiros têm acesso total a todos os módulos — incluindo portaria biométrica e controle de encomendas. Se gostar, escolhe o plano ideal. Se não, não há cobrança nem multa alguma.
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Pergunta 5 -->
+        <div class="faq-item" [class.open]="faqAberta === 4">
+          <button type="button" class="faq-question" (click)="toggleFaq(4)">
+            <span>Quanto tempo leva para a portaria começar a operar?</span>
+            <mat-icon>{{ faqAberta === 4 ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          @if (faqAberta === 4) {
+            <div class="faq-answer">
+              <p>
+                A implantação é imediata. Como o sistema está na nuvem, você pode cadastrar os apartamentos por planilha ou manualmente no primeiro dia. Os porteiros aprendem a operar a tela em menos de 10 minutos, pois a interface foi desenhada exatamente para ser intuitiva e sem cliques desnecessários.
+              </p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Final Call to Action Banner -->
   <section class="lp-final-cta-section">
     <div class="lp-section-container">
       <div class="final-cta-box">
-        <h2>Pronto para elevar a segurança e gestão do seu condomínio?</h2>
-        <p>Junte-se aos condomínios que abandonaram o papel e modernizaram suas portarias com o CondoFlow.</p>
+        <h2>Pronto para eliminar os atritos e modernizar o seu condomínio?</h2>
+        <p>Junte-se aos condomínios que abandonaram o papel, reduziram filas e ganharam tranquilidade com o CondoFlow.</p>
         <div class="final-cta-buttons">
           <a routerLink="/cadastro" class="btn-final-white">
             <mat-icon>rocket_launch</mat-icon>
@@ -478,14 +585,17 @@
           </a>
           <a routerLink="/login" class="btn-final-outline">
             <mat-icon>login</mat-icon>
-            <span>Já sou Cadastrado (Entrar)</span>
+            <span>Acessar Minha Conta</span>
           </a>
         </div>
+        <p class="final-cta-guarantee">
+          <mat-icon>verified</mat-icon> Teste completo sem cartão &bull; Ativação imediata em 2 minutos
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- 8. Footer Oficial -->
+  <!-- 9. Footer Oficial -->
   <footer class="lp-footer">
     <div class="lp-section-container footer-content">
       <div class="footer-brand">
@@ -501,8 +611,9 @@
       <div class="footer-col">
         <h4>Plataforma</h4>
         <a routerLink="/login">Acessar Sistema</a>
-        <a routerLink="/cadastro">Cadastrar Morador</a>
+        <a routerLink="/cadastro">Cadastrar Condomínio</a>
         <a (click)="scrollToSection('precos')">Tabela de Preços</a>
+        <a (click)="scrollToSection('faq')">Dúvidas Frequentes</a>
       </div>
 
       <div class="footer-col">

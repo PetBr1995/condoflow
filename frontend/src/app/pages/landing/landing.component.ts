@@ -15,11 +15,16 @@ export class LandingComponent implements OnInit {
   cicloPreco: 'anual' | 'mensal' = 'anual';
   abaVisaoAtiva: 'sindico' | 'portaria' | 'morador' = 'sindico';
   menuMobileAberto: boolean = false;
+  faqAberta: number | null = 0;
 
   ngOnInit(): void {}
 
   toggleMenuMobile(): void {
     this.menuMobileAberto = !this.menuMobileAberto;
+  }
+
+  toggleFaq(index: number): void {
+    this.faqAberta = this.faqAberta === index ? null : index;
   }
 
   scrollToSection(id: string): void {

@@ -1160,6 +1160,146 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+.hero-cta-reassurance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: 14px;
+}
+
+.hero-cta-reassurance mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+}
+
+.final-cta-guarantee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-top: 20px;
+}
+
+.final-cta-guarantee mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #38bdf8;
+}
+
+/* Redução de Risco na Tabela de Preços */
+.pricing-risk-reversal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.risk-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.risk-item mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #2563eb;
+}
+
+/* 7. Seção de FAQ */
+.lp-faq-section {
+  padding: 100px 0;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.lp-faq-accordion {
+  max-width: 800px;
+  margin: 40px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.faq-item:hover {
+  border-color: #cbd5e1;
+}
+
+.faq-item.open {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  gap: 16px;
+}
+
+.faq-question mat-icon {
+  color: #64748b;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.faq-item.open .faq-question mat-icon {
+  color: #2563eb;
+}
+
+.faq-answer {
+  padding: 0 24px 22px 24px;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+.faq-answer strong {
+  color: #0f172a;
+}
+
 /* 8. Footer */
 .lp-footer {
   background: #f8fafc;
