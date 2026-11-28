@@ -1,0 +1,522 @@
+<div class="landing-page-root">
+  <!-- 1. Navbar Glassmorphism -->
+  <header class="lp-navbar">
+    <div class="lp-navbar-container">
+      <a routerLink="/" class="lp-brand">
+        <div class="lp-logo-box">
+          <mat-icon>apartment</mat-icon>
+        </div>
+        <div class="lp-brand-text">
+          <span class="lp-brand-name">CondoFlow</span>
+          <span class="lp-version-badge">v2.0</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="lp-nav-links">
+        <a (click)="scrollToSection('recursos')">Recursos</a>
+        <a (click)="scrollToSection('bento')">Módulos</a>
+        <a (click)="scrollToSection('demonstracao')">Demonstração</a>
+        <a (click)="scrollToSection('visoes')">Visões do Sistema</a>
+        <a (click)="scrollToSection('precos')">Planos</a>
+      </nav>
+
+      <!-- Desktop CTAs -->
+      <div class="lp-nav-actions">
+        <a routerLink="/login" class="btn-lp-login">
+          <span>Entrar</span>
+        </a>
+        <a routerLink="/cadastro" class="btn-lp-primary">
+          <span>Começar Agora</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button type="button" class="btn-lp-mobile-toggle" (click)="toggleMenuMobile()">
+        <mat-icon>{{ menuMobileAberto ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    @if (menuMobileAberto) {
+      <div class="lp-mobile-dropdown">
+        <a (click)="scrollToSection('recursos')">Recursos</a>
+        <a (click)="scrollToSection('bento')">Módulos</a>
+        <a (click)="scrollToSection('demonstracao')">Demonstração</a>
+        <a (click)="scrollToSection('visoes')">Visões do Sistema</a>
+        <a (click)="scrollToSection('precos')">Planos</a>
+        <div class="lp-mobile-actions">
+          <a routerLink="/login" class="btn-lp-login-mobile">Entrar na Portaria</a>
+          <a routerLink="/cadastro" class="btn-lp-primary-mobile">Cadastrar Morador</a>
+        </div>
+      </div>
+    }
+  </header>
+
+  <!-- 2. Hero Section -->
+  <section class="lp-hero">
+    <div class="lp-hero-container">
+      <!-- Pill Badge -->
+      <div class="lp-hero-pill">
+        <span class="pulse-dot"></span>
+        <span class="pill-text-strong">Portaria Facial & Gestão Condominial</span>
+        <span class="pill-divider">•</span>
+        <a (click)="scrollToSection('bento')" class="pill-link">
+          <span>Conheça os Recursos</span>
+          <mat-icon>chevron_right</mat-icon>
+        </a>
+      </div>
+
+      <!-- Headline & Subheadline -->
+      <h1 class="lp-hero-title">
+        A portaria e gestão do seu condomínio sem filas, papel e sem ponto cego.
+      </h1>
+      <p class="lp-hero-subtitle">
+        Biometria facial para moradores e visitantes, rastreamento seguro de encomendas, reservas de áreas comuns, chamados de manutenção e assembleias com enquetes digitais.
+      </p>
+
+      <!-- CTAs -->
+      <div class="lp-hero-ctas">
+        <a routerLink="/cadastro" class="btn-hero-main">
+          <span>Começar Avaliação de 14 Dias</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+        <a (click)="scrollToSection('demonstracao')" class="btn-hero-secondary">
+          <mat-icon>play_circle</mat-icon>
+          <span>Ver Demonstração da Plataforma</span>
+        </a>
+      </div>
+
+      <!-- Micro-proof Badges -->
+      <div class="lp-hero-proofs">
+        <span class="proof-item">
+          <mat-icon class="icon-green">verified_user</mat-icon>
+          <span>Conforme LGPD & Proteção de Dados</span>
+        </span>
+        <span class="proof-item">
+          <mat-icon class="icon-amber">bolt</mat-icon>
+          <span>Reconhecimento Facial Integrado (OpenCV)</span>
+        </span>
+        <span class="proof-item">
+          <mat-icon class="icon-blue">devices</mat-icon>
+          <span>100% Web: Celular ou Computador</span>
+        </span>
+      </div>
+
+      <!-- 3. Interactive Hero Simulator (App Window Frame) -->
+      <div id="demonstracao" class="lp-app-frame-wrapper">
+        <div class="lp-app-frame">
+          <!-- Frame Topbar -->
+          <div class="frame-topbar">
+            <div class="frame-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <div class="frame-search">
+              <mat-icon>search</mat-icon>
+              <span>app.condoflow.com.br/dashboard</span>
+            </div>
+            <div class="frame-live-indicator">
+              <span class="live-dot"></span>
+              <span>Portaria Online</span>
+            </div>
+          </div>
+
+          <!-- Frame Content Grid -->
+          <div class="frame-body">
+            <!-- Coluna 1: Acesso Facial Recente -->
+            <div class="sim-card">
+              <div class="sim-card-header">
+                <mat-icon class="header-icon-blue">face</mat-icon>
+                <span>Último Acesso no Totem</span>
+                <span class="badge-sim-live">Agora</span>
+              </div>
+              <div class="sim-access-content">
+                <div class="sim-avatar-box">
+                  <mat-icon>person</mat-icon>
+                  <span class="sim-avatar-check"><mat-icon>check</mat-icon></span>
+                </div>
+                <div class="sim-access-info">
+                  <strong>Mariana Souza</strong>
+                  <span class="sim-muted">Bloco B · Apto 302 · Moradora</span>
+                  <div class="sim-telemetry">
+                    <span class="pill-sim-liberado">Entrada Liberada</span>
+                    <span class="text-sim-simil">99.4% Similaridade IA</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coluna 2: Encomenda em Espera -->
+            <div class="sim-card">
+              <div class="sim-card-header">
+                <mat-icon class="header-icon-amber">inventory_2</mat-icon>
+                <span>Encomenda na Portaria</span>
+                <span class="badge-sim-amber">Retirada Pendente</span>
+              </div>
+              <div class="sim-package-content">
+                <div class="sim-carrier-box">
+                  <mat-icon>local_shipping</mat-icon>
+                </div>
+                <div class="sim-package-info">
+                  <strong>Mercado Livre · Caixa Média</strong>
+                  <span class="sim-muted">Destino: Bloco A · Apto 104</span>
+                  <div class="sim-pickup-code">
+                    <small>Cód. Retirada:</small>
+                    <code>CF-8942</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coluna 3: Reserva Confirmada -->
+            <div class="sim-card">
+              <div class="sim-card-header">
+                <mat-icon class="header-icon-emerald">event_available</mat-icon>
+                <span>Próxima Reserva Ativa</span>
+                <span class="badge-sim-emerald">Hoje</span>
+              </div>
+              <div class="sim-booking-content">
+                <div class="sim-booking-date">
+                  <span class="b-day">27</span>
+                  <span class="b-month">NOV</span>
+                </div>
+                <div class="sim-booking-info">
+                  <strong>Churrasqueira Gourmet 01</strong>
+                  <span class="sim-muted">Turno Noite (18h às 23h)</span>
+                  <span class="sim-reserved-by">Reservado por Apto 201</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Bento Grid de Módulos Reais -->
+  <section id="bento" class="lp-bento-section">
+    <div class="lp-section-container">
+      <div class="lp-section-header">
+        <span class="lp-tag">MÓDULOS REAIS INTEGRADOS</span>
+        <h2>Tudo o que seu condomínio precisa em um único sistema sóbrio e veloz.</h2>
+        <p>Elimine as planilhas soltas, os cadernos de papel na portaria e o ruído descontrolado em grupos de mensagens.</p>
+      </div>
+
+      <div class="lp-bento-grid">
+        <!-- Card 1: Biometria Facial & Totem (2 Colunas) -->
+        <div class="bento-card bento-span-2">
+          <div class="bento-icon-box blue">
+            <mat-icon>photo_camera_front</mat-icon>
+          </div>
+          <h3>Biometria Facial & Auto-Cadastro de Visitantes</h3>
+          <p>
+            Reconhecimento facial com IA OpenCV direto no navegador via webcam ou totem. Moradores geram convites com links públicos seguros para que visitantes cadastrem suas selfies previamente pelo celular.
+          </p>
+          <div class="bento-mini-preview">
+            <div class="mini-hud-box">
+              <div class="mini-hud-reticle"></div>
+              <span>Retícula Biométrica Instantânea</span>
+            </div>
+            <div class="mini-hud-pill">
+              <mat-icon>check_circle</mat-icon>
+              <span>100% no Navegador</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Encomendas com Marcas Reais -->
+        <div class="bento-card">
+          <div class="bento-icon-box amber">
+            <mat-icon>markunread_mailbox</mat-icon>
+          </div>
+          <h3>Controle de Encomendas</h3>
+          <p>
+            Entrada de pacotes com identificação automática de transportadora (Mercado Livre, Amazon, Correios, Shopee), código de retirada protegido e confirmação de entrega ao morador.
+          </p>
+        </div>
+
+        <!-- Card 3: Reservas Sem Conflito -->
+        <div class="bento-card">
+          <div class="bento-icon-box green">
+            <mat-icon>calendar_month</mat-icon>
+          </div>
+          <h3>Reservas de Áreas Comuns</h3>
+          <p>
+            Agendamento simples de churrasqueiras, salões de festas e quadras por turnos (Manhã, Tarde, Noite). Sistema anti-conflito garante que nenhum espaço seja reservado em duplicidade.
+          </p>
+        </div>
+
+        <!-- Card 4: Chamados de Manutenção -->
+        <div class="bento-card">
+          <div class="bento-icon-box purple">
+            <mat-icon>handyman</mat-icon>
+          </div>
+          <h3>Chamados & Manutenções</h3>
+          <p>
+            Moradores reportam avarias com fotos e localização. O síndico acompanha status em tempo real (Aberto, Em Andamento, Concluído) e mantém histórico para prestação de contas.
+          </p>
+        </div>
+
+        <!-- Card 5: Assembleias & Enquetes (2 Colunas) -->
+        <div class="bento-card bento-span-2">
+          <div class="bento-icon-box teal">
+            <mat-icon>how_to_vote</mat-icon>
+          </div>
+          <h3>Assembleias Virtuais & Consultas Digitais</h3>
+          <p>
+            Decisões coletivas registradas com rigor: uma unidade, um voto. Enquetes com barras de porcentagem ao vivo, prazos de encerramento automáticos e auditoria transparente para evitar questionamentos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Product Deep-Dive (Visão Síndico, Portaria e Morador) -->
+  <section id="visoes" class="lp-visoes-section">
+    <div class="lp-section-container">
+      <div class="lp-section-header">
+        <span class="lp-tag">EXPERIÊNCIA DEDICADA</span>
+        <h2>Feito sob medida para quem administra, opera e vive no condomínio.</h2>
+      </div>
+
+      <!-- Segmented Tabs -->
+      <div class="visoes-tabs">
+        <button type="button" [class.active]="abaVisaoAtiva === 'sindico'" (click)="abaVisaoAtiva = 'sindico'">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>Para o Síndico & Administradora</span>
+        </button>
+        <button type="button" [class.active]="abaVisaoAtiva === 'portaria'" (click)="abaVisaoAtiva = 'portaria'">
+          <mat-icon>security</mat-icon>
+          <span>Para a Portaria & Segurança</span>
+        </button>
+        <button type="button" [class.active]="abaVisaoAtiva === 'morador'" (click)="abaVisaoAtiva = 'morador'">
+          <mat-icon>home</mat-icon>
+          <span>Para os Moradores</span>
+        </button>
+      </div>
+
+      <!-- Conteúdo da Visão -->
+      <div class="visao-card">
+        @if (abaVisaoAtiva === 'sindico') {
+          <div class="visao-content">
+            <div class="visao-text">
+              <h3>Controle absoluto, métricas claras e zero atrito com condôminos</h3>
+              <p>O síndico gerencia todas as ocorrências em um painel central: chamados em aberto, controle de inadimplência, agendamentos futuros e publicação de editais e atas de reunião em PDF com conformidade LGPD.</p>
+              <ul class="visao-bullets">
+                <li><mat-icon>check_circle</mat-icon> Dashboard consolidado de ocupação e chamados</li>
+                <li><mat-icon>check_circle</mat-icon> Emissão de comunicados com alerta de urgência</li>
+                <li><mat-icon>check_circle</mat-icon> Exportação de relatórios para prestação de contas</li>
+              </ul>
+              <a routerLink="/login" class="btn-visao-cta">Acessar Painel do Síndico</a>
+            </div>
+            <div class="visao-metric-box">
+              <div class="metric-pill">
+                <strong>100%</strong>
+                <span>Histórico Auditável</span>
+              </div>
+              <div class="metric-pill">
+                <strong>-80%</strong>
+                <span>Tempo em Atendimentos</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (abaVisaoAtiva === 'portaria') {
+          <div class="visao-content">
+            <div class="visao-text">
+              <h3>Liberação biométrica ultra-rápida e registro seguro de entregas</h3>
+              <p>A portaria ganha um totem inteligente ao vivo. Pedestres cadastrados entram sem necessitar de chaves ou tags que se perdem. O porteiro registra pacotes em segundos com código de entrega anti-fraude.</p>
+              <ul class="visao-bullets">
+                <li><mat-icon>check_circle</mat-icon> Scanner facial em tempo real com indicador HUD</li>
+                <li><mat-icon>check_circle</mat-icon> Registro rápido de pacotes por transportadora</li>
+                <li><mat-icon>check_circle</mat-icon> Lista de visitantes pré-autorizados pelos moradores</li>
+              </ul>
+              <a routerLink="/login" class="btn-visao-cta">Acessar Operação da Portaria</a>
+            </div>
+            <div class="visao-metric-box">
+              <div class="metric-pill">
+                <strong>&lt; 2s</strong>
+                <span>Tempo Médio de Liberação</span>
+              </div>
+              <div class="metric-pill">
+                <strong>Zero</strong>
+                <span>Extravios de Encomendas</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (abaVisaoAtiva === 'morador') {
+          <div class="visao-content">
+            <div class="visao-text">
+              <h3>Autonomia completa e comodidade na palma da mão</h3>
+              <p>O morador cadastra sua selfie, reserva a churrasqueira para o final de semana, gera convites de WhatsApp para seus convidados com QR Code e é avisado na hora que uma encomenda chega.</p>
+              <ul class="visao-bullets">
+                <li><mat-icon>check_circle</mat-icon> Notificação instantânea na chegada de pacotes</li>
+                <li><mat-icon>check_circle</mat-icon> Convite rápido para visitantes via link do WhatsApp</li>
+                <li><mat-icon>check_circle</mat-icon> Acompanhamento de chamados e votação em enquetes</li>
+              </ul>
+              <a routerLink="/cadastro" class="btn-visao-cta">Cadastrar Meu Apartamento</a>
+            </div>
+            <div class="visao-metric-box">
+              <div class="metric-pill">
+                <strong>4.9 ★</strong>
+                <span>Satisfação dos Condôminos</span>
+              </div>
+              <div class="metric-pill">
+                <strong>24/7</strong>
+                <span>Acesso Prático pelo Celular</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Tabela de Preços e Planos -->
+  <section id="precos" class="lp-precos-section">
+    <div class="lp-section-container">
+      <div class="lp-section-header">
+        <span class="lp-tag">PLANOS TRANSPARENTES</span>
+        <h2>Sem letras miúdas. Escolha o tamanho ideal para o seu condomínio.</h2>
+        
+        <!-- Toggle Anual / Mensal -->
+        <div class="pricing-toggle">
+          <button type="button" [class.active]="cicloPreco === 'mensal'" (click)="cicloPreco = 'mensal'">Mensal</button>
+          <button type="button" [class.active]="cicloPreco === 'anual'" (click)="cicloPreco = 'anual'">
+            Anual <span class="badge-desconto">-20% OFF</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pricing-cards-grid">
+        <!-- Plano Essencial -->
+        <div class="pricing-card">
+          <div class="plan-header">
+            <h3>Essencial</h3>
+            <p>Para condomínios residenciais que buscam digitalizar avisos, encomendas e manutenções.</p>
+            <div class="plan-price">
+              <span class="currency">R$</span>
+              <strong class="price-val">{{ cicloPreco === 'anual' ? '232' : '290' }}</strong>
+              <span class="period">/mês</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li><mat-icon>check</mat-icon> Até 50 unidades residenciais</li>
+            <li><mat-icon>check</mat-icon> Gestão de Encomendas com protocolo</li>
+            <li><mat-icon>check</mat-icon> Mural de Avisos & Atas Oficiais</li>
+            <li><mat-icon>check</mat-icon> Chamados de Manutenção com fotos</li>
+            <li><mat-icon>check</mat-icon> Reservas sem conflito de áreas</li>
+            <li><mat-icon>check</mat-icon> App Web responsivo para moradores</li>
+          </ul>
+          <a routerLink="/cadastro" class="btn-plan-outline">Começar com Essencial</a>
+        </div>
+
+        <!-- Plano Pro Facial (Destaque) -->
+        <div class="pricing-card highlight">
+          <div class="plan-badge-top">MAIS ESCOLHIDO</div>
+          <div class="plan-header">
+            <h3>Pro Facial</h3>
+            <p>O plano definitivo com biometria facial, totem de portaria e assembleias virtuais.</p>
+            <div class="plan-price">
+              <span class="currency">R$</span>
+              <strong class="price-val">{{ cicloPreco === 'anual' ? '472' : '590' }}</strong>
+              <span class="period">/mês</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li><mat-icon>check</mat-icon> Até 150 unidades residenciais</li>
+            <li><mat-icon>check</mat-icon> Biometria Facial com IA OpenCV</li>
+            <li><mat-icon>check</mat-icon> Módulo Totem da Portaria em Tempo Real</li>
+            <li><mat-icon>check</mat-icon> Auto-Cadastro de Visitantes via Link</li>
+            <li><mat-icon>check</mat-icon> Assembleias Virtuais & Votações por Unidade</li>
+            <li><mat-icon>check</mat-icon> Gestão Completa de Encomendas</li>
+            <li><mat-icon>check</mat-icon> Histórico Auditável de Acessos</li>
+            <li><mat-icon>check</mat-icon> Suporte Prioritário</li>
+          </ul>
+          <a routerLink="/cadastro" class="btn-plan-highlight">Experimentar Pro por 14 Dias</a>
+        </div>
+
+        <!-- Plano Enterprise -->
+        <div class="pricing-card">
+          <div class="plan-header">
+            <h3>Enterprise Multi-Torre</h3>
+            <p>Para grandes complexos residenciais, condomínios de múltiplos blocos e administradoras.</p>
+            <div class="plan-price">
+              <strong class="price-val" style="font-size: 1.8rem;">Sob Consulta</strong>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li><mat-icon>check</mat-icon> Unidades e torres ilimitadas</li>
+            <li><mat-icon>check</mat-icon> Múltiplos totens e câmeras sincronizadas</li>
+            <li><mat-icon>check</mat-icon> Gestão multi-condomínio integrada</li>
+            <li><mat-icon>check</mat-icon> API aberta para catracas e cancelas</li>
+            <li><mat-icon>check</mat-icon> Treinamento dedicado para porteiros</li>
+            <li><mat-icon>check</mat-icon> SLA de suporte garantido</li>
+          </ul>
+          <a routerLink="/login" class="btn-plan-outline">Falar com Especialista</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Final Call to Action Banner -->
+  <section class="lp-final-cta-section">
+    <div class="lp-section-container">
+      <div class="final-cta-box">
+        <h2>Pronto para elevar a segurança e gestão do seu condomínio?</h2>
+        <p>Junte-se aos condomínios que abandonaram o papel e modernizaram suas portarias com o CondoFlow.</p>
+        <div class="final-cta-buttons">
+          <a routerLink="/cadastro" class="btn-final-white">
+            <mat-icon>rocket_launch</mat-icon>
+            <span>Iniciar Teste Grátis de 14 Dias</span>
+          </a>
+          <a routerLink="/login" class="btn-final-outline">
+            <mat-icon>login</mat-icon>
+            <span>Já sou Cadastrado (Entrar)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Footer Oficial -->
+  <footer class="lp-footer">
+    <div class="lp-section-container footer-content">
+      <div class="footer-brand">
+        <div class="lp-brand">
+          <div class="lp-logo-box">
+            <mat-icon>apartment</mat-icon>
+          </div>
+          <span class="lp-brand-name">CondoFlow</span>
+        </div>
+        <p>Plataforma inteligente de segurança biométrica e gestão ágil para condomínios residenciais modernos.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Plataforma</h4>
+        <a routerLink="/login">Acessar Sistema</a>
+        <a routerLink="/cadastro">Cadastrar Morador</a>
+        <a (click)="scrollToSection('precos')">Tabela de Preços</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Segurança & Privacidade</h4>
+        <span>Conformidade com a LGPD</span>
+        <span>Criptografia de Biometria Facial</span>
+        <span>Acessos Auditados em Tempo Real</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="lp-section-container">
+        <p>© 2026 CondoFlow Tecnologia. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</div>

@@ -5,7 +5,7 @@ import { Building2, ShieldCheck, Heart } from "lucide-react";
 
 export default function Footer() {
   const currentYear = 2026;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4200";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
   return (
     <footer className="bg-surface border-t border-border pt-16 pb-12 text-ink-secondary text-xs">

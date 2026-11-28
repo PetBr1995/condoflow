@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     }
 
     const rotaAtual = this.router.url.split('?')[0].split('#')[0];
-    const rotasPublicas = ['', '/', '/landing', '/login', '/cadastro'];
+    const rotasPublicas = ['', '/', '/landing', '/login', '/cadastro', '/cadastro-morador'];
 
     if (rotasPublicas.includes(rotaAtual)) {
       return false;

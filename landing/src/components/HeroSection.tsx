@@ -5,7 +5,7 @@ import InteractiveHeroSim from "./InteractiveHeroSim";
 import { RetroGrid } from "./magicui/retro-grid";
 
 export default function HeroSection() {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4200";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
   return (
     <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden bg-gradient-to-b from-white via-page to-page-subtle text-ink-primary border-b border-border">

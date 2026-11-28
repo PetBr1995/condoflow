@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4200";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
   const navLinks = [
     { label: "Recursos", href: "#recursos" },

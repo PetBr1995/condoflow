@@ -3,7 +3,7 @@
 import { ArrowRight, ShieldCheck, Zap, Sparkles } from "lucide-react";
 
 export default function CtaBanner() {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4200";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
   return (
     <section className="py-20 bg-page border-t border-border">

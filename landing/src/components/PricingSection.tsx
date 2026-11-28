@@ -7,7 +7,7 @@ import { BorderBeam } from "./magicui/border-beam";
 export default function PricingSection() {
   const [billingCycle, setBillingCycle] = useState<"mensal" | "anual">("anual");
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4200";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
 
   const plans = [
     {

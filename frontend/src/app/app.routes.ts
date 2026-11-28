@@ -1,4 +1,5 @@
-import { Routes, CanActivateFn } from '@angular/router';
+import { Routes } from '@angular/router';
+import { LandingComponent } from './pages/landing/landing.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { Chamados } from './pages/chamados/chamados';
@@ -14,25 +15,18 @@ import { ConvitePublicoComponent } from './pages/convite-publico/convite-publico
 import { authGuard } from './guards/auth.guard';
 import { redirectIfAuthenticatedGuard } from './guards/redirect-authenticated.guard';
 
-/**
- * Guarda de redirecionamento para a nova Landing Page moderna (Next.js)
- */
-const redirectToLandingGuard: CanActivateFn = () => {
-  const landingUrl = 'http://localhost:3001';
-  window.location.href = landingUrl;
-  return false;
-};
-
 export const routes: Routes = [
   // Rotas Públicas (com redirecionamento automático caso já esteja autenticado)
   { 
     path: '', 
     pathMatch: 'full',
-    canActivate: [redirectIfAuthenticatedGuard, redirectToLandingGuard]
+    component: LandingComponent,
+    canActivate: [redirectIfAuthenticatedGuard]
   },
   { 
     path: 'landing', 
-    canActivate: [redirectToLandingGuard]
+    component: LandingComponent,
+    canActivate: [redirectIfAuthenticatedGuard]
   },
   { 
     path: 'login', 
