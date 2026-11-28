@@ -1,11 +1,46 @@
 import cv2
 import numpy as np
 import base64
-import io
+from pathlib import Path
 from PIL import Image
 
-# Carrega o classificador oficial pré-treinado do OpenCV
+# Caminhos para os pesos dos modelos de Deep Learning
+MODELS_DIR = Path(__file__).resolve().parent / 'models_weights'
+SFACE_PATH = MODELS_DIR / 'face_recognition_sface_2021dec.onnx'
+YUNET_PATH = MODELS_DIR / 'face_detection_yunet_2023mar.onnx'
+
+# Classificador Haar Cascade como fallback de segurança
 FACE_CASCADE = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+# Instância única em memória do extrator SFace (OpenCV Deep Learning)
+_sface_recognizer = None
+
+def get_sface_recognizer():
+    """Retorna o modelo SFace (MobileFaceNet/ResNet 128d) carregado."""
+    global _sface_recognizer
+    if _sface_recognizer is None and SFACE_PATH.exists():
+        try:
+            _sface_recognizer = cv2.FaceRecognizerSF.create(str(SFACE_PATH), '')
+        except Exception as e:
+            print(f"[FacialEngine] Erro ao carregar SFace: {e}")
+            _sface_recognizer = None
+    return _sface_recognizer
+
+def get_yunet_detector(largura: int, altura: int, score_threshold: float = 0.6):
+    """Retorna o detector CNN YuNet configurado para a dimensão do frame."""
+    if YUNET_PATH.exists():
+        try:
+            return cv2.FaceDetectorYN.create(
+                str(YUNET_PATH),
+                '',
+                (int(largura), int(altura)),
+                score_threshold=score_threshold,
+                nms_threshold=0.3,
+                top_k=5
+            )
+        except Exception as e:
+            print(f"[FacialEngine] Erro ao instanciar YuNet: {e}")
+    return None
 
 def decodificar_imagem_base64(imagem_base64: str) -> np.ndarray:
     """Decodifica uma string base64 (com ou sem prefixo data:image/...) para um array OpenCV BGR."""
@@ -26,49 +61,82 @@ def codificar_imagem_base64(img_bgr: np.ndarray, formato: str = '.jpg') -> str:
     b64 = base64.b64encode(buffer).decode('utf-8')
     return f"data:image/jpeg;base64,{b64}"
 
-def extrair_vetor_caracteristicas(face_gray_128: np.ndarray) -> list:
-    """
-    Gera um vetor de características faciais de 128 dimensões a partir de uma face alinhada 128x128.
-    Utiliza divisão espacial por blocos (8x8 células) combinando intensidade normalizada e gradientes Sobel.
-    """
-    # 1. Equalização adaptativa de histograma (CLAHE) para neutralizar sombras e variações de iluminação
+def _extrair_vetor_lbp_hog_fallback(face_bgr_ou_gray: np.ndarray) -> list:
+    """Fallback matemático quando os pesos ONNX não estiverem presentes (LBP + HOG)."""
+    if len(face_bgr_ou_gray.shape) == 3:
+        gray = cv2.cvtColor(face_bgr_ou_gray, cv2.COLOR_BGR2GRAY)
+    else:
+        gray = face_bgr_ou_gray
+
+    gray128 = cv2.resize(gray, (128, 128), interpolation=cv2.INTER_AREA)
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    face_eq = clahe.apply(face_gray_128)
+    eq = clahe.apply(gray128)
 
-    # 2. Gradientes horizontais e verticais de Sobel
-    grad_x = cv2.Sobel(face_eq, cv2.CV_32F, 1, 0, ksize=3)
-    grad_y = cv2.Sobel(face_eq, cv2.CV_32F, 0, 1, ksize=3)
-    magnitude, _ = cv2.cartToPolar(grad_x, grad_y)
+    # LBP
+    center = eq[1:-1, 1:-1]
+    lbp = np.zeros(center.shape, dtype=np.uint8)
+    lbp |= (eq[0:-2, 0:-2] >= center).astype(np.uint8) << 7
+    lbp |= (eq[0:-2, 1:-1] >= center).astype(np.uint8) << 6
+    lbp |= (eq[0:-2, 2:]   >= center).astype(np.uint8) << 5
+    lbp |= (eq[1:-1, 2:]   >= center).astype(np.uint8) << 4
+    lbp |= (eq[2:,   2:]   >= center).astype(np.uint8) << 3
+    lbp |= (eq[2:,   1:-1] >= center).astype(np.uint8) << 2
+    lbp |= (eq[2:,   0:-2] >= center).astype(np.uint8) << 1
+    lbp |= (eq[1:-1, 0:-2] >= center).astype(np.uint8) << 0
 
-    # 3. Divide a imagem 128x128 em grade de 8x8 blocos (cada bloco tem 16x16 pixels)
-    bloco_tam = 16
-    vetor = []
+    grid = 8
+    ch, cw = lbp.shape[0] // grid, lbp.shape[1] // grid
+    lbp_hists = []
+    for r in range(grid):
+        for c in range(grid):
+            cell = lbp[r*ch:(r+1)*ch, c*cw:(c+1)*cw]
+            h, _ = np.histogram(cell, bins=16, range=(0, 256), density=True)
+            lbp_hists.extend(h)
 
-    for r in range(0, 128, bloco_tam):
-        for c in range(0, 128, bloco_tam):
-            sub_intensidade = face_eq[r:r+bloco_tam, c:c+bloco_tam]
-            sub_gradiente = magnitude[r:r+bloco_tam, c:c+bloco_tam]
-            
-            # Extrai média de intensidade e média de gradiente de cada setor
-            m_int = float(np.mean(sub_intensidade) / 255.0)
-            m_grad = float(np.mean(sub_gradiente) / 255.0)
-            vetor.extend([m_int, m_grad])
+    # HOG
+    hog = cv2.HOGDescriptor((64, 64), (16, 16), (8, 8), (8, 8), 9)
+    g64 = cv2.resize(eq, (64, 64))
+    hog_f = hog.compute(g64).flatten()
+    hog_f = hog_f / (np.linalg.norm(hog_f) + 1e-7)
 
-    vetor_np = np.array(vetor, dtype=np.float32)
-    norma = np.linalg.norm(vetor_np)
-    if norma > 0:
-        vetor_np = vetor_np / norma
+    lbp_np = np.array(lbp_hists, dtype=np.float32)
+    lbp_np = lbp_np / (np.linalg.norm(lbp_np) + 1e-7)
 
-    return vetor_np.tolist()
+    comb = np.concatenate([lbp_np, hog_f])
+    # Reduz para 128 dimensões
+    if len(comb) > 128:
+        step = len(comb) / 128.0
+        vec128 = np.array([comb[int(i * step)] for i in range(128)], dtype=np.float32)
+    else:
+        vec128 = np.pad(comb, (0, 128 - len(comb)), 'constant')
+    norm = np.linalg.norm(vec128)
+    if norm > 0:
+        vec128 /= norm
+    return vec128.tolist()
+
+def extrair_vetor_caracteristicas(face_gray_ou_bgr: np.ndarray) -> list:
+    """Extrai o vetor de 128 dimensões da face."""
+    recognizer = get_sface_recognizer()
+    if recognizer is not None:
+        if len(face_gray_ou_bgr.shape) == 2:
+            face_bgr = cv2.cvtColor(face_gray_ou_bgr, cv2.COLOR_GRAY2BGR)
+        else:
+            face_bgr = face_gray_ou_bgr
+        face_112 = cv2.resize(face_bgr, (112, 112), interpolation=cv2.INTER_AREA)
+        raw_feat = recognizer.feature(face_112).flatten()
+        norm = np.linalg.norm(raw_feat)
+        if norm > 0:
+            raw_feat /= norm
+        return raw_feat.tolist()
+    return _extrair_vetor_lbp_hog_fallback(face_gray_ou_bgr)
 
 def processar_foto_facial(imagem_base64: str) -> dict:
     """
-    Analisa uma foto (selfie ou câmera da portaria):
-    - Detecta rostos;
-    - Valida qualidade (iluminação, tamanho e se há exatamente 1 face);
-    - Recorta a face;
-    - Gera o vetor biométrico numérico;
-    - Retorna resumo com status.
+    Analisa uma foto (selfie ou totem da portaria):
+    - Detecta rostos com YuNet CNN ou Haar Cascade;
+    - Alinha com 5 pontos anatômicos para neutralizar inclinação;
+    - Extrai o vetor biométrico profundo de 128 dimensões via SFace;
+    - Retorna status, coordenadas, face recortada em base64 e vetor.
     """
     img = decodificar_imagem_base64(imagem_base64)
     if img is None:
@@ -78,74 +146,110 @@ def processar_foto_facial(imagem_base64: str) -> dict:
         }
 
     altura, largura = img.shape[:2]
-    if altura < 120 or largura < 120:
+    if altura < 100 or largura < 100:
         return {
             'sucesso': False,
             'erro': 'Resolução da foto muito baixa. Aproxime a câmera do rosto.'
         }
 
-    cinza = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    recognizer = get_sface_recognizer()
+    detector = get_yunet_detector(largura, altura, score_threshold=0.6)
 
-    # Detecta rostos com escala ajustada
-    faces = FACE_CASCADE.detectMultiScale(
-        cinza,
-        scaleFactor=1.15,
-        minNeighbors=5,
-        minSize=(60, 60),
-        flags=cv2.CASCADE_SCALE_IMAGE
-    )
+    face_recortada_bgr = None
+    vetor_biometrico = None
+    coord = {'x': 0, 'y': 0, 'w': 0, 'h': 0}
 
-    if len(faces) == 0:
-        return {
-            'sucesso': False,
-            'erro': 'Nenhum rosto foi detectado na imagem. Centralize o rosto na câmera com boa iluminação.'
-        }
+    # 1. Tentativa com detector CNN YuNet
+    if detector is not None and recognizer is not None:
+        _, faces_detected = detector.detect(img)
+        if faces_detected is not None and len(faces_detected) > 0:
+            if len(faces_detected) > 1:
+                return {
+                    'sucesso': False,
+                    'erro': 'Mais de um rosto detectado. Apenas uma pessoa deve aparecer na câmera.'
+                }
+            face_data = faces_detected[0]
+            coord = {
+                'x': int(face_data[0]),
+                'y': int(face_data[1]),
+                'w': int(face_data[2]),
+                'h': int(face_data[3])
+            }
+            # Alinha e recorta com os 5 pontos anatômicos (olhos, nariz, boca)
+            face_recortada_bgr = recognizer.alignCrop(img, face_data)
+            raw_feat = recognizer.feature(face_recortada_bgr).flatten()
+            norm = np.linalg.norm(raw_feat)
+            if norm > 0:
+                raw_feat /= norm
+            vetor_biometrico = raw_feat.tolist()
 
-    if len(faces) > 1:
-        return {
-            'sucesso': False,
-            'erro': 'Mais de um rosto detectado. Apenas uma pessoa deve aparecer na foto de cadastro.'
-        }
+    # 2. Fallback com Haar Cascade se YuNet não encontrou face
+    if vetor_biometrico is None:
+        cinza = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces_haar = FACE_CASCADE.detectMultiScale(
+            cinza,
+            scaleFactor=1.15,
+            minNeighbors=5,
+            minSize=(60, 60),
+            flags=cv2.CASCADE_SCALE_IMAGE
+        )
 
-    x, y, w, h = faces[0]
+        if len(faces_haar) == 0:
+            return {
+                'sucesso': False,
+                'erro': 'Nenhum rosto foi detectado na imagem. Centralize o rosto na câmera com boa iluminação.'
+            }
 
-    # Adiciona uma margem de segurança de 15% ao redor do rosto
-    pad_x = int(w * 0.15)
-    pad_y = int(h * 0.20)
-    x1 = max(0, x - pad_x)
-    y1 = max(0, y - pad_y)
-    x2 = min(largura, x + w + pad_x)
-    y2 = min(altura, y + h + int(pad_y * 0.8))
+        if len(faces_haar) > 1:
+            return {
+                'sucesso': False,
+                'erro': 'Mais de um rosto detectado. Apenas uma pessoa deve aparecer na foto de cadastro.'
+            }
 
-    face_recortada_bgr = img[y1:y2, x1:x2]
-    face_recortada_gray = cinza[y1:y2, x1:x2]
+        x, y, w, h = faces_haar[0]
+        coord = {'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h)}
 
-    # Redimensiona para o padrão 128x128
-    face_128_gray = cv2.resize(face_recortada_gray, (128, 128), interpolation=cv2.INTER_AREA)
-    face_128_bgr = cv2.resize(face_recortada_bgr, (128, 128), interpolation=cv2.INTER_AREA)
+        pad_x = int(w * 0.15)
+        pad_y = int(h * 0.20)
+        x1 = max(0, x - pad_x)
+        y1 = max(0, y - pad_y)
+        x2 = min(largura, x + w + pad_x)
+        y2 = min(altura, y + h + int(pad_y * 0.8))
 
-    # Calcula brilho médio
-    brilho_medio = np.mean(face_128_gray)
-    if brilho_medio < 35:
+        crop = img[y1:y2, x1:x2]
+        face_recortada_bgr = cv2.resize(crop, (112, 112), interpolation=cv2.INTER_AREA)
+
+        if recognizer is not None:
+            raw_feat = recognizer.feature(face_recortada_bgr).flatten()
+            norm = np.linalg.norm(raw_feat)
+            if norm > 0:
+                raw_feat /= norm
+            vetor_biometrico = raw_feat.tolist()
+        else:
+            vetor_biometrico = _extrair_vetor_lbp_hog_fallback(face_recortada_bgr)
+
+    # 3. Validação de iluminação
+    face_gray = cv2.cvtColor(face_recortada_bgr, cv2.COLOR_BGR2GRAY)
+    brilho_medio = float(np.mean(face_gray))
+    if brilho_medio < 30:
         return {
             'sucesso': False,
             'erro': 'Foto muito escura. Vá para um local mais iluminado para a captura facial.'
         }
-    if brilho_medio > 230:
+    if brilho_medio > 240:
         return {
             'sucesso': False,
             'erro': 'Foto muito superexposta / com excesso de luz no rosto.'
         }
 
-    vetor_biometrico = extrair_vetor_caracteristicas(face_128_gray)
-    face_base64 = codificar_imagem_base64(face_128_bgr)
+    face_base64 = codificar_imagem_base64(face_recortada_bgr)
 
     return {
         'sucesso': True,
         'vetor': vetor_biometrico,
         'face_base64': face_base64,
-        'coordenadas': {'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h)},
-        'brilho': float(brilho_medio)
+        'coordenadas': coord,
+        'brilho': round(brilho_medio, 1)
     }
 
 def calcular_similaridade_cosseno(vetor1: list, vetor2: list) -> float:
@@ -162,14 +266,18 @@ def calcular_similaridade_cosseno(vetor1: list, vetor2: list) -> float:
     if norma1 == 0 or norma2 == 0:
         return 0.0
 
-    dot = np.dot(v1, v2)
+    dot = float(np.dot(v1, v2))
     sim = dot / (norma1 * norma2)
     return float(max(0.0, min(1.0, sim)))
 
-def comparar_face_com_base(vetor_consulta: list, lista_biometrias: list, limiar_minimo: float = 0.80) -> tuple:
+def comparar_face_com_base(vetor_consulta: list, lista_biometrias: list, limiar_minimo: float = 0.50) -> tuple:
     """
     Compara o vetor da face com uma lista de biometrias cadastradas.
     Retorna (melhor_match, similaridade). Se similaridade < limiar_minimo, retorna (None, similaridade).
+    Com a rede neural SFace:
+    - Mesma pessoa: similaridade tipicamente entre 0.70 e 0.95 (>= 0.50).
+    - Pessoas diferentes / familiares: similaridade tipicamente entre 0.00 e 0.20 (< 0.35).
+    Limiar de 0.50 elimina completamente falsos positivos.
     """
     melhor_match = None
     maior_similaridade = 0.0

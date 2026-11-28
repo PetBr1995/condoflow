@@ -858,7 +858,7 @@ class PortariaTotemViewSet(viewsets.ViewSet):
                 'vetor': b.vetor_facial
             })
 
-        match, similaridade = comparar_face_com_base(vetor_camera, base_comparacao, limiar_minimo=0.78)
+        match, similaridade = comparar_face_com_base(vetor_camera, base_comparacao, limiar_minimo=0.50)
 
         if not match:
             # Não reconheceu ninguém

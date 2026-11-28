@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import date, timedelta
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth import get_user_model
@@ -216,7 +216,7 @@ class CondoFlowE2ETestCase(APITestCase):
         self.assertEqual(res_ok.status_code, status.HTTP_201_CREATED)
 
         # 9. Regra dos Turnos: reservar Manhã deixa Tarde e Noite disponíveis
-        data_turnos = "2026-11-24"
+        data_turnos = (date.today() + timedelta(days=5)).isoformat()
         # 9.1 Reserva Manhã (deve ter sucesso)
         res_manha = self.client.post('/api/reservas/', {
             'area_comum': area.id,
@@ -418,8 +418,8 @@ class CondoFlowE2ETestCase(APITestCase):
             'nome': 'Roberto Eletricista',
             'tipo': 'prestador',
             'empresa': 'EletroReparos',
-            'data_inicio': '2026-11-20',
-            'data_fim': '2026-11-25',
+            'data_inicio': date.today().isoformat(),
+            'data_fim': (date.today() + timedelta(days=5)).isoformat(),
             'periodo': 'dia_inteiro',
             'observacoes': 'Reparo no quadro elétrico'
         }, **headers_morador)
