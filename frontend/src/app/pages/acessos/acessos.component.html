@@ -429,15 +429,22 @@
                 <video #videoTotemRef autoplay playsinline muted class="video-stream-totem"></video>
                 
                 <!-- HUD Biométrico com Cantoneiras e Linha Laser de Varredura -->
-                <div class="biometric-hud-overlay" [class.scanning]="analisandoFaceTotem || totemAutoScan">
+                <div class="biometric-hud-overlay" [class.scanning]="analisandoFaceTotem || totemAutoScan" [class.counting]="contagemRegressivaTotem > 0">
                   <div class="reticle-corner corner-tl"></div>
                   <div class="reticle-corner corner-tr"></div>
                   <div class="reticle-corner corner-bl"></div>
                   <div class="reticle-corner corner-br"></div>
                   
                   <div class="hud-center-target">
-                    <div class="target-circle"></div>
-                    <span class="hud-target-label">{{ analisandoFaceTotem ? 'ANALISANDO BIOMETRIA...' : 'POSICIONE O ROSTO' }}</span>
+                    @if (contagemRegressivaTotem > 0) {
+                      <div class="hud-countdown-ring">
+                        <span class="hud-countdown-digit">{{ contagemRegressivaTotem }}</span>
+                      </div>
+                      <span class="hud-target-label countdown-hint">OLHE PARA A CÂMERA...</span>
+                    } @else {
+                      <div class="target-circle"></div>
+                      <span class="hud-target-label">{{ analisandoFaceTotem ? 'ANALISANDO BIOMETRIA...' : 'POSICIONE O ROSTO' }}</span>
+                    }
                   </div>
 
                   <div class="laser-scanner-line"></div>
@@ -456,8 +463,11 @@
 
             @if (cameraTotemAtiva) {
               <div class="totem-controles">
-                <button type="button" class="btn-scan-manual touch-target focus-ring" (click)="analisarFaceAoVivo()" [disabled]="analisandoFaceTotem">
-                  @if (analisandoFaceTotem) {
+                <button type="button" class="btn-scan-manual touch-target focus-ring" (click)="iniciarScanManualComContagem()" [disabled]="analisandoFaceTotem || contagemRegressivaTotem > 0">
+                  @if (contagemRegressivaTotem > 0) {
+                    <mat-icon class="girando">timer</mat-icon>
+                    Preparando ({{ contagemRegressivaTotem }}s)...
+                  } @else if (analisandoFaceTotem) {
                     <mat-icon class="girando">sync</mat-icon>
                     Analisando Face...
                   } @else {

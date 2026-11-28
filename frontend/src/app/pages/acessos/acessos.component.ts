@@ -53,6 +53,8 @@ export class AcessosComponent implements OnInit, OnDestroy {
   historicoAcessos: RegistroAcesso[] = [];
   intervaloTotem: any = null;
   totemAutoScan: boolean = false;
+  contagemRegressivaTotem: number = 0;
+  timerContagem: any = null;
 
   constructor(
     public acessosService: AcessosService,
@@ -320,12 +322,33 @@ export class AcessosComponent implements OnInit, OnDestroy {
       clearInterval(this.intervaloTotem);
       this.intervaloTotem = null;
     }
+    if (this.timerContagem) {
+      clearInterval(this.timerContagem);
+      this.timerContagem = null;
+    }
+    this.contagemRegressivaTotem = 0;
     this.totemAutoScan = false;
     if (this.streamTotem) {
       this.streamTotem.getTracks().forEach(t => t.stop());
       this.streamTotem = null;
     }
     this.cameraTotemAtiva = false;
+  }
+
+  iniciarScanManualComContagem(): void {
+    if (this.analisandoFaceTotem || this.contagemRegressivaTotem > 0) return;
+    if (!this.cameraTotemAtiva) return;
+
+    // Contagem regressiva de 2 passos (1.4s) para o usuário olhar para a lente da câmera
+    this.contagemRegressivaTotem = 2;
+    this.timerContagem = setInterval(() => {
+      this.contagemRegressivaTotem--;
+      if (this.contagemRegressivaTotem <= 0) {
+        clearInterval(this.timerContagem);
+        this.timerContagem = null;
+        this.analisarFaceAoVivo();
+      }
+    }, 700);
   }
 
   toggleAutoScan(): void {

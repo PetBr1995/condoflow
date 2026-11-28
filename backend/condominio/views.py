@@ -811,7 +811,10 @@ class PortariaTotemViewSet(viewsets.ViewSet):
         if not resultado['sucesso']:
             return Response({
                 'autorizado': False,
+                'status': 'negado',
+                'nome': 'Face Não Enquadrada',
                 'motivo': resultado['erro'],
+                'similaridade': 0.0,
                 'tipo': 'desconhecido'
             })
 
