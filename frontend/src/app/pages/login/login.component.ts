@@ -37,12 +37,7 @@ export class LoginComponent {
       next: (resposta) => {
         this.carregando = false;
         localStorage.setItem('token', resposta.access);
-        
-        if (resposta.is_sindico) {
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.router.navigate(['/chamados']);
-        }
+        this.router.navigate(['/dashboard']);
       },
       error: (erro) => {
         this.carregando = false;

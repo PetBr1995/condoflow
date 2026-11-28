@@ -25,13 +25,12 @@
 
   <!-- Lista de Navegação Principal -->
   <nav class="sidebar-menu">
-    @if (authService.isSindico) {
-      <a class="menu-link" routerLink="/dashboard" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">
-        <mat-icon class="menu-icon">dashboard</mat-icon>
-        <span class="menu-text">Dashboard</span>
-        <span class="sidebar-tooltip">Dashboard</span>
-      </a>
-    }
+    <!-- Dashboard / Início -->
+    <a class="menu-link" routerLink="/dashboard" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">
+      <mat-icon class="menu-icon">dashboard</mat-icon>
+      <span class="menu-text">Dashboard</span>
+      <span class="sidebar-tooltip">Dashboard</span>
+    </a>
 
     <!-- Chamados -->
     <a class="menu-link" routerLink="/chamados" routerLinkActive="ativo">
